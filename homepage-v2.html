@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orijinz Daily — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e12; --bg2: #151519; --bg3: #1a1a22;
+    --card: #181820; --border: #2a2a34;
+    --text: #e0e0e8; --text-dim: #808898;
+    --gold: #f0c860;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; }
+  .page { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+  /* NAV */
+  .nav-bar { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .hamburger { background: none; border: none; color: var(--text-dim); cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+  .hamburger svg { width: 22px; height: 22px; }
+  .nav-spacer { flex: 1; }
+
+  /* LOGO */
+  .logo-section { text-align: center; padding: 32px 0 12px; }
+  .logo-ornament { font-family: 'Nunito Sans', sans-serif; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
+  .logo-text {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    line-height: 1; letter-spacing: -0.01em;
+    display: inline-flex; align-items: baseline;
+  }
+  .logo-text .rijinz-daily {
+    background-image: linear-gradient(90deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #B83030, #E07020, #FFD840);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: inline-block;
+  }
+  .logo-text .logo-spacer { width: 0.25em; }
+  .icon-o { position: relative; display: inline-block; font-size: 1em; line-height: 1; vertical-align: baseline; }
+  .icon-o .o-shadow { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; color: rgba(0,0,0,0.4); position: absolute; top: 0.03em; left: 0.025em; }
+  .icon-o .o-mid { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #7A5CA8, #4A70B8, #2A9AA8, #00A898, #C03828, #C06018, #D0A030, #7A5CA8); position: absolute; top: 0.015em; left: 0.01em; }
+  .icon-o .o-top { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #F05040, #F08030, #FFD840, #9D7DD4); position: relative; }
+
+  /* MARKETING */
+  .marketing { text-align: left; max-width: 780px; margin: 0 auto; padding: 8px 16px 28px; font-size: 0.95rem; color: var(--text-dim); line-height: 1.65; }
+  .marketing p { margin: 0 0 14px; }
+  .marketing p:last-child { margin-bottom: 0; }
+  .marketing strong { color: var(--text); }
+  .marketing em { font-style: italic; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'Nunito Sans', sans-serif; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim);
+    margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+
+  /* GAME GRID */
+  .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 700px) { .game-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 440px) { .game-grid { grid-template-columns: 1fr; } }
+
+  /* GAME TILE */
+  .game-tile {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; cursor: pointer; text-decoration: none; color: var(--text);
+    display: flex; flex-direction: column; transition: transform 0.15s, border-color 0.15s;
+  }
+  .game-tile:hover { transform: translateY(-3px); border-color: #444; }
+  .game-tile-color { height: 6px; }
+
+  /* GAME SCREENSHOT */
+  .game-screenshot {
+    width: 100%; aspect-ratio: 5/6; overflow: hidden; background: var(--bg3);
+  }
+  .game-screenshot img {
+    width: 100%; height: auto; object-fit: cover; object-position: top center;
+    display: block;
+  }
+
+  /* TILE BODY */
+  .tile-body { padding: 10px 14px 12px; }
+  .tile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .tile-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem; }
+  .tile-play {
+    display: inline-block; background: none; border: 1px solid var(--border);
+    color: var(--text); padding: 5px 16px; border-radius: 16px;
+    font-size: 0.68rem; font-weight: 700; text-align: center; transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .game-tile:hover .tile-play { border-color: var(--gold); color: var(--gold); }
+  .tile-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; }
+
+  /* CARD GAMES GRID */
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 500px; }
+  @media (max-width: 440px) { .card-grid { grid-template-columns: 1fr; } }
+  .card-tile {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 16px; cursor: pointer; text-decoration: none; color: var(--text);
+    text-align: center; transition: transform 0.15s, border-color 0.15s;
+  }
+  .card-tile:hover { transform: translateY(-2px); border-color: #444; }
+  .card-tile-img { margin-bottom: 10px; }
+  .card-tile-img img { width: 100%; max-width: 180px; border-radius: 8px; display: block; margin: 0 auto; }
+  .card-tile-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.9rem; margin-bottom: 4px; }
+  .card-tile-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; margin-bottom: 10px; }
+  .card-tile-buy {
+    display: inline-block; background: none; border: 1px solid #6B8F3A;
+    color: #8FB84A; padding: 6px 20px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 700; transition: all 0.15s;
+  }
+  .card-tile:hover .card-tile-buy { background: rgba(107,143,58,0.15); }
+
+  /* FOOTER */
+  .site-footer {
+    width: 100%; margin-top: 40px;
+    padding: 24px 16px 28px;
+    border-top: 1px solid var(--border);
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .site-footer-inner {
+    display: flex; flex-wrap: wrap; gap: 32px;
+    justify-content: space-between; align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .footer-label {
+    display: block;
+    font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 10px;
+  }
+  .footer-app-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .footer-app-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    color: var(--text); text-decoration: none;
+    font-size: 0.8rem; font-weight: 600;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .footer-app-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .footer-app-btn svg { opacity: 0.85; }
+  .footer-newsletter { flex: 1; min-width: 240px; }
+  .footer-email-row { display: flex; gap: 0; }
+  .footer-email-row input {
+    flex: 1; padding: 9px 12px;
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border);
+    border-radius: 8px 0 0 8px; border-right: none;
+    color: var(--text); font-family: inherit; font-size: 0.85rem;
+    outline: none;
+  }
+  .footer-email-row input:focus { border-color: var(--gold); }
+  .footer-email-row input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .footer-email-row button {
+    padding: 9px 18px;
+    background: var(--gold); border: 1px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    color: var(--bg); font-family: inherit; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .footer-email-row button:hover { opacity: 0.88; }
+  .footer-copyright {
+    text-align: center; font-size: 0.72rem; color: var(--text-dim);
+    padding-top: 16px; border-top: 1px solid var(--border);
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 480px) {
+    .site-footer-inner { gap: 20px; }
+    .footer-apps, .footer-newsletter { width: 100%; }
+  }
+
+  /* MENU PANEL */
+  .menu-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500;
+  }
+  .menu-overlay.open { display: block; }
+  .menu-panel {
+    position: fixed; top: 0; left: 0; bottom: 0; width: min(230px, 75vw);
+    background: var(--bg2); border-right: 1px solid var(--border);
+    z-index: 501; overflow-y: auto; transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+  .menu-overlay.open .menu-panel { transform: translateX(0); }
+  .menu-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+  }
+  .menu-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); }
+  .menu-close { background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+  .menu-items { padding: 8px 0; }
+  .menu-item {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 12px 20px; background: none; border: none;
+    font-family: 'Nunito Sans', sans-serif; font-size: 0.88rem; color: var(--text-dim);
+    cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s;
+  }
+  .menu-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .menu-item svg { opacity: 0.6; flex-shrink: 0; }
+  .menu-item:hover svg { opacity: 1; }
+  .menu-divider { height: 1px; background: var(--border); margin: 8px 20px; }
+  .menu-section-label {
+    font-size: 0.55rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-dim); padding: 12px 20px 4px; opacity: 0.6;
+  }
+
+  .menu-apps-row { display: flex; gap: 8px; padding: 4px 20px 10px; }
+  .menu-app-btn {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 8px 10px; border-radius: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    color: var(--text); text-decoration: none;
+    font-size: 0.75rem; font-weight: 600;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .menu-app-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .menu-app-btn svg { opacity: 0.85; flex-shrink: 0; }
+  .menu-newsletter { padding: 4px 20px 12px; }
+  .menu-newsletter input {
+    width: 100%; padding: 9px 12px; margin-bottom: 6px;
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none;
+    box-sizing: border-box;
+  }
+  .menu-newsletter input:focus { border-color: var(--gold); }
+  .menu-newsletter input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .menu-newsletter button {
+    width: 100%; padding: 9px;
+    background: var(--gold); border: 1px solid var(--gold); border-radius: 8px;
+    color: var(--bg); font-family: inherit; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .menu-newsletter button:hover { opacity: 0.88; }
+  .menu-newsletter button:disabled { opacity: 0.5; cursor: default; }
+  .menu-newsletter-msg { min-height: 1.2em; margin-top: 6px; font-size: 0.75rem; color: var(--text-dim); }
+  .menu-newsletter-msg.success { color: #4caf50; }
+  .menu-newsletter-msg.error { color: #e57373; }
+</style>
+</head>
+<body>
+
+<!-- Menu overlay -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
+  <nav class="menu-panel" onclick="event.stopPropagation()">
+    <div class="menu-header">
+      <span class="menu-title">Orijinz</span>
+      <button class="menu-close" onclick="closeMenu()">&#10005;</button>
+    </div>
+    <div class="menu-items">
+      <a class="menu-item" href="https://www.entspire.com">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a class="menu-item" href="https://www.entspire.com/orijinz-daily-qa">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Orijinz Daily Q&A
+      </a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Daily Games</div>
+      <a class="menu-item" href="https://www.entspire.com/odwordsandphrases">🔤 Words & Phrases</a>
+      <a class="menu-item" href="https://www.entspire.com/od70s-songs">🎵 70s Songs</a>
+      <a class="menu-item" href="https://www.entspire.com/odcovers">🎸 Covers</a>
+      <a class="menu-item" href="https://www.entspire.com/odmovies">🎬 Movies</a>
+      <a class="menu-item" href="https://www.entspire.com/odslogans">📢 Slogans</a>
+      <a class="menu-item" href="https://www.entspire.com/odquotes">💬 Quotes</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Card Games</div>
+      <a class="menu-item" href="https://www.entspire.com/the-card-games">🃏 The Card Games</a>
+      <a class="menu-item" href="https://www.entspire.com/buy">🛒 Buy</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">More</div>
+      <a class="menu-item" href="https://www.entspire.com/profile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </a>
+      <a class="menu-item" href="https://www.entspire.com/account-settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Account Settings
+      </a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Get the Orijinz Daily App</div>
+      <div class="menu-apps-row">
+        <a class="menu-app-btn" href="https://apps.apple.com/us/app/orijinz-daily/id6477123796" aria-label="Download on the App Store">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          iOS
+        </a>
+        <a class="menu-app-btn" href="https://play.google.com/store/apps/details?id=com.app.entspirellc" aria-label="Get it on Google Play">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M3.6 2.1c-.3.3-.5.8-.5 1.4v17c0 .6.2 1.1.5 1.4l.1.1 9.5-9.5v-.2L3.6 2.1zm13.1 13.1L14.1 12.7l3.8-3.8 3.4 1.9c1 .5 1 1.5 0 2l-4.6 2.4zM14.1 11.3L3.7 1.1c.3-.2.7-.1 1.1.1l11.3 6.4-2 3.7zm0 1.4l2 3.7-11.3 6.4c-.4.2-.8.3-1.1.1L14.1 12.7z"/></svg>
+          Android
+        </a>
+      </div>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Free email newsletter</div>
+      <form class="menu-newsletter" onsubmit="submitMenuNewsletter(event)">
+        <input id="menuNewsletterEmail" type="email" placeholder="Your email" required>
+        <button type="submit">Sign Up</button>
+        <div class="menu-newsletter-msg" id="menuNewsletterMsg"></div>
+      </form>
+    </div>
+  </nav>
+</div>
+
+<div class="page">
+
+  <!-- NAV -->
+  <div class="nav-bar">
+    <button class="hamburger" onclick="openMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- LOGO -->
+  <div class="logo-section">
+    <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span></div>
+    <div style="font-family:'Nunito Sans',sans-serif; font-size:1rem; color:var(--text); font-style:italic; font-weight:600; margin-top:8px; letter-spacing:0.04em;">The fun and fascinating origins games</div>
+  </div>
+
+  <!-- MARKETING -->
+  <div class="marketing">
+    <p>For over a decade, Orijinz has been the little guessing game that could &mdash; surprising, delighting, and occasionally stumping players around the world. It all started with our card games &mdash; read an origin, guess the matching word or phrase or read a quote and guess the voice behind it. After that, Orijinz Daily arrived with one fresh puzzle every morning that you can play on your computer, phone or laptop.</p>
+    <p>Now we&rsquo;re leveling up.</p>
+    <p>Introducing the new Orijinz Daily lineup &mdash; a revamped <strong>Words &amp; Phrases</strong> plus five brand&#8209;new daily games: <strong>70s Songs, Covers, Movies, Slogans, and Quotes</strong>. Six games. Six daily brain-tingles. Endless &ldquo;wow, that was fascinating,&rdquo; &ldquo;oooh, that was fun,&rdquo; &ldquo;that was so cool,&rdquo; and &ldquo;I didn&rsquo;t know that&rdquo; moments.</p>
+    <p>Sign up for any game and enjoy a <strong>two&#8209;week free trial</strong>. After that, each game is just <strong>$1.99/month</strong>, or grab the <strong>Orijinz Daily Game Pass</strong> for an introductory <strong>$5.99/month</strong> and play <em>all</em> the games, <em>every</em> day.</p>
+    <p>Some puzzles are easy. Some will make you pace around the room. All of them are fun, clever, interesting, addictive and a blast to share and compete with friends and family. Want to learn more? Just go to the <svg style="vertical-align:middle;margin:0 2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> menu on the upper left and choose Orijinz Daily Q&amp;A. You can download the Orijinz Daily App on that menu too.</p>
+    <p>Give Orijinz Daily a spin &mdash; your brain will thank you.</p>
+  </div>
+
+  <!-- DAILY GAMES -->
+  <div class="section-label">Daily Games</div>
+  <div class="game-grid">
+
+    <!-- Words & Phrases -->
+    <a class="game-tile" href="https://www.entspire.com/odwordsandphrases">
+      <div class="game-tile-color" style="background:linear-gradient(90deg,#43BAD0,#7FCEDB)"></div>
+      <div class="game-screenshot"><img src="../screenshots/Screenshot-wp.png" alt="Words & Phrases"></div>
+      <div class="tile-body">
+        <div class="tile-header"><div class="tile-name">Words & Phrases</div><span class="tile-play">Play</span></div>
+        <div class="tile-desc">Read the origin. Guess the word or phrase.</div>
+      </div>
+    </a>
+
+    <!-- 70s Songs -->
+    <a class="game-tile" href="https://www.entspire.com/od70s-songs">
+      <div class="game-tile-color" style="background:linear-gradient(90deg,#9D7DD4,#C8A0F0)"></div>
+      <div class="game-screenshot"><img src="../screenshots/Screenshot 70s.png" alt="70s Songs"></div>
+      <div class="tile-body">
+        <div class="tile-header"><div class="tile-name">70s Songs</div><span class="tile-play">Play</span></div>
+        <div class="tile-desc">Read the song title. Guess the artist.</div>
+      </div>
+    </a>
+
+    <!-- Covers -->
+    <a class="game-tile" href="https://www.entspire.com/odcovers">
+      <div class="game-tile-color" style="background:linear-gradient(90deg,#6898E8,#90C0F8)"></div>
+      <div class="game-screenshot"><img src="../screenshots/Screenshot covers.png" alt="Covers"></div>
+      <div class="tile-body">
+        <div class="tile-header"><div class="tile-name">Covers</div><span class="tile-play">Play</span></div>
+        <div class="tile-desc">Listen to the cover. Guess the original artist.</div>
+      </div>
+    </a>
+
+    <!-- Movies -->
+    <a class="game-tile" href="https://www.entspire.com/odmovies">
+      <div class="game-tile-color" style="background:linear-gradient(90deg,#9AAAB8,#C0D0DC)"></div>
+      <div class="game-screenshot"><img src="../screenshots/Screenshot movies.png" alt="Movies"></div>
+      <div class="tile-body">
+        <div class="tile-header"><div class="tile-name">Movies</div><span class="tile-play">Play</span></div>
+        <div class="tile-desc">Read the synopsis. Guess the movie.</div>
+      </div>
+    </a>
+
+    <!-- Slogans -->
+    <a class="game-tile" href="https://www.entspire.com/odslogans">
+      <div class="game-tile-color" style="background:linear-gradient(90deg,#FF8820,#FFB050)"></div>
+      <div class="game-screenshot"><img src="../screenshots/Screenshot slogans.png" alt="Slogans"></div>
+      <div class="tile-body">
+        <div class="tile-header"><div class="tile-name">Slogans</div><span class="tile-play">Play</span></div>
+        <div class="tile-desc">Read the slogan. Guess the source.</div>
+      </div>
+    </a>
+
+    <!-- Quotes -->
+    <a class="game-tile" href="https://www.entspire.com/odquotes">
+      <div class="game-tile-color" style="background:linear-gradient(90deg,#00CEB8,#40F0D8)"></div>
+      <div class="game-screenshot"><img src="../screenshots/Screenshot quotes.png" alt="Quotes"></div>
+      <div class="tile-body">
+        <div class="tile-header"><div class="tile-name">Quotes</div><span class="tile-play">Play</span></div>
+        <div class="tile-desc">Read the quote. Guess the source.</div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- CARD GAMES -->
+  <div class="section-label">Card Games</div>
+  <div class="card-grid">
+    <a class="card-tile" href="https://www.entspire.com/buy">
+      <div class="card-tile-img"><img src="../screenshots/WordsPhrases 1 - Box front small.jpg" alt="Words & Phrases card game"></div>
+      <div class="card-tile-name">Words & Phrases</div>
+      <div class="card-tile-desc">The original card game. Read the origin, guess the word or phrase.</div>
+      <span class="card-tile-buy">Buy</span>
+    </a>
+    <a class="card-tile" href="https://www.entspire.com/buy">
+      <div class="card-tile-img"><img src="../screenshots/Quotes - Box front small.jpg" alt="Quotes card game"></div>
+      <div class="card-tile-name">Quotes</div>
+      <div class="card-tile-desc">The fun and fascinating game about who said it.</div>
+      <span class="card-tile-buy">Buy</span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-apps">
+        <span class="footer-label">Try the Orijinz Daily App</span>
+        <div class="footer-app-btns">
+          <a class="footer-app-btn" href="https://apps.apple.com/us/app/orijinz-daily/id6477123796" aria-label="Download on the App Store">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            App Store
+          </a>
+          <a class="footer-app-btn" href="https://play.google.com/store/apps/details?id=com.app.entspirellc" aria-label="Get it on Google Play">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M3.6 2.1c-.3.3-.5.8-.5 1.4v17c0 .6.2 1.1.5 1.4l.1.1 9.5-9.5v-.2L3.6 2.1zm13.1 13.1L14.1 12.7l3.8-3.8 3.4 1.9c1 .5 1 1.5 0 2l-4.6 2.4zM14.1 11.3L3.7 1.1c.3-.2.7-.1 1.1.1l11.3 6.4-2 3.7zm0 1.4l2 3.7-11.3 6.4c-.4.2-.8.3-1.1.1L14.1 12.7z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+
+      <form class="footer-newsletter" action="https://www.entspire.com/newsletter" method="get">
+        <label class="footer-label" for="footerEmail">Sign up for our free newsletter</label>
+        <div class="footer-email-row">
+          <input id="footerEmail" name="email" type="email" placeholder="Email address" required>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+    <div class="footer-copyright"><a href="https://www.entspire.com/about-us" target="_top" style="color:var(--text-dim);text-decoration:none;">About Us</a> &middot; &copy; 2026 by Orijinz &amp; Entspire</div>
+  </footer>
+
+</div>
+<script>
+function openMenu() { document.getElementById('menuOverlay').classList.add('open'); }
+function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); }
+
+function submitMenuNewsletter(e) {
+  e.preventDefault();
+  var input = document.getElementById('menuNewsletterEmail');
+  var msg   = document.getElementById('menuNewsletterMsg');
+  var btn   = e.target.querySelector('button');
+  var email = (input.value || '').trim();
+  if (!email) return;
+  btn.disabled = true;
+  msg.className = 'menu-newsletter-msg';
+  msg.textContent = 'Signing up\u2026';
+  window.parent.postMessage({ type: 'orijinz_newsletter_signup', email: email, source: 'homepage' }, '*');
+  setTimeout(function() {
+    if (btn.disabled) {
+      msg.className = 'menu-newsletter-msg success';
+      msg.textContent = 'Thanks! You\u2019re subscribed.';
+      input.value = '';
+      btn.disabled = false;
+    }
+  }, 2000);
+}
+window.addEventListener('message', function(evt) {
+  if (!evt.data || evt.data.type !== 'orijinz_newsletter_result') return;
+  var msg = document.getElementById('menuNewsletterMsg');
+  var btn = document.querySelector('.menu-newsletter button');
+  var input = document.getElementById('menuNewsletterEmail');
+  if (!msg) return;
+  if (evt.data.success) {
+    msg.className = 'menu-newsletter-msg success';
+    msg.textContent = evt.data.message || 'Thanks! You\u2019re subscribed.';
+    if (input) input.value = '';
+  } else {
+    msg.className = 'menu-newsletter-msg error';
+    msg.textContent = evt.data.message || 'Sign up failed. Please try again.';
+  }
+  if (btn) btn.disabled = false;
+});
+</script>
+</body>
+</html>

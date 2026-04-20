@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews &mdash; Orijinz Card Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e12; --bg2: #151519; --bg3: #1a1a22;
+    --card: #181820; --border: #2a2a34;
+    --text: #e0e0e8; --text-dim: #808898;
+    --gold: #f0c860;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; }
+  .page { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+  .nav-bar { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .hamburger { background: none; border: none; color: var(--text-dim); cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+  .hamburger svg { width: 22px; height: 22px; }
+  .nav-spacer { flex: 1; }
+
+  .logo-section { text-align: center; padding: 32px 0 12px; }
+  .logo-text {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    line-height: 1; letter-spacing: -0.01em;
+    display: inline-flex; align-items: baseline;
+  }
+  .logo-text .rijinz-daily {
+    background-image: linear-gradient(90deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #B83030, #E07020, #FFD840);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: inline-block;
+  }
+  .logo-text .logo-spacer { width: 0.25em; }
+  .icon-o { position: relative; display: inline-block; font-size: 1em; line-height: 1; vertical-align: baseline; }
+  .icon-o .o-shadow { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; color: rgba(0,0,0,0.4); position: absolute; top: 0.03em; left: 0.025em; }
+  .icon-o .o-mid { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #7A5CA8, #4A70B8, #2A9AA8, #00A898, #C03828, #C06018, #D0A030, #7A5CA8); position: absolute; top: 0.015em; left: 0.01em; }
+  .icon-o .o-top { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #F05040, #F08030, #FFD840, #9D7DD4); position: relative; }
+
+  .page-title {
+    text-align: center;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    color: var(--text-dim); margin: 4px 0 28px;
+    letter-spacing: 0.02em;
+  }
+  .page-title span { color: var(--gold); }
+
+  /* REVIEWS */
+  .reviews { max-width: 780px; margin: 0 auto; padding: 0 16px 24px; }
+
+  .review {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px 28px; margin-bottom: 16px;
+    position: relative;
+  }
+  .review::before {
+    content: '\201C'; position: absolute;
+    top: 12px; left: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; color: var(--gold); opacity: 0.3;
+    line-height: 1;
+  }
+  .review-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.92rem; color: var(--text); line-height: 1.65;
+    font-style: italic; padding-left: 20px;
+  }
+  .review-author {
+    margin-top: 10px; padding-left: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--gold);
+  }
+
+  /* FEATURED (press mentions) */
+  .featured {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 28px; margin-bottom: 16px;
+    text-align: center;
+  }
+  .featured-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.92rem; color: var(--text); font-style: italic;
+  }
+  .featured-source {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem; font-weight: 800; color: var(--gold);
+    margin-top: 6px;
+  }
+
+  /* PRODUCT GALLERY */
+  .gallery {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin: 28px 0 16px;
+  }
+  .gallery img {
+    max-width: 200px; width: 100%; height: auto;
+    border-radius: 8px; border: 1px solid var(--border);
+    cursor: zoom-in; transition: opacity 0.15s;
+  }
+  .gallery img:hover { opacity: 0.85; }
+
+  /* BUY BUTTON */
+  .buy-row { text-align: center; margin: 20px 0 12px; }
+  .buy-btn {
+    display: inline-block; padding: 14px 48px; border-radius: 24px;
+    background: var(--gold); color: var(--bg); text-decoration: none;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.1rem;
+    letter-spacing: 0.03em; transition: opacity 0.15s;
+  }
+  .buy-btn:hover { opacity: 0.88; }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88); z-index: 600;
+    justify-content: center; align-items: center; cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 4px 40px rgba(0,0,0,0.5); }
+  .lightbox-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; opacity: 0.7; transition: opacity 0.15s; }
+  .lightbox-close:hover { opacity: 1; }
+
+  /* FOOTER */
+  .site-footer { width: 100%; margin-top: 40px; padding: 24px 16px 28px; border-top: 1px solid var(--border); font-family: 'Nunito Sans', sans-serif; }
+  .site-footer-inner { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .footer-label { display: block; font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+  .footer-app-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.8rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+  .footer-app-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .footer-app-btn svg { opacity: 0.85; }
+  .footer-newsletter { flex: 1; min-width: 240px; }
+  .footer-email-row { display: flex; gap: 0; }
+  .footer-email-row input { flex: 1; padding: 9px 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px 0 0 8px; border-right: none; color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none; }
+  .footer-email-row input:focus { border-color: var(--gold); }
+  .footer-email-row input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .footer-email-row button { padding: 9px 18px; background: var(--gold); border: 1px solid var(--gold); border-radius: 0 8px 8px 0; color: var(--bg); font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s; }
+  .footer-email-row button:hover { opacity: 0.88; }
+  .footer-newsletter-msg { min-height: 1.2em; margin-top: 6px; font-size: 0.72rem; color: var(--text-dim); }
+  .footer-newsletter-msg.success { color: #4caf50; }
+  .footer-newsletter-msg.error { color: #e57373; }
+  .footer-copyright { text-align: center; font-size: 0.72rem; color: var(--text-dim); padding-top: 16px; border-top: 1px solid var(--border); letter-spacing: 0.04em; }
+  @media (max-width: 480px) {
+    .site-footer-inner { gap: 20px; }
+    .footer-apps, .footer-newsletter { width: 100%; }
+    .review { padding: 20px 20px; }
+    .gallery img { max-width: 150px; }
+  }
+
+  /* MENU */
+  .menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; }
+  .menu-overlay.open { display: block; }
+  .menu-panel { position: fixed; top: 0; left: 0; bottom: 0; width: min(230px, 75vw); background: var(--bg2); border-right: 1px solid var(--border); z-index: 501; overflow-y: auto; transform: translateX(-100%); transition: transform 0.25s ease; }
+  .menu-overlay.open .menu-panel { transform: translateX(0); }
+  .menu-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .menu-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); }
+  .menu-close { background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+  .menu-items { padding: 8px 0; }
+  .menu-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 20px; background: none; border: none; font-family: 'Nunito Sans', sans-serif; font-size: 0.88rem; color: var(--text-dim); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  .menu-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .menu-divider { height: 1px; background: var(--border); margin: 8px 20px; }
+  .menu-section-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 20px 4px; opacity: 0.6; }
+  .menu-apps-row { display: flex; gap: 8px; padding: 4px 20px 10px; }
+  .menu-app-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.75rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+  .menu-app-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .menu-app-btn svg { opacity: 0.85; flex-shrink: 0; }
+  .menu-newsletter { padding: 4px 20px 12px; }
+  .menu-newsletter input { width: 100%; padding: 9px 12px; margin-bottom: 6px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none; box-sizing: border-box; }
+  .menu-newsletter input:focus { border-color: var(--gold); }
+  .menu-newsletter input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .menu-newsletter button { width: 100%; padding: 9px; background: var(--gold); border: 1px solid var(--gold); border-radius: 8px; color: var(--bg); font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s; }
+  .menu-newsletter button:hover { opacity: 0.88; }
+  .menu-newsletter button:disabled { opacity: 0.5; cursor: default; }
+  .menu-newsletter-msg { min-height: 1.2em; margin-top: 6px; font-size: 0.75rem; color: var(--text-dim); }
+  .menu-newsletter-msg.success { color: #4caf50; }
+  .menu-newsletter-msg.error { color: #e57373; }
+</style>
+</head>
+<body>
+
+<!-- Menu overlay -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
+  <nav class="menu-panel" onclick="event.stopPropagation()">
+    <div class="menu-header">
+      <span class="menu-title">Orijinz</span>
+      <button class="menu-close" onclick="closeMenu()">&#10005;</button>
+    </div>
+    <div class="menu-items">
+      <a class="menu-item" href="https://www.entspire.com">Home</a>
+      <a class="menu-item" href="https://www.entspire.com/orijinz-daily-qa">Orijinz Daily Q&amp;A</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Daily Games</div>
+      <a class="menu-item" href="https://www.entspire.com/odwordsandphrases">&#x1F524; Words &amp; Phrases</a>
+      <a class="menu-item" href="https://www.entspire.com/od70s-songs">&#x1F3B5; 70s Songs</a>
+      <a class="menu-item" href="https://www.entspire.com/odcovers">&#x1F3B8; Covers</a>
+      <a class="menu-item" href="https://www.entspire.com/odmovies">&#x1F3AC; Movies</a>
+      <a class="menu-item" href="https://www.entspire.com/odslogans">&#x1F4E2; Slogans</a>
+      <a class="menu-item" href="https://www.entspire.com/odquotes">&#x1F4AC; Quotes</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Card Games</div>
+      <a class="menu-item" href="https://www.entspire.com/the-card-games">&#x1F0CF; The Card Games</a>
+      <a class="menu-item" href="https://www.entspire.com/buy">&#x1F6D2; Buy</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Get the Orijinz Daily App</div>
+      <div class="menu-apps-row">
+        <a class="menu-app-btn" href="https://apps.apple.com/us/app/orijinz-daily/id6477123796"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg> iOS</a>
+        <a class="menu-app-btn" href="https://play.google.com/store/apps/details?id=com.app.entspirellc"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3.6 2.1c-.3.3-.5.8-.5 1.4v17c0 .6.2 1.1.5 1.4l.1.1 9.5-9.5v-.2L3.6 2.1zm13.1 13.1L14.1 12.7l3.8-3.8 3.4 1.9c1 .5 1 1.5 0 2l-4.6 2.4zM14.1 11.3L3.7 1.1c.3-.2.7-.1 1.1.1l11.3 6.4-2 3.7zm0 1.4l2 3.7-11.3 6.4c-.4.2-.8.3-1.1.1L14.1 12.7z"/></svg> Android</a>
+      </div>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Free email newsletter</div>
+      <form class="menu-newsletter" onsubmit="submitMenuNewsletter(event)">
+        <input id="menuNewsletterEmail" type="email" placeholder="Your email" required>
+        <button type="submit">Sign Up</button>
+        <div class="menu-newsletter-msg" id="menuNewsletterMsg"></div>
+      </form>
+    </div>
+  </nav>
+</div>
+
+<div class="page">
+
+  <div class="nav-bar">
+    <button class="hamburger" onclick="openMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <div class="logo-section">
+    <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span></div>
+  </div>
+  <div class="page-title"><span>What People Are Saying</span></div>
+
+  <!-- PRODUCT PHOTOS -->
+  <div class="gallery">
+    <img src="card-game-images/image2.jpeg" alt="Words &amp; Phrases First Edition" onclick="openLightbox(this.src)">
+    <img src="card-game-images/image6.jpeg" alt="Quotes First Edition" onclick="openLightbox(this.src)">
+    <img src="card-game-images/image3.jpeg" alt="Words &amp; Phrases Second Edition" onclick="openLightbox(this.src)">
+  </div>
+
+  <!-- PRESS MENTIONS -->
+  <div class="reviews">
+    <div class="featured">
+      <div class="featured-text">Named a favorite party game</div>
+      <div class="featured-source">People Magazine</div>
+    </div>
+
+    <div class="featured">
+      <div class="featured-text">&ldquo;I&rsquo;ve been playing the word game Orijinz lately and it&rsquo;s a lot of fun.&rdquo;</div>
+      <div class="featured-source">Jim Horne &mdash; New York Times</div>
+    </div>
+
+    <div class="featured">
+      <div class="featured-text">&ldquo;Definitely a fun game.&rdquo;</div>
+      <div class="featured-source">Deb Amlen &mdash; New York Times</div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER REVIEWS -->
+  <div class="reviews">
+
+    <div class="review">
+      <div class="review-text">Great game &mdash; lots of fun and insidiously educational.</div>
+      <div class="review-author">&mdash; James, Indiana</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">We played Orijinz on Christmas Day with players aged 14 to 70 and it was so much fun! I&rsquo;m hooked! It is all I can do to resist sitting down and playing &ldquo;Orijinz Solitaire.&rdquo; But then I&rsquo;d have an unsporting advantage at the next games party, so I&rsquo;m leaving it alone. I&rsquo;m suffering here, though. That little blue box is calling me. So many words, so much fun and knowledge&hellip; Will I resist? Be strong, girlfriend!</div>
+      <div class="review-author">&mdash; Kris, Idaho</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">Wonderful game! Kept the family engaged and &ldquo;howling&rdquo; for hours!</div>
+      <div class="review-author">&mdash; Joan, North Carolina</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">My husband HATES games. When I told him the game I got for Christmas would be right up his alley, he declined and sat across the room. He called out his answers from across the room and eventually joined us as his was the most successful answer each time. He is the master of clich&eacute; in our house and blew everyone else away. This didn&rsquo;t make him like other games, but he&rsquo;s hooked on Orijinz!</div>
+      <div class="review-author">&mdash; Kelly, Seattle</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I love the simplicity of the game. And yet it&rsquo;s challenging. It&rsquo;s all about great content. You&rsquo;ve done an amazing job here. It&rsquo;s not too trivial and mundane, and yet not too simplistic and obvious. You feel smart when getting it right, but when you can&rsquo;t figure it out, it still has that great &ldquo;aha, of course&rdquo; quality when hearing the answer.</div>
+      <div class="review-author">&mdash; Dave, Seattle</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I bought a dozen sets and gave them for Christmas gifts to nephews, nieces, cousins, friends. So far I&rsquo;ve had good reviews from all. The game is challenging and entertaining, especially when spelling is part of the answer.</div>
+      <div class="review-author">&mdash; Jere, Tennessee</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">What a fabulous game. We played recently and laughed and laughed for hours. I am ordering the second edition for us and a few other games to give as gifts.</div>
+      <div class="review-author">&mdash; Jill, London</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I love this game! A &ldquo;Word Wizard&rdquo; friend shared with me about it, and I bought three games! I have given two of them to special people in my life, and WOW! WHAT FUN! I am a school teacher and love to share with my 6th graders about idioms and expressions. This game is an excellent way to do just that! I also like your suggestions about &ldquo;making up&rdquo; where the expression came from, which really gets creative juices flowing. This is fun whether you are in the car, in the classroom, or at the game table!</div>
+      <div class="review-author">&mdash; Donna, Livingston, NJ</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I gave Orijinz I to my teenage nieces on Thanksgiving, and they obligingly (begrudgingly?) suggested the whole family try the game at the end of the day. The girls discovered not only how smart their dad is (surprise!), but also what a hilarious time everyone of various ages could have together.</div>
+      <div class="review-author">&mdash; Annie, New Jersey</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I love this game, and give it as birthday gifts all the time! It&rsquo;s so amazing to learn where phrases and words come from! Can&rsquo;t wait for the next edition!</div>
+      <div class="review-author">&mdash; Sara, Indiana</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">Thanks to learning of this game via your word site, we purchased it for Christmas and it was a big hit. We&rsquo;ve found it&rsquo;s also fun to simply look through the cards on your own and try to guess the &ldquo;orijinz.&rdquo;</div>
+      <div class="review-author">&mdash; RG</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">We&rsquo;ve played the game on family road trips and kept everyone alert, but most importantly, the driver. We also used it as a kind of ice breaker at a recent party of about 100 guests. Mother read each of three questions and the first person to yell out the answer received a prize&hellip; we had just three prizes&hellip; then several people wanted to see the box of cards and wrote down where to order it.</div>
+      <div class="review-author">&mdash; Virginia M., Fort Worth, TX</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I played Orijinz for the first time with two other teacher colleagues. I am a life-long lover of words and student of etymologies, having written my Master&rsquo;s thesis on the use of word origins in the development and learning of concepts. I, very modestly, of course, assumed I would easily trounce my competition, a science teacher and guidance counselor. However, to my surprise, the science oriented person was a very worthy adversary &mdash; and it turned out that we were each equally challenged. Interestingly, the game itself elicited from each of us some unexpected self-disclosures about the past and what certain words and meanings have for us. In the end, a very good time was had by all. Thanks for a great time!</div>
+      <div class="review-author">&mdash; Tom, Sacramento, CA</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">Well, I bought the set to play with my grandkids. I&rsquo;m a mystery author and also took it to my chapter meeting of Mystery Writers of America. The &ldquo;smarties&rdquo; on the board had a hoot playing it. They also are a pretty darn smart group and were hollering out the possible answers and right ones quickly. Bottom line: We all had great fun with it &mdash; and a few walked away feeling incredibly smart and/or smug. Great entertainment!</div>
+      <div class="review-author">&mdash; Patricia H., Pacific Northwest</div>
+    </div>
+
+    <div class="review">
+      <div class="review-text">I bought Orijinz after learning about it from my Wordsmith emails and my family loved playing it over the holidays. It was a smash hit! We would enjoy having new cards, whenever they are available.</div>
+      <div class="review-author">&mdash; Shanta, US &amp; India</div>
+    </div>
+
+  </div>
+
+  <!-- BUY -->
+  <div class="buy-row">
+    <a class="buy-btn" href="https://www.entspire.com/buy">Buy Now</a>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-apps">
+        <span class="footer-label">Try the Orijinz Daily App</span>
+        <div class="footer-app-btns">
+          <a class="footer-app-btn" href="https://apps.apple.com/us/app/orijinz-daily/id6477123796"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg> App Store</a>
+          <a class="footer-app-btn" href="https://play.google.com/store/apps/details?id=com.app.entspirellc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3.6 2.1c-.3.3-.5.8-.5 1.4v17c0 .6.2 1.1.5 1.4l.1.1 9.5-9.5v-.2L3.6 2.1zm13.1 13.1L14.1 12.7l3.8-3.8 3.4 1.9c1 .5 1 1.5 0 2l-4.6 2.4zM14.1 11.3L3.7 1.1c.3-.2.7-.1 1.1.1l11.3 6.4-2 3.7zm0 1.4l2 3.7-11.3 6.4c-.4.2-.8.3-1.1.1L14.1 12.7z"/></svg> Google Play</a>
+        </div>
+      </div>
+      <form class="footer-newsletter" onsubmit="submitFooterNewsletter(event)">
+        <label class="footer-label" for="footerEmail">Sign up for our free newsletter</label>
+        <div class="footer-email-row">
+          <input id="footerEmail" name="email" type="email" placeholder="Email address" required>
+          <button type="submit">Submit</button>
+        </div>
+        <div class="footer-newsletter-msg" id="footerNewsletterMsg"></div>
+      </form>
+    </div>
+    <div class="footer-copyright"><a href="https://www.entspire.com/about-us" target="_top" style="color:var(--text-dim);text-decoration:none;">About Us</a> &middot; &copy; 2026 by Orijinz &amp; Entspire</div>
+  </footer>
+
+</div>
+
+<script>
+function openMenu() { document.getElementById('menuOverlay').classList.add('open'); }
+function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); }
+function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+
+function submitMenuNewsletter(e) {
+  e.preventDefault();
+  var input = document.getElementById('menuNewsletterEmail'), msg = document.getElementById('menuNewsletterMsg'), btn = e.target.querySelector('button'), email = (input.value||'').trim();
+  if (!email) return; btn.disabled = true; msg.className = 'menu-newsletter-msg'; msg.textContent = 'Signing up\u2026';
+  window.parent.postMessage({ type: 'orijinz_newsletter_signup', email: email, source: 'reviews' }, '*');
+  setTimeout(function() { if (btn.disabled) { msg.className = 'menu-newsletter-msg success'; msg.textContent = 'Thanks! You\u2019re subscribed.'; input.value = ''; btn.disabled = false; } }, 2000);
+}
+function submitFooterNewsletter(e) {
+  e.preventDefault();
+  var input = document.getElementById('footerEmail'), msg = document.getElementById('footerNewsletterMsg'), btn = e.target.querySelector('button'), email = (input.value||'').trim();
+  if (!email) return; btn.disabled = true; if (msg) { msg.className = 'footer-newsletter-msg'; msg.textContent = 'Signing up\u2026'; }
+  window.parent.postMessage({ type: 'orijinz_newsletter_signup', email: email, source: 'reviews-footer' }, '*');
+  setTimeout(function() { if (btn.disabled) { if (msg) { msg.className = 'footer-newsletter-msg success'; msg.textContent = 'Thanks! You\u2019re subscribed.'; } input.value = ''; btn.disabled = false; } }, 2000);
+}
+window.addEventListener('message', function(evt) {
+  if (!evt.data || evt.data.type !== 'orijinz_newsletter_result') return;
+  var s = !!evt.data.success, m = evt.data.message || (s ? 'Thanks! You\u2019re subscribed.' : 'Sign up failed.');
+  ['menuNewsletterMsg','footerNewsletterMsg'].forEach(function(id) { var el = document.getElementById(id); if (el) { el.className = el.className.replace(/success|error/g,'').trim() + ' ' + (s ? 'success' : 'error'); el.textContent = m; } });
+  document.querySelectorAll('.menu-newsletter button, .footer-newsletter button').forEach(function(b) { b.disabled = false; });
+  if (s) { ['menuNewsletterEmail','footerEmail'].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; }); }
+});
+</script>
+</body>
+</html>

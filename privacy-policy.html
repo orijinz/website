@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy &mdash; Orijinz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e12; --bg2: #151519; --bg3: #1a1a22;
+    --card: #181820; --border: #2a2a34;
+    --text: #e0e0e8; --text-dim: #808898;
+    --gold: #f0c860;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; }
+  .page { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+  .nav-bar { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .hamburger { background: none; border: none; color: var(--text-dim); cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+  .hamburger svg { width: 22px; height: 22px; }
+  .nav-spacer { flex: 1; }
+
+  .logo-section { text-align: center; padding: 32px 0 12px; }
+  .logo-text {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    line-height: 1; letter-spacing: -0.01em;
+    display: inline-flex; align-items: baseline;
+  }
+  .logo-text .rijinz-daily {
+    background-image: linear-gradient(90deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #B83030, #E07020, #FFD840);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: inline-block;
+  }
+  .logo-text .logo-spacer { width: 0.25em; }
+  .icon-o { position: relative; display: inline-block; font-size: 1em; line-height: 1; vertical-align: baseline; }
+  .icon-o .o-shadow { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; color: rgba(0,0,0,0.4); position: absolute; top: 0.03em; left: 0.025em; }
+  .icon-o .o-mid { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #7A5CA8, #4A70B8, #2A9AA8, #00A898, #C03828, #C06018, #D0A030, #7A5CA8); position: absolute; top: 0.015em; left: 0.01em; }
+  .icon-o .o-top { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #F05040, #F08030, #FFD840, #9D7DD4); position: relative; }
+
+  .page-title {
+    text-align: center;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    color: var(--text-dim); margin: 4px 0 28px;
+    letter-spacing: 0.02em;
+  }
+  .page-title span { color: var(--gold); }
+
+  .policy {
+    max-width: 780px; margin: 0 auto; padding: 0 16px 40px;
+    font-size: 0.9rem; color: var(--text-dim); line-height: 1.7;
+  }
+  .policy h2 {
+    color: var(--gold); font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin: 28px 0 8px;
+  }
+  .policy h2:first-child { margin-top: 0; }
+  .policy p { margin: 0 0 14px; }
+  .policy ul { margin: 0 0 14px 20px; padding: 0; }
+  .policy li { margin-bottom: 8px; }
+  .policy strong { color: var(--text); }
+  .policy a { color: var(--gold); text-decoration: none; }
+  .policy a:hover { text-decoration: underline; }
+  .policy .legal { font-size: 0.8rem; color: var(--text-dim); opacity: 0.8; }
+
+  /* FOOTER */
+  .site-footer { width: 100%; margin-top: 40px; padding: 24px 16px 28px; border-top: 1px solid var(--border); font-family: 'Nunito Sans', sans-serif; }
+  .site-footer-inner { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .footer-label { display: block; font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+  .footer-app-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.8rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+  .footer-app-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .footer-app-btn svg { opacity: 0.85; }
+  .footer-newsletter { flex: 1; min-width: 240px; }
+  .footer-email-row { display: flex; gap: 0; }
+  .footer-email-row input { flex: 1; padding: 9px 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px 0 0 8px; border-right: none; color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none; }
+  .footer-email-row input:focus { border-color: var(--gold); }
+  .footer-email-row input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .footer-email-row button { padding: 9px 18px; background: var(--gold); border: 1px solid var(--gold); border-radius: 0 8px 8px 0; color: var(--bg); font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s; }
+  .footer-email-row button:hover { opacity: 0.88; }
+  .footer-newsletter-msg { min-height: 1.2em; margin-top: 6px; font-size: 0.72rem; color: var(--text-dim); }
+  .footer-newsletter-msg.success { color: #4caf50; }
+  .footer-newsletter-msg.error { color: #e57373; }
+  .footer-copyright { text-align: center; font-size: 0.72rem; color: var(--text-dim); padding-top: 16px; border-top: 1px solid var(--border); letter-spacing: 0.04em; }
+  @media (max-width: 480px) {
+    .site-footer-inner { gap: 20px; }
+    .footer-apps, .footer-newsletter { width: 100%; }
+  }
+
+  /* MENU */
+  .menu-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; }
+  .menu-overlay.open { display: block; }
+  .menu-panel { position: fixed; top: 0; left: 0; bottom: 0; width: min(230px, 75vw); background: var(--bg2); border-right: 1px solid var(--border); z-index: 501; overflow-y: auto; transform: translateX(-100%); transition: transform 0.25s ease; }
+  .menu-overlay.open .menu-panel { transform: translateX(0); }
+  .menu-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .menu-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); }
+  .menu-close { background: none; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+  .menu-items { padding: 8px 0; }
+  .menu-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 20px; background: none; border: none; font-family: 'Nunito Sans', sans-serif; font-size: 0.88rem; color: var(--text-dim); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  .menu-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .menu-divider { height: 1px; background: var(--border); margin: 8px 20px; }
+  .menu-section-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 20px 4px; opacity: 0.6; }
+  .menu-apps-row { display: flex; gap: 8px; padding: 4px 20px 10px; }
+  .menu-app-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.75rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+  .menu-app-btn:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+  .menu-app-btn svg { opacity: 0.85; flex-shrink: 0; }
+  .menu-newsletter { padding: 4px 20px 12px; }
+  .menu-newsletter input { width: 100%; padding: 9px 12px; margin-bottom: 6px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none; box-sizing: border-box; }
+  .menu-newsletter input:focus { border-color: var(--gold); }
+  .menu-newsletter input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .menu-newsletter button { width: 100%; padding: 9px; background: var(--gold); border: 1px solid var(--gold); border-radius: 8px; color: var(--bg); font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s; }
+  .menu-newsletter button:hover { opacity: 0.88; }
+  .menu-newsletter button:disabled { opacity: 0.5; cursor: default; }
+  .menu-newsletter-msg { min-height: 1.2em; margin-top: 6px; font-size: 0.75rem; color: var(--text-dim); }
+  .menu-newsletter-msg.success { color: #4caf50; }
+  .menu-newsletter-msg.error { color: #e57373; }
+</style>
+</head>
+<body>
+
+<!-- Menu overlay -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
+  <nav class="menu-panel" onclick="event.stopPropagation()">
+    <div class="menu-header">
+      <span class="menu-title">Orijinz</span>
+      <button class="menu-close" onclick="closeMenu()">&#10005;</button>
+    </div>
+    <div class="menu-items">
+      <a class="menu-item" href="https://www.entspire.com">Home</a>
+      <a class="menu-item" href="https://www.entspire.com/orijinz-daily-qa">Orijinz Daily Q&amp;A</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Daily Games</div>
+      <a class="menu-item" href="https://www.entspire.com/odwordsandphrases">&#x1F524; Words &amp; Phrases</a>
+      <a class="menu-item" href="https://www.entspire.com/od70s-songs">&#x1F3B5; 70s Songs</a>
+      <a class="menu-item" href="https://www.entspire.com/odcovers">&#x1F3B8; Covers</a>
+      <a class="menu-item" href="https://www.entspire.com/odmovies">&#x1F3AC; Movies</a>
+      <a class="menu-item" href="https://www.entspire.com/odslogans">&#x1F4E2; Slogans</a>
+      <a class="menu-item" href="https://www.entspire.com/odquotes">&#x1F4AC; Quotes</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Card Games</div>
+      <a class="menu-item" href="https://www.entspire.com/the-card-games">&#x1F0CF; The Card Games</a>
+      <a class="menu-item" href="https://www.entspire.com/buy">&#x1F6D2; Buy</a>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Get the Orijinz Daily App</div>
+      <div class="menu-apps-row">
+        <a class="menu-app-btn" href="https://apps.apple.com/us/app/orijinz-daily/id6477123796"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg> iOS</a>
+        <a class="menu-app-btn" href="https://play.google.com/store/apps/details?id=com.app.entspirellc"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3.6 2.1c-.3.3-.5.8-.5 1.4v17c0 .6.2 1.1.5 1.4l.1.1 9.5-9.5v-.2L3.6 2.1zm13.1 13.1L14.1 12.7l3.8-3.8 3.4 1.9c1 .5 1 1.5 0 2l-4.6 2.4zM14.1 11.3L3.7 1.1c.3-.2.7-.1 1.1.1l11.3 6.4-2 3.7zm0 1.4l2 3.7-11.3 6.4c-.4.2-.8.3-1.1.1L14.1 12.7z"/></svg> Android</a>
+      </div>
+      <div class="menu-divider"></div>
+      <div class="menu-section-label">Free email newsletter</div>
+      <form class="menu-newsletter" onsubmit="submitMenuNewsletter(event)">
+        <input id="menuNewsletterEmail" type="email" placeholder="Your email" required>
+        <button type="submit">Sign Up</button>
+        <div class="menu-newsletter-msg" id="menuNewsletterMsg"></div>
+      </form>
+    </div>
+  </nav>
+</div>
+
+<div class="page">
+
+  <div class="nav-bar">
+    <button class="hamburger" onclick="openMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <div class="logo-section">
+    <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span></div>
+  </div>
+  <div class="page-title"><span>Privacy Policy</span></div>
+
+  <div class="policy">
+
+    <p>Your privacy is important, so we&rsquo;d like to explain what information we collect when you visit <a href="https://www.entspire.com">www.entspire.com</a>, why we collect it and how it is used. We&rsquo;d also like to explain your options to access and control your information, our data security practices and other matters.</p>
+
+    <h2>Special Note About Children</h2>
+    <p>This site is not intended for children, especially kids under 13. Children may use this site only with the direct supervision of their parent.</p>
+
+    <h2>What Information Do We Collect From You? Why?</h2>
+    <p>We generally do not collect personal information from you at our site unless you make a purchase. In that case we collect the information necessary to complete the purchase and ship you product or subscribe to our online Orijinz Daily games.</p>
+    <p>You can choose to be a member of our email mailing list. The benefit of the list is that it gives us a way to contact you with important updates about our products. We will strive to be thoughtful and prudent about the frequency of our email updates so they are informative and not annoying. You can choose to remove yourself from the list at any time.</p>
+    <p>If you send us a message containing your name, email address, picture or any other personal information, please do so on a non-confidential basis. We may or may not respond to it, depending on the nature of the communication and our available staff.</p>
+
+    <h2>What Information Do We Share With Others? Why?</h2>
+    <p>We are not in the business of selling or sharing information to others and generally do not do so. The exceptions are below:</p>
+    <ul>
+      <li><strong>Agents:</strong> We may employ other companies and individuals to perform functions on our behalf. Examples include fulfilling orders, delivering packages, sending postal mail and e-mail, removing repetitive information from customer lists, analyzing data, providing marketing assistance, processing credit card payments, and providing customer service. They have access to personal information needed to perform their functions, but may not use it for other purposes.</li>
+      <li><strong>Business Transfers:</strong> As we continue to develop our business, we might sell or buy assets. In such transactions, customer information generally is one of the transferred business assets. If Entspire LLC, or substantially all of its assets are acquired, customer information will of course be one of the transferred assets.</li>
+      <li><strong>Protection of Entspire LLC and Others:</strong> We may disclose your personal information when we believe it is necessary to comply with law and protect the rights, property, or safety of Entspire LLC, our users, or others. This includes exchanging information with other companies and organizations for fraud protection and credit risk reduction.</li>
+      <li><strong>With Your Consent:</strong> Other than as set out above, you will receive notice when information about you might go to third parties, and you will have an opportunity to choose not to share the information.</li>
+    </ul>
+
+    <h2>What Are Cookies? Why Do We Use Them?</h2>
+    <p>Cookies are small files stored by your browser in your computer when you visit our site. We may use cookies to improve our site and make it easier to use. Cookies permit us to recognize users and avoid repetitive requests for the same information.</p>
+
+    <h2>How Do We Protect Information We Collect?</h2>
+    <p>We follow technical and management practices we believe are reasonable under the circumstances to protect the confidentiality, security and integrity of information stored on our system, but we do not operate a completely secure site. For example, we generally do not always use secure pages to collect information and we generally do not store data in encrypted form.</p>
+
+    <h2>How Long Do We Keep User Information?</h2>
+    <p>We plan to keep user data on our server or in our archives for as long as we reasonably need it. We may alter this practice according to changing requirements. For example, we may delete some data if needed to free up storage space. We may keep other data for longer periods if the law requires it.</p>
+
+    <h2>Your Consent to This Policy</h2>
+    <p>By using our site, you agree to this Policy. This is our entire and exclusive Privacy Policy and it supersedes any earlier version. We may change it by posting a new version on our site so check back periodically.</p>
+
+    <h2>Legal</h2>
+    <p class="legal">This site operates as-is and as available. Any warranties of accuracy, quality, title, fitness or merchantability are disclaimed. We are not liable for direct, indirect, incidental or consequential damages or for events beyond our direct control.</p>
+    <p class="legal">Washington law governs this Policy, excluding conflicts of law principles. Any provision of this Policy that is illegal or unenforceable shall be deemed automatically conformed to the minimum requirements of law. Any legal actions against us must be commenced in New York within one year after the claim arose, or be barred.</p>
+
+    <h2>If You Have a Privacy Question</h2>
+    <p>If you have a privacy question about our site, please email: <a href="mailto:orijinzgames@outlook.com">orijinzgames@outlook.com</a>.</p>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-apps">
+        <span class="footer-label">Try the Orijinz Daily App</span>
+        <div class="footer-app-btns">
+          <a class="footer-app-btn" href="https://apps.apple.com/us/app/orijinz-daily/id6477123796">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            App Store
+          </a>
+          <a class="footer-app-btn" href="https://play.google.com/store/apps/details?id=com.app.entspirellc">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3.6 2.1c-.3.3-.5.8-.5 1.4v17c0 .6.2 1.1.5 1.4l.1.1 9.5-9.5v-.2L3.6 2.1zm13.1 13.1L14.1 12.7l3.8-3.8 3.4 1.9c1 .5 1 1.5 0 2l-4.6 2.4zM14.1 11.3L3.7 1.1c.3-.2.7-.1 1.1.1l11.3 6.4-2 3.7zm0 1.4l2 3.7-11.3 6.4c-.4.2-.8.3-1.1.1L14.1 12.7z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+      <form class="footer-newsletter" onsubmit="submitFooterNewsletter(event)">
+        <label class="footer-label" for="footerEmail">Sign up for our free newsletter</label>
+        <div class="footer-email-row">
+          <input id="footerEmail" name="email" type="email" placeholder="Email address" required>
+          <button type="submit">Submit</button>
+        </div>
+        <div class="footer-newsletter-msg" id="footerNewsletterMsg"></div>
+      </form>
+    </div>
+    <div class="footer-copyright"><a href="https://www.entspire.com/about-us" target="_top" style="color:var(--text-dim);text-decoration:none;">About Us</a> &middot; &copy; 2026 by Orijinz &amp; Entspire</div>
+  </footer>
+
+</div>
+
+<script>
+function openMenu() { document.getElementById('menuOverlay').classList.add('open'); }
+function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); }
+function submitMenuNewsletter(e) {
+  e.preventDefault();
+  var input = document.getElementById('menuNewsletterEmail'), msg = document.getElementById('menuNewsletterMsg'), btn = e.target.querySelector('button'), email = (input.value||'').trim();
+  if (!email) return; btn.disabled = true; msg.className = 'menu-newsletter-msg'; msg.textContent = 'Signing up\u2026';
+  window.parent.postMessage({ type: 'orijinz_newsletter_signup', email: email, source: 'privacy' }, '*');
+  setTimeout(function() { if (btn.disabled) { msg.className = 'menu-newsletter-msg success'; msg.textContent = 'Thanks! You\u2019re subscribed.'; input.value = ''; btn.disabled = false; } }, 2000);
+}
+function submitFooterNewsletter(e) {
+  e.preventDefault();
+  var input = document.getElementById('footerEmail'), msg = document.getElementById('footerNewsletterMsg'), btn = e.target.querySelector('button'), email = (input.value||'').trim();
+  if (!email) return; btn.disabled = true; if (msg) { msg.className = 'footer-newsletter-msg'; msg.textContent = 'Signing up\u2026'; }
+  window.parent.postMessage({ type: 'orijinz_newsletter_signup', email: email, source: 'privacy-footer' }, '*');
+  setTimeout(function() { if (btn.disabled) { if (msg) { msg.className = 'footer-newsletter-msg success'; msg.textContent = 'Thanks! You\u2019re subscribed.'; } input.value = ''; btn.disabled = false; } }, 2000);
+}
+window.addEventListener('message', function(evt) {
+  if (!evt.data || evt.data.type !== 'orijinz_newsletter_result') return;
+  var s = !!evt.data.success, m = evt.data.message || (s ? 'Thanks! You\u2019re subscribed.' : 'Sign up failed.');
+  ['menuNewsletterMsg','footerNewsletterMsg'].forEach(function(id) { var el = document.getElementById(id); if (el) { el.className = el.className.replace(/success|error/g,'').trim() + ' ' + (s ? 'success' : 'error'); el.textContent = m; } });
+  document.querySelectorAll('.menu-newsletter button, .footer-newsletter button').forEach(function(b) { b.disabled = false; });
+  if (s) { ['menuNewsletterEmail','footerEmail'].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; }); }
+});
+</script>
+</body>
+</html>
