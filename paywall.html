@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orijinz Daily &mdash; Subscribe to Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #121218;
+    --bg2: #1a1a24;
+    --bg3: #22222e;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f0f0;
+    --text-dim: #a0a8b8;
+    --gold: #f5c842;
+    --blue: #43bad0;
+    --green: #4caf50;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; min-height: 100vh; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 36px 20px 48px; }
+
+  /* Header */
+  .logo-section { text-align: center; padding: 32px 0 12px; }
+  .logo-text {
+    font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 2.6rem;
+    line-height: 1; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .logo-text .rijinz-daily {
+    background: linear-gradient(180deg, #ffffff 0%, #a8b8c8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .logo-text .logo-spacer { width: 0.25em; }
+  .icon-o { position: relative; display: inline-block; font-size: 1em; line-height: 1; vertical-align: baseline; }
+  .icon-o .o-shadow { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; color: rgba(0,0,0,0.4); position: absolute; top: 0.03em; left: 0.025em; }
+  .icon-o .o-mid { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #7A5CA8, #4A70B8, #2A9AA8, #00A898, #C03828, #C06018, #D0A030, #7A5CA8); position: absolute; top: 0.015em; left: 0.01em; }
+  .icon-o .o-top { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #F05040, #F08030, #FFD840, #9D7DD4); position: relative; }
+  .tagline { text-align: center; color: var(--text-dim); font-size: 0.92rem; font-style: italic; margin-bottom: 28px; }
+
+  /* Marketing copy */
+  .copy { max-width: 700px; margin: 0 auto 10px; font-size: 0.9rem; color: var(--text-dim); line-height: 1.65; }
+  .copy p { margin-bottom: 12px; }
+  .copy strong { color: var(--text); }
+  .copy .game-list { margin: 8px 0 12px 0; padding: 0; list-style: none; }
+  .copy .game-list li { padding: 2px 0; }
+  .copy .game-list li strong { color: var(--blue); }
+
+  /* Section label */
+  .section-label {
+    font-family: 'Nunito Sans', sans-serif; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim);
+    margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  /* Plan cards grid */
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .plan-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px 18px 18px; text-align: center; position: relative;
+    transition: border-color 0.2s;
+  }
+  .plan-card.featured { border-color: var(--gold); border-width: 2px; }
+  .plan-badge {
+    position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: #111; font-size: 0.58rem; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 12px; border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .plan-img { margin: 0 auto 10px; width: 160px; height: 160px; border-radius: 10px; overflow: hidden; }
+  .plan-img img { width: 100%; height: 100%; object-fit: cover; }
+
+  .plan-name { font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800; margin-bottom: 2px; }
+  .plan-price { font-family: 'Nunito', sans-serif; font-size: 1.8rem; font-weight: 900; margin: 4px 0 0; }
+  .plan-price .currency { font-size: 1rem; vertical-align: top; line-height: 2; }
+  .plan-price .period { font-size: 0.7rem; color: var(--text-dim); font-weight: 600; }
+  .plan-desc { font-size: 0.75rem; color: var(--text-dim); margin: 6px 0 4px; line-height: 1.4; }
+  .plan-trial { font-size: 0.72rem; color: var(--green); font-weight: 600; margin-bottom: 12px; }
+
+  .plan-btn {
+    display: block; width: 100%; padding: 10px; border: none; border-radius: 8px;
+    font-family: 'Nunito Sans', sans-serif; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; transition: opacity 0.15s; text-decoration: none; text-align: center;
+    color: #111; background: var(--gold);
+  }
+  .plan-btn:hover { opacity: 0.85; }
+
+  .plan-features {
+    list-style: none; text-align: left; margin: 10px 0 14px; padding: 0;
+  }
+  .plan-features li {
+    font-size: 0.73rem; color: var(--text-dim); padding: 3px 0;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .plan-features .check { color: var(--green); font-weight: 700; }
+
+  /* Footer note */
+  .note { text-align: center; color: var(--text-dim); font-size: 0.75rem; line-height: 1.6; margin-top: 24px; }
+  .note a { color: var(--blue); text-decoration: none; }
+
+  @media (max-width: 540px) {
+    .plans-grid { grid-template-columns: 1fr; max-width: 320px; margin-left: auto; margin-right: auto; }
+    .container { padding: 24px 16px 36px; }
+    .logo { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="logo-section">
+    <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
+  </div>
+  <div class="tagline">So many games, so much fun &mdash; and it costs less than a cup of coffee.</div>
+
+  <div class="copy">
+    <p>Introducing the new Orijinz Daily lineup. A daily stream of &ldquo;Hey, I never knew that,&rdquo; &ldquo;Oooh, that was fun,&rdquo; &ldquo;I totally forgot that song,&rdquo; &ldquo;I should rewatch that movie,&rdquo; and &ldquo;So <em>that&rsquo;s</em> who said it&rdquo; moments.</p>
+    <p><strong>Six games. Six daily brain-tingles:</strong></p>
+    <ul class="game-list">
+      <li><strong>Words &amp; Phrases</strong> &mdash; Read the origin. Guess the word or phrase.</li>
+      <li><strong>70s Songs</strong> &mdash; See the song title. Name the artist.</li>
+      <li><strong>Covers</strong> &mdash; Hear the cover. Guess the original artist.</li>
+      <li><strong>Movies</strong> &mdash; Read the mini-synopsis. Guess the film.</li>
+      <li><strong>Slogans</strong> &mdash; Read the slogan. Name the source.</li>
+      <li><strong>Quotes</strong> &mdash; Read the quote. Guess who said it.</li>
+    </ul>
+    <p>Sign up for any game using the subscription plans below and enjoy a <strong>two-week free trial</strong>.</p>
+    <p>After that, each game is just <strong>$1.99/month</strong>, or grab the Orijinz Daily Game Pass for an introductory price of <strong>$5.99/month</strong> and play every daily puzzle from all six games, every day.</p>
+  </div>
+
+  <!-- ALL GAMES PASS -->
+  <div class="section-label">Best Value</div>
+  <div class="plans-grid" style="max-width:300px;margin-left:auto;margin-right:auto;">
+    <div class="plan-card featured">
+      <div class="plan-badge">Save 50%</div>
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/Game Pass title graphic.png" alt="All Games Pass"></div>
+      <div class="plan-name">Orijinz Daily All Games Pass</div>
+      <div class="plan-price"><span class="currency">$</span>5.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Play the daily puzzle for all Orijinz Daily Games</div>
+      <div class="plan-trial">14 day free trial</div>
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> All six games, every day</li>
+        <li><span class="check">&#10003;</span> Cancel anytime</li>
+        <li><span class="check">&#10003;</span> No ads</li>
+      </ul>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=57add40e-8a34-4f11-8273-cca387fbe7b2&checkoutFlowId=912a7fd5-6220-43f4-ad9b-baea56342064">Start Free Trial</a>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL GAMES -->
+  <div class="section-label">Individual Games</div>
+  <div class="plans-grid">
+
+    <!-- Words & Phrases -->
+    <div class="plan-card">
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/Words%20%26%20Phrases%20title%20graphic.png" alt="Words &amp; Phrases"></div>
+      <div class="plan-name">Words &amp; Phrases</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Read the origin and guess the matching word or phrase</div>
+      <div class="plan-trial">14 day free trial</div>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=e4a5c01d-9d92-4650-9f17-583e6dc32f69&checkoutFlowId=0b4b2a75-dc0a-4256-ac03-d5e81275bf3c">Start Free Trial</a>
+    </div>
+
+    <!-- 70s Songs -->
+    <div class="plan-card">
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/70s%20Songs.png" alt="70s Songs"></div>
+      <div class="plan-name">70s Songs</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Read the song title. Guess the matching artist</div>
+      <div class="plan-trial">14 day free trial</div>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=1586d054-9d82-4e6e-b64c-da3c09d55f9d&checkoutFlowId=bfcac153-e9a5-47bf-9d93-57462d943697">Start Free Trial</a>
+    </div>
+
+    <!-- Covers -->
+    <div class="plan-card">
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/Covers%20title%20graphic.png" alt="Covers"></div>
+      <div class="plan-name">Covers</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Listen to a cover. Guess the original artist</div>
+      <div class="plan-trial">14 day free trial</div>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=8ccae465-b3f7-4f82-8966-8c3892e30f66&checkoutFlowId=f73434f1-05f4-4aee-904f-8d1bfe4d0275">Start Free Trial</a>
+    </div>
+
+    <!-- Movies -->
+    <div class="plan-card">
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/Orijinz%20Movies%20title%20graphic.png" alt="Movies"></div>
+      <div class="plan-name">Movies</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Read a movie synopsis. Guess the movie</div>
+      <div class="plan-trial">14 day free trial</div>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=c52bfa5a-81db-456b-bdd3-8c46d8136880&checkoutFlowId=6eab9644-3343-42d8-afd5-2096e4d69c3e">Start Free Trial</a>
+    </div>
+
+    <!-- Slogans -->
+    <div class="plan-card">
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/Slogans%20title%20graphic.png" alt="Slogans"></div>
+      <div class="plan-name">Slogans</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Read the slogan. Guess the source</div>
+      <div class="plan-trial">14 day free trial</div>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=62892428-37aa-474c-948f-cc0f3f34ac6b&checkoutFlowId=f7ed10e6-0f41-4f25-b2c5-911bbdab6d18">Start Free Trial</a>
+    </div>
+
+    <!-- Quotes -->
+    <div class="plan-card">
+      <div class="plan-img"><img src="https://orijinz.github.io/screenshots/Quotes%20title%20graphic.png" alt="Quotes"></div>
+      <div class="plan-name">Quotes</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period"> / month</span></div>
+      <div class="plan-desc">Read the quote. Guess who said it</div>
+      <div class="plan-trial">14 day free trial</div>
+      <a class="plan-btn" target="_top" href="https://www.entspire.com/pricing-plans/checkout?planId=02eab473-86b3-418e-83f3-434166e120b5&checkoutFlowId=a3ac65c1-6939-4d71-9d89-4ee536183a30">Start Free Trial</a>
+    </div>
+
+  </div>
+
+  <div class="note">
+    All plans renew monthly. Cancel anytime from your Account Settings.<br>
+    Questions? Check out our <a target="_top" href="https://www.entspire.com/ODQ&A">Orijinz Daily Q&amp;A</a>.
+  </div>
+
+</div>
+</body>
+</html>
