@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orijinz Daily &mdash; Plans &amp; Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Nunito+Sans:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #121218;
+    --bg2: #1a1a24;
+    --bg3: #22222e;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f0f0;
+    --text-dim: #a0a8b8;
+    --gold: #f5c842;
+    --blue: #43bad0;
+    --green: #4caf50;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; min-height: 100vh; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 60px; text-align: center; }
+
+  /* Logo */
+  .logo { font-family: 'Nunito', sans-serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; }
+  .logo .o { background: conic-gradient(from 200deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #9b59b6, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .tagline { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 36px; }
+
+  /* Headline */
+  .headline { font-family: 'Nunito', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; line-height: 1.3; }
+  .subheadline { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; max-width: 600px; margin: 0 auto 36px; }
+
+  /* Game mini tiles */
+  .games-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px; }
+  .game-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
+    padding: 6px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text);
+  }
+  .game-chip .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Pricing cards */
+  .plans { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+  .plan-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 24px 24px; width: 260px; text-align: center; position: relative;
+    transition: border-color 0.2s;
+  }
+  .plan-card.featured { border-color: var(--gold); }
+  .plan-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: #111; font-size: 0.62rem; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 14px; border-radius: 10px;
+  }
+  .plan-name { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+  .plan-price { font-family: 'Nunito', sans-serif; font-size: 2.2rem; font-weight: 900; margin: 8px 0 2px; }
+  .plan-price .currency { font-size: 1.2rem; vertical-align: top; }
+  .plan-price .period { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; }
+  .plan-trial { font-size: 0.78rem; color: var(--green); font-weight: 600; margin-bottom: 16px; }
+  .plan-features { list-style: none; text-align: left; margin-bottom: 20px; }
+  .plan-features li {
+    font-size: 0.82rem; color: var(--text-dim); padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features .check { color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .plan-btn {
+    display: block; width: 100%; padding: 12px; border: none; border-radius: 8px;
+    font-family: 'Nunito Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; transition: opacity 0.15s; text-decoration: none; text-align: center;
+  }
+  .plan-btn:hover { opacity: 0.85; }
+  .plan-btn.primary { background: var(--gold); color: #111; }
+  .plan-btn.secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+
+  /* Bottom note */
+  .note { color: var(--text-dim); font-size: 0.8rem; line-height: 1.6; max-width: 520px; margin: 0 auto; }
+
+  @media (max-width: 580px) {
+    .plans { flex-direction: column; align-items: center; }
+    .plan-card { width: 100%; max-width: 320px; }
+    .headline { font-size: 1.3rem; }
+    .container { padding: 28px 16px 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="logo"><span class="o">O</span>rijinz Daily</div>
+  <div class="tagline">The fun and fascinating origins games</div>
+
+  <div class="headline">Six daily games. Endless &ldquo;I didn&rsquo;t know that&rdquo; moments.</div>
+  <div class="subheadline">Choose a single game or get all six with the Game Pass. Every plan starts with a free 14-day trial &mdash; no commitment, cancel anytime.</div>
+
+  <div class="games-row">
+    <div class="game-chip"><span class="dot" style="background:#43BAD0"></span>Words &amp; Phrases</div>
+    <div class="game-chip"><span class="dot" style="background:#9D7DD4"></span>70s Songs</div>
+    <div class="game-chip"><span class="dot" style="background:#6898E8"></span>Covers</div>
+    <div class="game-chip"><span class="dot" style="background:#9AAAB8"></span>Movies</div>
+    <div class="game-chip"><span class="dot" style="background:#FF8820"></span>Slogans</div>
+    <div class="game-chip"><span class="dot" style="background:#00CEB8"></span>Quotes</div>
+  </div>
+
+  <div class="plans">
+
+    <!-- Single Game -->
+    <div class="plan-card">
+      <div class="plan-name">Single Game</div>
+      <div class="plan-price"><span class="currency">$</span>1.99<span class="period">/mo</span></div>
+      <div class="plan-trial">14-day free trial</div>
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> Pick any one game</li>
+        <li><span class="check">&#10003;</span> New puzzle every day</li>
+        <li><span class="check">&#10003;</span> Stats, streaks &amp; leaderboard</li>
+        <li><span class="check">&#10003;</span> Share results with friends</li>
+        <li><span class="check">&#10003;</span> Cancel anytime</li>
+      </ul>
+      <a class="plan-btn secondary" target="_top" href="https://www.entspire.com/plans-pricing">Start Free Trial</a>
+    </div>
+
+    <!-- Game Pass -->
+    <div class="plan-card featured">
+      <div class="plan-badge">Best Value</div>
+      <div class="plan-name">Game Pass</div>
+      <div class="plan-price"><span class="currency">$</span>5.99<span class="period">/mo</span></div>
+      <div class="plan-trial">14-day free trial</div>
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> All six games</li>
+        <li><span class="check">&#10003;</span> New puzzle every day</li>
+        <li><span class="check">&#10003;</span> Stats, streaks &amp; leaderboard</li>
+        <li><span class="check">&#10003;</span> Cross-game dashboard</li>
+        <li><span class="check">&#10003;</span> Save 67% vs. buying separately</li>
+        <li><span class="check">&#10003;</span> Cancel anytime</li>
+      </ul>
+      <a class="plan-btn primary" target="_top" href="https://www.entspire.com/plans-pricing">Start Free Trial</a>
+    </div>
+
+  </div>
+
+  <div class="note">
+    All plans renew monthly. You can cancel anytime from your Account Settings.
+    <br>Questions? Check out our <a target="_top" href="https://www.entspire.com/ODQ&amp;A" style="color:var(--blue);text-decoration:none;">Q&amp;A</a> page.
+  </div>
+
+</div>
+</body>
+</html>
