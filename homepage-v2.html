@@ -328,7 +328,7 @@
     <p>Now we&rsquo;re leveling up.</p>
     <p>Introducing the new Orijinz Daily lineup &mdash; a revamped <strong>Words &amp; Phrases</strong> plus five brand&#8209;new daily games: <strong>70s Songs, Covers, Movies, Slogans, and Quotes</strong>. Six games. Six daily brain-tingles. Endless &ldquo;wow, that was fascinating,&rdquo; &ldquo;oooh, that was fun,&rdquo; &ldquo;that was so cool,&rdquo; and &ldquo;I didn&rsquo;t know that&rdquo; moments.</p>
     <p>Sign up for any game and enjoy a <strong>two&#8209;week free trial</strong>. After that, each game is just <strong>$1.99/month</strong>, or grab the <strong>Orijinz Daily All Games Pass</strong> for an introductory <strong>$5.99/month</strong> and play <em>all</em> the games, <em>every</em> day.</p>
-    <p>Some puzzles are easy. Some will make you pace around the room. All of them are fun, clever, interesting, addictive and a blast to share and compete with friends and family. Want to learn more? Just go to the <svg style="vertical-align:middle;margin:0 2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> menu on the upper left and choose Orijinz Daily Q&amp;A. You can download the Orijinz Daily App on that menu too.</p>
+    <p>Some puzzles are easy. Some will make you pace around the room. All of them are fun, clever, interesting, addictive and a blast to share and compete with friends and family. <strong style="color:#fff;">Want to learn more? Just go to the <svg style="vertical-align:middle;margin:0 2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> menu on the upper left and choose Orijinz Daily Q&amp;A. You can download the Orijinz Daily App on that menu too.</strong></p>
     <p>Give Orijinz Daily a spin &mdash; your brain will thank you.</p>
   </div>
 
@@ -511,11 +511,19 @@ window.addEventListener('message', function(evt) {
 
 // === SUBSCRIPTION CHECK ===
 // Ask parent Wix page what games this member is subscribed to
+// Default: hide Play buttons until we know (avoids flash)
+document.querySelectorAll('.tile-play').forEach(function(b) { b.style.display = 'none'; });
 window.parent.postMessage({ type: 'orijinz_check_subscriptions' }, '*');
+// Safety timeout: if no response in 3s, show both buttons
+var _subTimeout = setTimeout(function() {
+  document.querySelectorAll('.tile-play').forEach(function(b) { b.style.display = ''; });
+}, 3000);
 
 window.addEventListener('message', function(event) {
   if (!event.data || event.data.type !== 'orijinz_subscriptions') return;
-  var subs = event.data.games || []; // array of game identifiers
+  clearTimeout(_subTimeout);
+  var loggedIn = event.data.loggedIn || false;
+  var subs = event.data.games || [];
   var hasAllGames = event.data.allGamesPass || false;
 
   document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
@@ -524,12 +532,16 @@ window.addEventListener('message', function(event) {
     var playBtn = tile.querySelector('.tile-play');
     var trialBtn = tile.querySelector('.tile-trial');
 
-    if (subscribed) {
-      // Subscribed: show Play, hide Start Free Trial
+    if (!loggedIn) {
+      // Not logged in: show only Start Free Trial
+      if (playBtn) playBtn.style.display = 'none';
+      if (trialBtn) trialBtn.style.display = '';
+    } else if (subscribed) {
+      // Logged in + subscribed: show only Play
       if (playBtn) playBtn.style.display = '';
       if (trialBtn) trialBtn.style.display = 'none';
     } else {
-      // Not subscribed: show both
+      // Logged in + not subscribed: show both
       if (playBtn) playBtn.style.display = '';
       if (trialBtn) trialBtn.style.display = '';
     }
