@@ -48,6 +48,20 @@
   .marketing p:last-child { margin-bottom: 0; }
   .marketing strong { color: var(--text); }
   .marketing em { font-style: italic; }
+  .marketing-toggle {
+    max-width: 780px; margin: 0 auto; padding: 0 16px;
+    display: flex; align-items: center; cursor: pointer; user-select: none;
+  }
+  .marketing-toggle .toggle-arrow {
+    font-size: 0.6rem; color: var(--text-dim); margin-right: 8px;
+    transition: transform 0.2s; display: inline-block;
+  }
+  .marketing-toggle.collapsed .toggle-arrow { transform: rotate(-90deg); }
+  .marketing-toggle .toggle-label {
+    font-size: 0.78rem; color: var(--text-dim); font-style: italic;
+  }
+  .marketing-toggle:hover .toggle-label { color: var(--text); }
+  .marketing.collapsed { display: none; }
 
   /* SECTION LABEL */
   .section-label {
@@ -323,7 +337,11 @@
   </div>
 
   <!-- MARKETING -->
-  <div class="marketing">
+  <div class="marketing-toggle" id="marketingToggle" onclick="toggleMarketing()">
+    <span class="toggle-arrow">&#9660;</span>
+    <span class="toggle-label">About Orijinz Daily</span>
+  </div>
+  <div class="marketing" id="marketingContent">
     <p>For over a decade, Orijinz has been the little guessing game that could &mdash; surprising, delighting, and occasionally stumping players around the world. It all started with our card games &mdash; read an origin, guess the matching word or phrase or read a quote and guess the voice behind it. After that, Orijinz Daily arrived with one fresh puzzle every morning that you can play on your computer, phone or laptop.</p>
     <p>Now we&rsquo;re leveling up.</p>
     <p>Introducing the new Orijinz Daily lineup &mdash; a revamped <strong>Words &amp; Phrases</strong> plus five brand&#8209;new daily games: <strong>70s Songs, Covers, Movies, Slogans, and Quotes</strong>. Six games. Six daily brain-tingles. Endless &ldquo;wow, that was fascinating,&rdquo; &ldquo;oooh, that was fun,&rdquo; &ldquo;that was so cool,&rdquo; and &ldquo;I didn&rsquo;t know that&rdquo; moments.</p>
@@ -471,6 +489,25 @@
 <script>
 function openMenu() { document.getElementById('menuOverlay').classList.add('open'); }
 function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); }
+
+// Marketing text toggle
+function toggleMarketing() {
+  var content = document.getElementById('marketingContent');
+  var toggle = document.getElementById('marketingToggle');
+  var collapsed = !content.classList.contains('collapsed');
+  content.classList.toggle('collapsed', collapsed);
+  toggle.classList.toggle('collapsed', collapsed);
+  try { localStorage.setItem('orijinzMarketingCollapsed', collapsed ? '1' : '0'); } catch(e) {}
+}
+// Restore state on load
+(function() {
+  try {
+    if (localStorage.getItem('orijinzMarketingCollapsed') === '1') {
+      document.getElementById('marketingContent').classList.add('collapsed');
+      document.getElementById('marketingToggle').classList.add('collapsed');
+    }
+  } catch(e) {}
+})();
 
 function submitMenuNewsletter(e) {
   e.preventDefault();
