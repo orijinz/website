@@ -64,10 +64,10 @@
   /* GAME TILE */
   .game-tile {
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; cursor: pointer; text-decoration: none; color: var(--text);
-    display: flex; flex-direction: column; transition: transform 0.15s, border-color 0.15s;
+    overflow: hidden; color: var(--text);
+    display: flex; flex-direction: column; transition: border-color 0.15s;
   }
-  .game-tile:hover { transform: translateY(-3px); border-color: #444; }
+  .game-tile:hover { border-color: #444; }
   .game-tile-color { height: 6px; }
 
   /* GAME SCREENSHOT */
@@ -83,14 +83,22 @@
   .tile-body { padding: 10px 14px 12px; }
   .tile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   .tile-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem; }
+  .tile-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; margin-bottom: 8px; }
+  .tile-buttons { display: flex; justify-content: space-between; align-items: center; }
   .tile-play {
     display: inline-block; background: none; border: 1px solid var(--border);
     color: var(--text); padding: 5px 16px; border-radius: 16px;
     font-size: 0.68rem; font-weight: 700; text-align: center; transition: all 0.15s;
-    flex-shrink: 0;
+    text-decoration: none; flex-shrink: 0;
   }
-  .game-tile:hover .tile-play { border-color: var(--gold); color: var(--gold); }
-  .tile-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; }
+  .tile-play:hover { border-color: var(--gold); color: var(--gold); }
+  .tile-trial {
+    display: inline-block; background: var(--gold); border: none;
+    color: #111; padding: 5px 14px; border-radius: 16px;
+    font-size: 0.68rem; font-weight: 700; text-align: center; transition: opacity 0.15s;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .tile-trial:hover { opacity: 0.85; }
 
   /* CARD GAMES GRID */
   .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 500px; }
@@ -329,64 +337,88 @@
   <div class="game-grid">
 
     <!-- Words & Phrases -->
-    <a class="game-tile" target="_top" href="https://www.entspire.com/odwordsandphrases">
+    <div class="game-tile" data-game="wordsandphrases">
       <div class="game-tile-color" style="background:linear-gradient(90deg,#43BAD0,#7FCEDB)"></div>
       <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot-wp.png" alt="Words & Phrases"></div>
       <div class="tile-body">
-        <div class="tile-header"><div class="tile-name">Words & Phrases</div><span class="tile-play">Play</span></div>
+        <div class="tile-name">Words & Phrases</div>
         <div class="tile-desc">Read the origin. Guess the word or phrase.</div>
+        <div class="tile-buttons">
+          <a class="tile-play" target="_top" href="https://www.entspire.com/odwordsandphrases">Play</a>
+          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- 70s Songs -->
-    <a class="game-tile" target="_top" href="https://www.entspire.com/od70s-songs">
+    <div class="game-tile" data-game="70ssongs">
       <div class="game-tile-color" style="background:linear-gradient(90deg,#9D7DD4,#C8A0F0)"></div>
       <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot 70s.png" alt="70s Songs"></div>
       <div class="tile-body">
-        <div class="tile-header"><div class="tile-name">70s Songs</div><span class="tile-play">Play</span></div>
+        <div class="tile-name">70s Songs</div>
         <div class="tile-desc">Read the song title. Guess the artist.</div>
+        <div class="tile-buttons">
+          <a class="tile-play" target="_top" href="https://www.entspire.com/od70s-songs">Play</a>
+          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- Covers -->
-    <a class="game-tile" target="_top" href="https://www.entspire.com/odcovers">
+    <div class="game-tile" data-game="covers">
       <div class="game-tile-color" style="background:linear-gradient(90deg,#6898E8,#90C0F8)"></div>
       <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot covers.png" alt="Covers"></div>
       <div class="tile-body">
-        <div class="tile-header"><div class="tile-name">Covers</div><span class="tile-play">Play</span></div>
-        <div class="tile-desc">Listen to the cover. Guess the original artist.</div>
+        <div class="tile-name">Covers</div>
+        <div class="tile-desc">Listen to a cover. Guess the original artist.</div>
+        <div class="tile-buttons">
+          <a class="tile-play" target="_top" href="https://www.entspire.com/odcovers">Play</a>
+          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- Movies -->
-    <a class="game-tile" target="_top" href="https://www.entspire.com/odmovies">
+    <div class="game-tile" data-game="movies">
       <div class="game-tile-color" style="background:linear-gradient(90deg,#9AAAB8,#C0D0DC)"></div>
       <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot movies.png" alt="Movies"></div>
       <div class="tile-body">
-        <div class="tile-header"><div class="tile-name">Movies</div><span class="tile-play">Play</span></div>
+        <div class="tile-name">Movies</div>
         <div class="tile-desc">Read the synopsis. Guess the movie.</div>
+        <div class="tile-buttons">
+          <a class="tile-play" target="_top" href="https://www.entspire.com/odmovies">Play</a>
+          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- Slogans -->
-    <a class="game-tile" target="_top" href="https://www.entspire.com/odslogans">
+    <div class="game-tile" data-game="slogans">
       <div class="game-tile-color" style="background:linear-gradient(90deg,#FF8820,#FFB050)"></div>
       <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot slogans.png" alt="Slogans"></div>
       <div class="tile-body">
-        <div class="tile-header"><div class="tile-name">Slogans</div><span class="tile-play">Play</span></div>
+        <div class="tile-name">Slogans</div>
         <div class="tile-desc">Read the slogan. Guess the source.</div>
+        <div class="tile-buttons">
+          <a class="tile-play" target="_top" href="https://www.entspire.com/odslogans">Play</a>
+          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- Quotes -->
-    <a class="game-tile" target="_top" href="https://www.entspire.com/odquotes">
+    <div class="game-tile" data-game="quotes">
       <div class="game-tile-color" style="background:linear-gradient(90deg,#00CEB8,#40F0D8)"></div>
       <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot quotes.png" alt="Quotes"></div>
       <div class="tile-body">
-        <div class="tile-header"><div class="tile-name">Quotes</div><span class="tile-play">Play</span></div>
+        <div class="tile-name">Quotes</div>
         <div class="tile-desc">Read the quote. Guess the source.</div>
+        <div class="tile-buttons">
+          <a class="tile-play" target="_top" href="https://www.entspire.com/odquotes">Play</a>
+          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        </div>
       </div>
-    </a>
+    </div>
 
   </div>
 
@@ -475,6 +507,33 @@ window.addEventListener('message', function(evt) {
     msg.textContent = evt.data.message || 'Sign up failed. Please try again.';
   }
   if (btn) btn.disabled = false;
+});
+
+// === SUBSCRIPTION CHECK ===
+// Ask parent Wix page what games this member is subscribed to
+window.parent.postMessage({ type: 'orijinz_check_subscriptions' }, '*');
+
+window.addEventListener('message', function(event) {
+  if (!event.data || event.data.type !== 'orijinz_subscriptions') return;
+  var subs = event.data.games || []; // array of game identifiers
+  var hasAllGames = event.data.allGamesPass || false;
+
+  document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
+    var game = tile.getAttribute('data-game');
+    var subscribed = hasAllGames || subs.indexOf(game) !== -1;
+    var playBtn = tile.querySelector('.tile-play');
+    var trialBtn = tile.querySelector('.tile-trial');
+
+    if (subscribed) {
+      // Subscribed: show Play, hide Start Free Trial
+      if (playBtn) playBtn.style.display = '';
+      if (trialBtn) trialBtn.style.display = 'none';
+    } else {
+      // Not subscribed: show both
+      if (playBtn) playBtn.style.display = '';
+      if (trialBtn) trialBtn.style.display = '';
+    }
+  });
 });
 </script>
 </body>
