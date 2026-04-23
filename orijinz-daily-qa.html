@@ -86,6 +86,36 @@
     white-space: nowrap;
   }
 
+  /* SCREENSHOT GALLERY */
+  .ss-label { font-size: 0.75rem; color: var(--text-dim); margin: 16px 0 10px; font-style: italic; }
+  .ss-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .ss-thumb {
+    border-radius: 8px; overflow: hidden; cursor: pointer;
+    border: 1px solid var(--border); transition: border-color 0.15s, transform 0.15s;
+  }
+  .ss-thumb:hover { border-color: var(--gold); transform: scale(1.03); }
+  .ss-thumb img { width: 100%; aspect-ratio: 384/640; object-fit: cover; object-position: top; display: block; }
+  .ss-thumb .ss-name {
+    text-align: center; font-size: 0.65rem; font-weight: 600; color: var(--text-dim);
+    padding: 5px 4px; background: var(--bg2);
+  }
+  @media (max-width: 480px) { .ss-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* LIGHTBOX */
+  .lightbox-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+    z-index: 1000; justify-content: center; align-items: center; cursor: pointer;
+  }
+  .lightbox-overlay.open { display: flex; }
+  .lightbox-overlay img {
+    max-width: 90vw; max-height: 85vh; border-radius: 10px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+  .lightbox-close {
+    position: fixed; top: 16px; right: 20px; color: #fff; font-size: 2rem;
+    cursor: pointer; z-index: 1001; line-height: 1;
+  }
+
   /* FOOTER */
   .site-footer {
     width: 100%; margin-top: 40px;
@@ -294,10 +324,10 @@
   <div class="qa">
 
     <p class="qa-q">What is Orijinz Daily?</p>
-    <p>Orijinz Daily is a daily puzzle. You get one puzzle for each game you are signed up for every day. You read a clue, such as an origin, and guess the answer, such as the word or phrase that has that origin. A timer starts when you begin.</p>
+    <p>Orijinz Daily is a daily puzzle. A daily stream of fun and fascination and entertainment! A daily stream of &ldquo;Hey, I never knew that,&rdquo; &ldquo;Oooh, that was fun,&rdquo; &ldquo;I totally forgot that song,&rdquo; &ldquo;I should rewatch that movie,&rdquo; and &ldquo;So <em>that&rsquo;s</em> who said it&rdquo; moments. You get one puzzle for each game you are signed up for every day. You read a clue, such as an origin, and guess the answer, such as the word or phrase that has that origin. A timer starts when you begin.</p>
 
     <p class="qa-q">How many Orijinz Daily games are there?</p>
-    <p>There are currently six games:</p>
+    <p>There are currently six games. Six daily brain-tingles in the Orijinz Daily lineup:</p>
     <ul>
       <li><strong>Words &amp; Phrases:</strong> Read the origin, guess the matching word or phrase.</li>
       <li><strong>70s Songs:</strong> Read the song title. Guess the matching artist.</li>
@@ -306,6 +336,38 @@
       <li><strong>Slogans:</strong> Read the slogan. Guess the source.</li>
       <li><strong>Quotes:</strong> Read the quote. Guess the source.</li>
     </ul>
+
+    <p class="ss-label">Screenshots of each game:</p>
+    <div class="ss-grid">
+      <div class="ss-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="https://orijinz.github.io/screenshots/Screenshot-wp.png" alt="Words &amp; Phrases">
+        <div class="ss-name">Words &amp; Phrases</div>
+      </div>
+      <div class="ss-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="https://orijinz.github.io/screenshots/Screenshot%2070s.png" alt="70s Songs">
+        <div class="ss-name">70s Songs</div>
+      </div>
+      <div class="ss-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="https://orijinz.github.io/screenshots/Screenshot%20covers.png" alt="Covers">
+        <div class="ss-name">Covers</div>
+      </div>
+      <div class="ss-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="https://orijinz.github.io/screenshots/Screenshot%20movies.png" alt="Movies">
+        <div class="ss-name">Movies</div>
+      </div>
+      <div class="ss-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="https://orijinz.github.io/screenshots/Screenshot%20slogans%202.png" alt="Slogans">
+        <div class="ss-name">Slogans</div>
+      </div>
+      <div class="ss-thumb" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="https://orijinz.github.io/screenshots/Screenshot%20quotes.png" alt="Quotes">
+        <div class="ss-name">Quotes</div>
+      </div>
+    </div>
+
+    <p class="qa-q">What does Orijinz Daily cost?</p>
+    <p>All games come with a <strong style="color:#fff;">two-week free trial</strong>. After that, each game is just <strong>$1.99/month</strong> or <strong style="color:#fff;">save 50% and grab the Orijinz Daily All Games Pass for an introductory price of $5.99/month</strong> and play every daily puzzle from all six games, every day.</p>
+    <p style="text-align:center;margin:16px 0;"><a target="_top" href="https://www.entspire.com/pricing-plans/lists" style="display:inline-block;padding:10px 28px;background:var(--gold);color:#111;font-weight:700;font-size:0.95rem;border-radius:8px;text-decoration:none;font-family:'Nunito Sans',sans-serif;">Start Free Trial</a></p>
 
     <p class="qa-q">Can you get hints to help you answer the puzzle?</p>
     <p>Yes, different games have different types of hints. All games let you tap <span class="btn-ref">&#x1F521; Reveal a Letter</span> and a random letter from the answer is revealed. You can choose <span class="btn-ref">&#x1F521; Reveal a Letter</span> as many times as you want, even to show the full answer. Some games have other buttons to give you a hint. In Words &amp; Phrases, some clues let you tap <span class="btn-ref">&#x1F4D6; Definition</span>. In 70s Songs, you can tap <span class="btn-ref">&#x1F3A7; Listen</span> for up to a 30 second audio clip. In Movies, you can tap <span class="btn-ref">&#x25B6; Watch Trailer</span> for up to a 30 second trailer. In Quotes, sometimes there is a general <span class="btn-ref">&#x1F4A1; Hint</span>.</p>
@@ -333,6 +395,8 @@
 
     <p class="qa-q">Can we send you feedback or ideas?</p>
     <p>Of course &mdash; email <a href="mailto:orijinzgames@outlook.com">orijinzgames@outlook.com</a>.</p>
+
+    <p style="text-align:center;margin:28px 0 8px;"><a target="_top" href="https://www.entspire.com/pricing-plans/lists" style="display:inline-block;padding:10px 28px;background:var(--gold);color:#111;font-weight:700;font-size:0.95rem;border-radius:8px;text-decoration:none;font-family:'Nunito Sans',sans-serif;">Start Free Trial</a></p>
 
   </div>
 
@@ -429,6 +493,22 @@ window.addEventListener('message', function(evt) {
   if (fBtn) fBtn.disabled = false;
   if (success && fInput) fInput.value = '';
 });
+function openLightbox(src) {
+  var overlay = document.getElementById('lbOverlay');
+  document.getElementById('lbImg').src = src;
+  overlay.classList.add('open');
+}
+function closeLightbox() {
+  var overlay = document.getElementById('lbOverlay');
+  overlay.classList.remove('open');
+  document.getElementById('lbImg').src = '';
+}
 </script>
+
+<div class="lightbox-overlay" id="lbOverlay" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <img id="lbImg" src="" alt="Screenshot">
+</div>
+
 </body>
 </html>
