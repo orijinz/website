@@ -292,6 +292,10 @@
       <a class="menu-item" target="_top" href="https://www.entspire.com/buy">🛒 Buy</a>
       <div class="menu-divider"></div>
       <div class="menu-section-label">More</div>
+      <a class="menu-item" id="menuAuthItem" href="#" onclick="handleMenuAuth(event)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span id="menuAuthLabel">Log In</span>
+      </a>
       <a class="menu-item" target="_top" href="https://www.entspire.com/profile">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Profile
@@ -491,6 +495,13 @@
 function openMenu() { document.getElementById('menuOverlay').classList.add('open'); }
 function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); }
 
+var _isLoggedIn = false;
+function handleMenuAuth(evt) {
+  evt.preventDefault();
+  closeMenu();
+  window.parent.postMessage({ type: _isLoggedIn ? 'orijinz_logout' : 'orijinz_login' }, '*');
+}
+
 // Marketing text toggle
 function toggleMarketing() {
   var content = document.getElementById('marketingContent');
@@ -563,6 +574,10 @@ window.addEventListener('message', function(event) {
   var loggedIn = event.data.loggedIn || false;
   var subs = event.data.games || [];
   var hasAllGames = event.data.allGamesPass || false;
+
+  _isLoggedIn = loggedIn;
+  var authLabel = document.getElementById('menuAuthLabel');
+  if (authLabel) authLabel.textContent = loggedIn ? 'Log Out' : 'Log In';
 
   document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
     var game = tile.getAttribute('data-game');
