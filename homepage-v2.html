@@ -94,25 +94,36 @@
   }
 
   /* TILE BODY */
-  .tile-body { padding: 10px 14px 12px; }
+  .tile-body { padding: 10px 14px 0; }
   .tile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   .tile-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem; }
   .tile-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; margin-bottom: 8px; }
-  .tile-buttons { display: flex; justify-content: space-between; align-items: center; }
-  .tile-play {
-    display: inline-block; background: none; border: 1px solid var(--border);
-    color: var(--text); padding: 5px 16px; border-radius: 16px;
-    font-size: 0.68rem; font-weight: 700; text-align: center; transition: all 0.15s;
-    text-decoration: none; flex-shrink: 0;
+
+  /* TILE BUTTONS — full-width bar, single or split 50/50 */
+  .tile-buttons { display: flex; gap: 0; margin-top: 10px; margin-bottom: 12px; }
+  .tile-buttons a {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    flex: 1; border: none; font-weight: 800; text-decoration: none;
+    text-transform: uppercase; letter-spacing: 1px;
+    transition: filter 0.15s;
   }
-  .tile-play:hover { border-color: var(--gold); color: var(--gold); }
-  .tile-trial {
-    display: inline-block; background: var(--gold); border: none;
-    color: #111; padding: 5px 14px; border-radius: 16px;
-    font-size: 0.68rem; font-weight: 700; text-align: center; transition: opacity 0.15s;
-    text-decoration: none; flex-shrink: 0;
+  .tile-buttons.single a { padding: 12px; font-size: 0.85rem; }
+  .tile-buttons.split a  { padding: 11px 8px; font-size: 0.72rem; }
+  .tile-buttons a:hover { filter: brightness(1.15); }
+  .tile-play::before {
+    content: ''; flex-shrink: 0; width: 0; height: 0;
+    border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+    border-left: 7px solid currentColor;
   }
-  .tile-trial:hover { opacity: 0.85; }
+  .tile-trial { background: var(--gold); color: #111; }
+
+  /* Per-game Play gradients */
+  .game-tile[data-game="wordsandphrases"] .tile-play { background: linear-gradient(90deg,#43BAD0,#7FCEDB); color: #0a2a2a; }
+  .game-tile[data-game="70ssongs"]        .tile-play { background: linear-gradient(90deg,#9D7DD4,#C8A0F0); color: #fff; }
+  .game-tile[data-game="covers"]          .tile-play { background: linear-gradient(90deg,#6898E8,#90C0F8); color: #fff; }
+  .game-tile[data-game="movies"]          .tile-play { background: linear-gradient(90deg,#9AAAB8,#C0D0DC); color: #111; }
+  .game-tile[data-game="slogans"]         .tile-play { background: linear-gradient(90deg,#FF8820,#FFB050); color: #fff; }
+  .game-tile[data-game="quotes"]          .tile-play { background: linear-gradient(90deg,#00CEB8,#40F0D8); color: #0a2a28; }
 
   /* CARD GAMES GRID */
   .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 500px; }
@@ -366,7 +377,7 @@
       <div class="tile-body">
         <div class="tile-name">Words & Phrases</div>
         <div class="tile-desc">Read the origin. Guess the word or phrase.</div>
-        <div class="tile-buttons">
+        <div class="tile-buttons single">
           <a class="tile-play" target="_top" href="https://www.entspire.com/odwordsandphrases">Play</a>
           <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
         </div>
@@ -380,7 +391,7 @@
       <div class="tile-body">
         <div class="tile-name">70s Songs</div>
         <div class="tile-desc">Read the song title. Guess the artist.</div>
-        <div class="tile-buttons">
+        <div class="tile-buttons single">
           <a class="tile-play" target="_top" href="https://www.entspire.com/od70s-songs">Play</a>
           <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
         </div>
@@ -394,7 +405,7 @@
       <div class="tile-body">
         <div class="tile-name">Covers</div>
         <div class="tile-desc">Listen to a cover. Guess the original artist.</div>
-        <div class="tile-buttons">
+        <div class="tile-buttons single">
           <a class="tile-play" target="_top" href="https://www.entspire.com/odcovers">Play</a>
           <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
         </div>
@@ -408,7 +419,7 @@
       <div class="tile-body">
         <div class="tile-name">Movies</div>
         <div class="tile-desc">Read the synopsis. Guess the movie.</div>
-        <div class="tile-buttons">
+        <div class="tile-buttons single">
           <a class="tile-play" target="_top" href="https://www.entspire.com/odmovies">Play</a>
           <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
         </div>
@@ -422,7 +433,7 @@
       <div class="tile-body">
         <div class="tile-name">Slogans</div>
         <div class="tile-desc">Read the slogan. Guess the source.</div>
-        <div class="tile-buttons">
+        <div class="tile-buttons single">
           <a class="tile-play" target="_top" href="https://www.entspire.com/odslogans">Play</a>
           <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
         </div>
@@ -436,7 +447,7 @@
       <div class="tile-body">
         <div class="tile-name">Quotes</div>
         <div class="tile-desc">Read the quote. Guess the source.</div>
-        <div class="tile-buttons">
+        <div class="tile-buttons single">
           <a class="tile-play" target="_top" href="https://www.entspire.com/odquotes">Play</a>
           <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
         </div>
@@ -559,13 +570,38 @@ window.addEventListener('message', function(evt) {
 });
 
 // === SUBSCRIPTION CHECK ===
-// Ask parent Wix page what games this member is subscribed to
-// Default: hide Play buttons until we know (avoids flash)
-document.querySelectorAll('.tile-play').forEach(function(b) { b.style.display = 'none'; });
+// Ask parent Wix page what games this member is subscribed to.
+// Default (until we know): hide the button row to avoid flash.
+document.querySelectorAll('.tile-buttons').forEach(function(b) { b.style.visibility = 'hidden'; });
 window.parent.postMessage({ type: 'orijinz_check_subscriptions' }, '*');
+
+function setTileButtons(tile, mode) {
+  // mode: 'play-only' | 'trial-only' | 'both'
+  var btnRow = tile.querySelector('.tile-buttons');
+  var playBtn = tile.querySelector('.tile-play');
+  var trialBtn = tile.querySelector('.tile-trial');
+  if (!btnRow) return;
+  if (mode === 'both') {
+    btnRow.className = 'tile-buttons split';
+    if (playBtn) playBtn.style.display = '';
+    if (trialBtn) { trialBtn.style.display = ''; trialBtn.textContent = 'Free Trial'; }
+  } else if (mode === 'play-only') {
+    btnRow.className = 'tile-buttons single';
+    if (playBtn) playBtn.style.display = '';
+    if (trialBtn) trialBtn.style.display = 'none';
+  } else {
+    btnRow.className = 'tile-buttons single';
+    if (playBtn) playBtn.style.display = 'none';
+    if (trialBtn) { trialBtn.style.display = ''; trialBtn.textContent = 'Start Free Trial'; }
+  }
+  btnRow.style.visibility = '';
+}
+
 // Safety timeout: if no response in 3s, show both buttons
 var _subTimeout = setTimeout(function() {
-  document.querySelectorAll('.tile-play').forEach(function(b) { b.style.display = ''; });
+  document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
+    setTileButtons(tile, 'both');
+  });
 }, 3000);
 
 window.addEventListener('message', function(event) {
@@ -582,22 +618,9 @@ window.addEventListener('message', function(event) {
   document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
     var game = tile.getAttribute('data-game');
     var subscribed = hasAllGames || subs.indexOf(game) !== -1;
-    var playBtn = tile.querySelector('.tile-play');
-    var trialBtn = tile.querySelector('.tile-trial');
-
-    if (!loggedIn) {
-      // Not logged in: show only Start Free Trial
-      if (playBtn) playBtn.style.display = 'none';
-      if (trialBtn) trialBtn.style.display = '';
-    } else if (subscribed) {
-      // Logged in + subscribed: show only Play
-      if (playBtn) playBtn.style.display = '';
-      if (trialBtn) trialBtn.style.display = 'none';
-    } else {
-      // Logged in + not subscribed: show both
-      if (playBtn) playBtn.style.display = '';
-      if (trialBtn) trialBtn.style.display = '';
-    }
+    if (!loggedIn)         setTileButtons(tile, 'trial-only');
+    else if (subscribed)   setTileButtons(tile, 'play-only');
+    else                   setTileButtons(tile, 'both');
   });
 });
 </script>
