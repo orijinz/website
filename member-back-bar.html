@@ -20,6 +20,17 @@
   .back-btn:hover { color: #e0e0e8; }
   .back-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
   .back-label { font-weight: 600; }
+  .spacer { flex: 1; }
+  .login-btn {
+    display: none;
+    background: transparent; border: 1px solid #2a2a34;
+    color: #e0e0e8; cursor: pointer;
+    padding: 5px 12px; border-radius: 14px;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .login-btn:hover { border-color: #e0e0e8; }
 </style>
 </head>
 <body>
@@ -28,12 +39,33 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     <span class="back-label">Back</span>
   </button>
+  <div class="spacer"></div>
+  <button class="login-btn" id="loginBtn" onclick="loginClick()">Log In</button>
 </div>
 <script>
 function goBack() {
   try { if (window.parent !== window) { window.parent.history.back(); return; } } catch(e) {}
   history.back();
 }
+function loginClick() {
+  window.parent.postMessage({ type: 'orijinz_login' }, '*');
+}
+
+// Ask parent if user is logged in; show Log In button if not.
+window.parent.postMessage({ type: 'orijinz_check_login' }, '*');
+
+// Safety: if no answer in 1.5s, show the button anyway
+var _loginCheckTimeout = setTimeout(function() {
+  var b = document.getElementById('loginBtn');
+  if (b) b.style.display = 'inline-block';
+}, 1500);
+
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'orijinz_login_status') return;
+  clearTimeout(_loginCheckTimeout);
+  var b = document.getElementById('loginBtn');
+  if (b) b.style.display = e.data.loggedIn ? 'none' : 'inline-block';
+});
 </script>
 </body>
 </html>
