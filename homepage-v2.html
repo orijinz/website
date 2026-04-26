@@ -73,6 +73,53 @@
   .marketing-toggle:hover .toggle-label { color: var(--text); }
   .marketing.collapsed { display: none; }
 
+  /* ALL GAMES PASS BANNER */
+  .agp-banner {
+    display: none;
+    margin: 0 0 16px;
+    background: linear-gradient(135deg, #14141c, #0e0e12);
+    border: 1px solid rgba(240,200,96,0.55);
+    border-radius: 12px;
+    padding: 14px 20px;
+    box-shadow: 0 0 18px rgba(240,200,96,0.10);
+    align-items: center; gap: 18px;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .agp-banner:hover { text-decoration: none; border-color: var(--gold); }
+  .agp-banner.visible { display: flex; }
+  .agp-banner-img {
+    width: 220px; height: 110px; flex-shrink: 0;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+  }
+  @media (max-width: 540px) {
+    .agp-banner-img { width: 100%; height: 90px; }
+  }
+  .agp-banner-text { flex: 1; min-width: 220px; }
+  .agp-banner-tagline {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem; font-weight: 600;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .agp-banner-pricing {
+    font-size: 0.78rem; color: var(--text-dim); line-height: 1.5;
+  }
+  .agp-banner-pricing .price { color: var(--gold); font-weight: 700; }
+  .agp-banner-btn {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--gold); color: #111;
+    padding: 11px 22px; border-radius: 22px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 800; font-size: 0.74rem;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    text-decoration: none; transition: filter 0.15s;
+  }
+  .agp-banner-btn:hover { filter: brightness(1.1); }
+
   /* SECTION LABEL */
   .section-label {
     font-family: 'Nunito Sans', sans-serif; font-size: 0.6rem; font-weight: 700;
@@ -372,13 +419,24 @@
     <p>For over a decade, Orijinz has been the little guessing game that could &mdash; surprising, delighting, and occasionally stumping players around the world. It all started with our card games &mdash; read an origin, guess the matching word or phrase or read a quote and guess the voice behind it. After that, Orijinz Daily arrived with one fresh puzzle every morning that you can play on your computer, phone or laptop.</p>
     <p>Now we&rsquo;re leveling up.</p>
     <p>Introducing the new Orijinz Daily lineup &mdash; a revamped <strong>Words &amp; Phrases</strong> plus five brand&#8209;new daily games: <strong>70s Songs, Covers, Movies, Slogans, and Quotes</strong>. Six games. Six daily brain-tingles. Endless &ldquo;wow, that was fascinating,&rdquo; &ldquo;oooh, that was fun,&rdquo; &ldquo;that was so cool,&rdquo; and &ldquo;I didn&rsquo;t know that&rdquo; moments.</p>
-    <p>Sign up for any game and enjoy a <strong>two&#8209;week free trial</strong>. After that, each game is just <strong>$1.99/month</strong>, or grab the <strong>Orijinz Daily All Games Pass</strong> for an introductory <strong>$5.99/month</strong> and play <em>all</em> the games, <em>every</em> day.</p>
+    <p>Sign up for any game and enjoy a <strong>two&#8209;week free trial</strong>. After that, each game is just <strong>$1.99/month</strong>, or grab the <strong>Orijinz Daily All Games Pass</strong> for an introductory <strong>$5.99/month</strong> and play <em>all</em> the games, <em>every</em> day. You can cancel any plan at any time.</p>
     <p>Some puzzles are easy. Some will make you pace around the room. All of them are fun, clever, interesting, addictive and a blast to share and compete with friends and family. <strong style="color:#fff;">Want to learn more? Just go to the <svg style="vertical-align:middle;margin:0 2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> menu on the upper left and choose Orijinz Daily Q&amp;A.</strong> You can download the Orijinz Daily App on that menu too.</p>
     <p>Give Orijinz Daily a spin &mdash; your brain will thank you.</p>
   </div>
 
   <!-- DAILY GAMES -->
   <div class="section-label">Daily Games</div>
+
+  <!-- ALL GAMES PASS BANNER (hidden by default; shown when user is not on All Games Pass) -->
+  <a class="agp-banner" id="agpBanner" target="_top" href="https://www.entspire.com/pricing-plans/list">
+    <img class="agp-banner-img" src="https://orijinz.github.io/screenshots/Game%20Pass%20title%20graphic.png" alt="All Games Pass">
+    <div class="agp-banner-text">
+      <div class="agp-banner-tagline">Play every daily puzzle, every day.</div>
+      <div class="agp-banner-pricing"><span class="price">$5.99/month</span> for all six games — about 50% off single-game plans. 14-day free trial. Cancel anytime.</div>
+    </div>
+    <span class="agp-banner-btn">Free Trial</span>
+  </a>
+
   <div class="game-grid">
 
     <!-- Words & Phrases -->
@@ -611,11 +669,13 @@ function setTileButtons(tile, mode) {
   btnRow.style.visibility = '';
 }
 
-// Safety timeout: if no response in 3s, show both buttons
+// Safety timeout: if no response in 3s, show both buttons + the AGP banner
 var _subTimeout = setTimeout(function() {
   document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
     setTileButtons(tile, 'both');
   });
+  var agp = document.getElementById('agpBanner');
+  if (agp) agp.classList.add('visible');
 }, 3000);
 
 window.addEventListener('message', function(event) {
@@ -632,6 +692,12 @@ window.addEventListener('message', function(event) {
   if (navBtn) {
     navBtn.style.display = loggedIn ? 'none' : 'inline-block';
     navBtn.style.visibility = 'visible';
+  }
+  // Show All Games Pass banner unless the user already has it
+  var agp = document.getElementById('agpBanner');
+  if (agp) {
+    if (hasAllGames) agp.classList.remove('visible');
+    else             agp.classList.add('visible');
   }
 
   document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
