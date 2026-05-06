@@ -144,6 +144,7 @@
   /* GAME SCREENSHOT */
   .game-screenshot {
     width: 100%; aspect-ratio: 5/6; overflow: hidden; background: var(--bg3);
+    cursor: pointer;
   }
   .game-screenshot img {
     width: 100%; height: auto; object-fit: cover; object-position: top center;
@@ -706,6 +707,19 @@ window.addEventListener('message', function(event) {
     if (!loggedIn)         setTileButtons(tile, 'trial-only');
     else if (subscribed)   setTileButtons(tile, 'play-only');
     else                   setTileButtons(tile, 'both');
+  });
+});
+
+// Clicking the screenshot behaves like the primary button (Play if subscribed, Free Trial otherwise)
+document.querySelectorAll('.game-tile .game-screenshot').forEach(function(ss) {
+  ss.addEventListener('click', function() {
+    var tile = ss.closest('.game-tile');
+    if (!tile) return;
+    var playBtn  = tile.querySelector('.tile-play');
+    var trialBtn = tile.querySelector('.tile-trial');
+    var btn = (playBtn && playBtn.style.display !== 'none') ? playBtn : trialBtn;
+    if (!btn || !btn.href) return;
+    try { window.top.location.href = btn.href; } catch(e) { window.location.href = btn.href; }
   });
 });
 </script>
