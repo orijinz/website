@@ -14,7 +14,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; }
-  .page { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+  .page { max-width: 680px; margin: 0 auto; padding: 0 16px; }
 
   /* NAV */
   .nav-bar { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
@@ -52,26 +52,12 @@
   .icon-o .o-mid { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #7A5CA8, #4A70B8, #2A9AA8, #00A898, #C03828, #C06018, #D0A030, #7A5CA8); position: absolute; top: 0.015em; left: 0.01em; }
   .icon-o .o-top { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #F05040, #F08030, #FFD840, #9D7DD4); position: relative; }
 
-  /* MARKETING */
-  .marketing { text-align: left; max-width: 780px; margin: 0 auto; padding: 8px 16px 0; font-size: 17px; color: #c0c2d0; line-height: 1.65; }
-  .marketing p { margin: 0 0 14px; }
-  .marketing p:last-child { margin-bottom: 0; }
-  .marketing strong { color: var(--text); }
-  .marketing em { font-style: italic; }
-  .marketing-toggle {
-    max-width: 780px; margin: 0 auto; padding: 0 16px;
-    display: flex; align-items: center; cursor: pointer; user-select: none;
+  /* PITCH */
+  .pitch {
+    text-align: center; max-width: 620px; margin: 0 auto;
+    padding: 10px 16px 0; color: var(--text-dim); font-size: 0.88rem; line-height: 1.6;
   }
-  .marketing-toggle .toggle-arrow {
-    font-size: 0.6rem; color: var(--text-dim); margin-right: 8px;
-    transition: transform 0.2s; display: inline-block;
-  }
-  .marketing-toggle.collapsed .toggle-arrow { transform: rotate(-90deg); }
-  .marketing-toggle .toggle-label {
-    font-size: 0.78rem; color: var(--text-dim); font-style: italic;
-  }
-  .marketing-toggle:hover .toggle-label { color: var(--text); }
-  .marketing.collapsed { display: none; }
+  .pitch strong { color: var(--text); font-weight: 700; }
 
   /* ALL GAMES PASS BANNER */
   .agp-banner {
@@ -123,50 +109,44 @@
   /* SECTION LABEL */
   .section-label {
     font-family: 'Nunito Sans', sans-serif; font-size: 0.6rem; font-weight: 700;
-    letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim);
+    letter-spacing: 3px; text-transform: uppercase; color: var(--text);
     margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
   }
 
-  /* GAME GRID */
-  .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 700px) { .game-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 440px) { .game-grid { grid-template-columns: 1fr; } }
 
-  /* GAME TILE */
-  .game-tile {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; color: var(--text);
-    display: flex; flex-direction: column; transition: border-color 0.15s;
+  /* CAROUSEL */
+  .carousel-viewport { overflow: hidden; border-radius: 14px; border: 1px solid var(--border); }
+  .carousel-track { display: flex; transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .carousel-slide { min-width: 50%; display: flex; flex-direction: column; background: var(--card); border-right: 1px solid var(--border); }
+  @media (max-width: 600px) { .carousel-slide { min-width: 100%; } }
+  .carousel-slide-img {
+    width: 100%; flex-shrink: 0; cursor: pointer;
+    background: var(--bg); display: flex; justify-content: center;
+    padding: 20px 20px 0;
   }
-  .game-tile:hover { border-color: #444; }
-  .game-tile-color { height: 6px; }
-
-  /* GAME SCREENSHOT */
-  .game-screenshot {
-    width: 100%; aspect-ratio: 5/6; overflow: hidden; background: var(--bg3);
-    cursor: pointer;
+  .carousel-slide-img img {
+    width: 240px; height: auto; display: block;
+    border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    max-height: 360px; object-fit: cover; object-position: top center;
   }
-  .game-screenshot img {
-    width: 100%; height: auto; object-fit: cover; object-position: top center;
-    display: block;
+  .carousel-slide-body { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .carousel-slide-color { height: 4px; flex-shrink: 0; margin-top: 16px; width: 240px; }
+  .carousel-slide-inner { padding: 14px 0 20px; width: 240px; flex: 1; display: flex; flex-direction: column; }
+  .carousel-slide-name { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1rem; margin-bottom: 5px; }
+  .carousel-slide-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; flex: 1; }
+  @media (max-width: 480px) {
+    .carousel-slide-img img { width: 180px; }
+    .carousel-slide-color { width: 180px; }
+    .carousel-slide-inner { width: 180px; }
   }
-
-  /* TILE BODY */
-  .tile-body { padding: 10px 14px 0; }
-  .tile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .tile-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem; }
-  .tile-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; margin-bottom: 8px; }
-
-  /* TILE BUTTONS — full-width bar, single or split 50/50 */
-  .tile-buttons { display: flex; gap: 0; margin-top: 10px; margin-bottom: 12px; }
+  .tile-buttons { display: flex; gap: 0; margin-top: 16px; }
   .tile-buttons a {
     display: flex; align-items: center; justify-content: center; gap: 6px;
     flex: 1; border: none; font-weight: 800; text-decoration: none;
-    text-transform: uppercase; letter-spacing: 1px;
-    transition: filter 0.15s;
+    text-transform: uppercase; letter-spacing: 1px; transition: filter 0.15s;
   }
-  .tile-buttons.single a { padding: 12px; font-size: 0.85rem; }
-  .tile-buttons.split a  { padding: 11px 8px; font-size: 0.72rem; }
+  .tile-buttons.single a { padding: 13px; font-size: 0.82rem; }
+  .tile-buttons.split  a { padding: 11px 8px; font-size: 0.72rem; }
   .tile-buttons a:hover { filter: brightness(1.15); }
   .tile-play::before {
     content: ''; flex-shrink: 0; width: 0; height: 0;
@@ -175,14 +155,86 @@
   }
   .tile-trial { background: var(--gold); color: #111; }
 
-  /* Per-game Play gradients */
-  .game-tile[data-game="wordsandphrases"] .tile-play { background: linear-gradient(90deg,#43BAD0,#7FCEDB); color: #0a2a2a; }
-  .game-tile[data-game="70ssongs"]        .tile-play { background: linear-gradient(90deg,#9D7DD4,#C8A0F0); color: #fff; }
-  .game-tile[data-game="covers"]          .tile-play { background: linear-gradient(90deg,#6898E8,#90C0F8); color: #fff; }
-  .game-tile[data-game="movies"]          .tile-play { background: linear-gradient(90deg,#9AAAB8,#C0D0DC); color: #111; }
-  .game-tile[data-game="slogans"]         .tile-play { background: linear-gradient(90deg,#FF8820,#FFB050); color: #fff; }
-  .game-tile[data-game="quotes"]          .tile-play { background: linear-gradient(90deg,#00CEB8,#40F0D8); color: #0a2a28; }
+  /* Per-slide play gradients */
+  [data-game="wordsandphrases"] .tile-play { background: linear-gradient(90deg,#43BAD0,#7FCEDB); color: #0a2a2a; }
+  [data-game="70ssongs"]        .tile-play { background: linear-gradient(90deg,#9D7DD4,#C8A0F0); color: #fff; }
+  [data-game="covers"]          .tile-play { background: linear-gradient(90deg,#6898E8,#90C0F8); color: #fff; }
+  [data-game="movies"]          .tile-play { background: linear-gradient(90deg,#9AAAB8,#C0D0DC); color: #111; }
+  [data-game="slogans"]         .tile-play { background: linear-gradient(90deg,#FF8820,#FFB050); color: #fff; }
+  [data-game="quotes"]          .tile-play { background: linear-gradient(90deg,#00CEB8,#40F0D8); color: #0a2a28; }
+  [data-game="books"]           .tile-play { background: linear-gradient(90deg,#C4774A,#E09870); color: #fff; }
 
+  /* FREE TODAY badge on carousel slide */
+  .carousel-slide.free-today .carousel-slide-name::after {
+    content: 'FREE TODAY'; display: inline-block; margin-left: 8px;
+    font-size: 0.52rem; background: var(--gold); color: #111;
+    padding: 2px 6px; border-radius: 10px; font-weight: 800; letter-spacing: 1px; vertical-align: middle;
+  }
+
+  /* Carousel nav */
+  .carousel-wrap { position: relative; }
+  .carousel-btn {
+    position: absolute; top: 38%; transform: translateY(-50%); z-index: 10;
+    background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; cursor: pointer; width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; line-height: 1; padding: 0;
+    transition: background 0.15s; backdrop-filter: blur(6px);
+  }
+  .carousel-btn:hover { background: rgba(0,0,0,0.8); }
+  #carouselPrev { left: 10px; }
+  #carouselNext { right: 10px; }
+  .carousel-nav { display: flex; justify-content: center; margin-top: 10px; }
+  .carousel-dots { display: flex; gap: 8px; align-items: center; }
+  .carousel-dot {
+    width: 9px; height: 9px; border-radius: 50%; border: none; padding: 0;
+    background: rgba(255,255,255,0.22); cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .carousel-dot.active { background: rgba(255,255,255,0.85); transform: scale(1.35); }
+
+  /* FREE GAME HERO */
+  .free-hero {
+    display: none;
+    margin: 28px 0 0;
+    background: linear-gradient(135deg, #16141f, #0e0c16);
+    border: 2px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    padding: 20px 24px 22px;
+  }
+  .free-hero.visible { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .free-hero-thumb {
+    width: 80px; height: 80px; border-radius: 10px; overflow: hidden;
+    flex-shrink: 0; background: var(--bg3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  .free-hero-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .free-hero-info { flex: 1; min-width: 160px; }
+  .free-hero-label {
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+  }
+  .free-hero-name {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: clamp(1.25rem, 4vw, 1.7rem); line-height: 1.1; margin-bottom: 4px;
+  }
+  .free-hero-desc { font-size: 0.78rem; color: var(--text-dim); }
+  .free-hero-btn {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 28px; border-radius: 26px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 800; font-size: 0.78rem;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    text-decoration: none; color: #fff; transition: filter 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .free-hero-btn::before {
+    content: ''; width: 0; height: 0;
+    border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+    border-left: 7px solid currentColor;
+  }
+  .free-hero-btn:hover { filter: brightness(1.2); }
   /* CARD GAMES GRID */
   .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 500px; }
   @media (max-width: 440px) { .card-grid { grid-template-columns: 1fr; } }
@@ -355,6 +407,7 @@
       <a class="menu-item" target="_top" href="https://www.entspire.com/odmovies">🎬 Movies</a>
       <a class="menu-item" target="_top" href="https://www.entspire.com/odslogans">📢 Slogans</a>
       <a class="menu-item" target="_top" href="https://www.entspire.com/odquotes">💬 Quotes</a>
+      <a class="menu-item" target="_top" href="https://www.entspire.com/odbooks">📚 Books</a>
       <div class="menu-divider"></div>
       <div class="menu-section-label">Card Games</div>
       <a class="menu-item" target="_top" href="https://www.entspire.com/cardgames">🃏 The Card Games</a>
@@ -411,18 +464,23 @@
     <div style="font-family:'Nunito Sans',sans-serif; font-size:1rem; color:var(--text); font-style:italic; font-weight:600; margin-top:8px; letter-spacing:0.04em;">The fun and fascinating origins games</div>
   </div>
 
-  <!-- MARKETING -->
-  <div class="marketing-toggle" id="marketingToggle" onclick="toggleMarketing()">
-    <span class="toggle-arrow">&#9660;</span>
-    <span class="toggle-label">About Orijinz Daily</span>
+  <!-- PITCH -->
+  <div class="pitch">
+    Seven daily puzzle games &mdash; songs, movies, books, slogans, quotes, and more.<br>
+    <strong>One free game everyday.</strong> Subscribe from <strong>$1.99/month</strong>, or play all seven for <strong>$5.99/month</strong>.
   </div>
-  <div class="marketing" id="marketingContent">
-    <p>For over a decade, Orijinz has been the little guessing game that could &mdash; surprising, delighting, and occasionally stumping players around the world. It all started with our card games &mdash; read an origin, guess the matching word or phrase or read a quote and guess the voice behind it. After that, Orijinz Daily arrived with one fresh puzzle every morning that you can play on your computer, phone or laptop.</p>
-    <p>Now we&rsquo;re leveling up.</p>
-    <p>Introducing the new Orijinz Daily lineup &mdash; a revamped <strong>Words &amp; Phrases</strong> plus five brand&#8209;new daily games: <strong>70s Songs, Covers, Movies, Slogans, and Quotes</strong>. Six games. Six daily brain-tingles. Endless &ldquo;wow, that was fascinating,&rdquo; &ldquo;oooh, that was fun,&rdquo; &ldquo;that was so cool,&rdquo; and &ldquo;I didn&rsquo;t know that&rdquo; moments.</p>
-    <p>Sign up for any game and enjoy a <strong>two&#8209;week free trial</strong>. After that, each game is just <strong>$1.99/month</strong>, or grab the <strong>Orijinz Daily All Games Pass</strong> for an introductory <strong>$5.99/month</strong> and play <em>all</em> the games, <em>every</em> day. You can cancel any plan at any time.</p>
-    <p>Some puzzles are easy. Some will make you pace around the room. All of them are fun, clever, interesting, addictive and a blast to share and compete with friends and family. <strong style="color:#fff;">Want to learn more? Just go to the <svg style="vertical-align:middle;margin:0 2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> menu on the upper left and choose Orijinz Daily Q&amp;A.</strong> You can download the Orijinz Daily App on that menu too.</p>
-    <p>Give Orijinz Daily a spin &mdash; your brain will thank you.</p>
+
+  <!-- FREE GAME HERO -->
+  <div class="free-hero" id="freeHero">
+    <div class="free-hero-thumb">
+      <img id="freeHeroImg" src="" alt="">
+    </div>
+    <div class="free-hero-info">
+      <div class="free-hero-label">⭐ Today's Free Game</div>
+      <div class="free-hero-name" id="freeHeroName"></div>
+      <div class="free-hero-desc" id="freeHeroDesc"></div>
+    </div>
+    <a class="free-hero-btn" id="freeHeroBtn" target="_top" href="#">Play Free</a>
   </div>
 
   <!-- DAILY GAMES -->
@@ -433,97 +491,127 @@
     <img class="agp-banner-img" src="https://orijinz.github.io/screenshots/Game%20Pass%20title%20graphic.png" alt="All Games Pass">
     <div class="agp-banner-text">
       <div class="agp-banner-tagline">Play every daily puzzle, every day.</div>
-      <div class="agp-banner-pricing"><span class="price">$5.99/month</span> for all six games — about 50% off single-game plans. 14-day free trial. Cancel anytime.</div>
+      <div class="agp-banner-pricing"><span class="price">$5.99/month</span> for all seven games — nearly 60% off single-game plans. 14-day free trial. Cancel anytime.</div>
     </div>
     <span class="agp-banner-btn">Free Trial</span>
   </a>
 
-  <div class="game-grid">
+  <div class="carousel-wrap">
+    <button class="carousel-btn" id="carouselPrev">&#8249;</button>
+    <button class="carousel-btn" id="carouselNext">&#8250;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="carouselTrack">
 
-    <!-- Words & Phrases -->
-    <div class="game-tile" data-game="wordsandphrases">
-      <div class="game-tile-color" style="background:linear-gradient(90deg,#43BAD0,#7FCEDB)"></div>
-      <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot-wp.png" alt="Words & Phrases"></div>
-      <div class="tile-body">
-        <div class="tile-name">Words & Phrases</div>
-        <div class="tile-desc">Read the origin. Guess the word or phrase.</div>
-        <div class="tile-buttons single">
-          <a class="tile-play" target="_top" href="https://www.entspire.com/odwordsandphrases">Play</a>
-          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+        <div class="carousel-slide" data-game="wordsandphrases">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot-wp.png" alt="Words & Phrases"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#43BAD0,#7FCEDB)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">Words & Phrases</div>
+              <div class="carousel-slide-desc">Read the origin. Guess the word or phrase.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odwordsandphrases">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="carousel-slide" data-game="70ssongs">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot 70s.png" alt="70s Songs"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#9D7DD4,#C8A0F0)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">70s Songs</div>
+              <div class="carousel-slide-desc">Read the song title. Guess the artist.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/od70s-songs">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-slide" data-game="covers">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot covers.png" alt="Covers"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#6898E8,#90C0F8)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">Covers</div>
+              <div class="carousel-slide-desc">Listen to a cover. Guess the original artist.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odcovers">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-slide" data-game="movies">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot movies.png" alt="Movies"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#9AAAB8,#C0D0DC)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">Movies</div>
+              <div class="carousel-slide-desc">Read the synopsis. Guess the movie.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odmovies">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-slide" data-game="slogans">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot%20slogans%202.png" alt="Slogans"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#FF8820,#FFB050)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">Slogans</div>
+              <div class="carousel-slide-desc">Read the slogan. Guess the source.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odslogans">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-slide" data-game="quotes">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot quotes.png" alt="Quotes"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#00CEB8,#40F0D8)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">Quotes</div>
+              <div class="carousel-slide-desc">Read the quote. Guess the source.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odquotes">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-slide" data-game="books">
+          <div class="carousel-slide-img"><img src="https://orijinz.github.io/screenshots/Screenshot%20Books.png" alt="Books"></div>
+          <div class="carousel-slide-body">
+            <div class="carousel-slide-color" style="background:linear-gradient(90deg,#C4774A,#E09870)"></div>
+            <div class="carousel-slide-inner">
+              <div class="carousel-slide-name">Books</div>
+              <div class="carousel-slide-desc">Read the summary. Name the book.</div>
+              <div class="tile-buttons single">
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odbooks">Play</a>
+                <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <!-- 70s Songs -->
-    <div class="game-tile" data-game="70ssongs">
-      <div class="game-tile-color" style="background:linear-gradient(90deg,#9D7DD4,#C8A0F0)"></div>
-      <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot 70s.png" alt="70s Songs"></div>
-      <div class="tile-body">
-        <div class="tile-name">70s Songs</div>
-        <div class="tile-desc">Read the song title. Guess the artist.</div>
-        <div class="tile-buttons single">
-          <a class="tile-play" target="_top" href="https://www.entspire.com/od70s-songs">Play</a>
-          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
-        </div>
-      </div>
+    <div class="carousel-nav">
+      <div class="carousel-dots" id="carouselDots"></div>
     </div>
-
-    <!-- Covers -->
-    <div class="game-tile" data-game="covers">
-      <div class="game-tile-color" style="background:linear-gradient(90deg,#6898E8,#90C0F8)"></div>
-      <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot covers.png" alt="Covers"></div>
-      <div class="tile-body">
-        <div class="tile-name">Covers</div>
-        <div class="tile-desc">Listen to a cover. Guess the original artist.</div>
-        <div class="tile-buttons single">
-          <a class="tile-play" target="_top" href="https://www.entspire.com/odcovers">Play</a>
-          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Movies -->
-    <div class="game-tile" data-game="movies">
-      <div class="game-tile-color" style="background:linear-gradient(90deg,#9AAAB8,#C0D0DC)"></div>
-      <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot movies.png" alt="Movies"></div>
-      <div class="tile-body">
-        <div class="tile-name">Movies</div>
-        <div class="tile-desc">Read the synopsis. Guess the movie.</div>
-        <div class="tile-buttons single">
-          <a class="tile-play" target="_top" href="https://www.entspire.com/odmovies">Play</a>
-          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slogans -->
-    <div class="game-tile" data-game="slogans">
-      <div class="game-tile-color" style="background:linear-gradient(90deg,#FF8820,#FFB050)"></div>
-      <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot slogans.png" alt="Slogans"></div>
-      <div class="tile-body">
-        <div class="tile-name">Slogans</div>
-        <div class="tile-desc">Read the slogan. Guess the source.</div>
-        <div class="tile-buttons single">
-          <a class="tile-play" target="_top" href="https://www.entspire.com/odslogans">Play</a>
-          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quotes -->
-    <div class="game-tile" data-game="quotes">
-      <div class="game-tile-color" style="background:linear-gradient(90deg,#00CEB8,#40F0D8)"></div>
-      <div class="game-screenshot"><img src="https://orijinz.github.io/screenshots/Screenshot quotes.png" alt="Quotes"></div>
-      <div class="tile-body">
-        <div class="tile-name">Quotes</div>
-        <div class="tile-desc">Read the quote. Guess the source.</div>
-        <div class="tile-buttons single">
-          <a class="tile-play" target="_top" href="https://www.entspire.com/odquotes">Play</a>
-          <a class="tile-trial" target="_top" href="https://www.entspire.com/pricing-plans/lists">Start Free Trial</a>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- CARD GAMES -->
@@ -586,24 +674,6 @@ function navLoginClick() {
   window.parent.postMessage({ type: 'orijinz_login' }, '*');
 }
 
-// Marketing text toggle
-function toggleMarketing() {
-  var content = document.getElementById('marketingContent');
-  var toggle = document.getElementById('marketingToggle');
-  var collapsed = !content.classList.contains('collapsed');
-  content.classList.toggle('collapsed', collapsed);
-  toggle.classList.toggle('collapsed', collapsed);
-  try { localStorage.setItem('orijinzMarketingCollapsed', collapsed ? '1' : '0'); } catch(e) {}
-}
-// Restore state on load
-(function() {
-  try {
-    if (localStorage.getItem('orijinzMarketingCollapsed') === '1') {
-      document.getElementById('marketingContent').classList.add('collapsed');
-      document.getElementById('marketingToggle').classList.add('collapsed');
-    }
-  } catch(e) {}
-})();
 
 function submitMenuNewsletter(e) {
   e.preventDefault();
@@ -642,6 +712,88 @@ window.addEventListener('message', function(evt) {
   if (btn) btn.disabled = false;
 });
 
+// === CAROUSEL ===
+(function() {
+  var track = document.getElementById('carouselTrack');
+  var dotsEl = document.getElementById('carouselDots');
+  if (!track || !dotsEl) return;
+  var slides = track.querySelectorAll('.carousel-slide');
+  var total = slides.length;
+  var perPage = window.innerWidth >= 600 ? 2 : 1;
+  var positions = total - perPage + 1; // 6 nav positions for 7 slides at 2/page
+  var current = 0;
+
+  for (var i = 0; i < positions; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Position ' + (i + 1));
+    dot.addEventListener('click', (function(idx) { return function() { goTo(idx); }; })(i));
+    dotsEl.appendChild(dot);
+  }
+  function goTo(idx) {
+    current = ((idx % positions) + positions) % positions;
+    track.style.transform = 'translateX(-' + (current * (100 / perPage)) + '%)';
+    dotsEl.querySelectorAll('.carousel-dot').forEach(function(d, i) {
+      d.classList.toggle('active', i === current);
+    });
+  }
+  window.carouselGoTo = goTo;
+  var prevBtn = document.getElementById('carouselPrev');
+  var nextBtn = document.getElementById('carouselNext');
+  if (prevBtn) prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { goTo(current + 1); });
+  var startX = 0;
+  track.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+  });
+})();
+
+// === FREE GAME TODAY ===
+var FREE_ROTATION = ['wordsandphrases', '70ssongs', 'covers', 'quotes', 'movies', 'slogans', 'books'];
+var FREE_EPOCH    = new Date(2026, 4, 22);
+var FREE_GAME_INFO = {
+  wordsandphrases: { name: 'Words & Phrases', color: '#43BAD0', colorEnd: '#7FCEDB', url: 'https://www.entspire.com/odwordsandphrases' },
+  '70ssongs':      { name: '70s Songs',       color: '#9D7DD4', colorEnd: '#C8A0F0', url: 'https://www.entspire.com/od70s-songs' },
+  covers:          { name: 'Covers',          color: '#6898E8', colorEnd: '#90C0F8', url: 'https://www.entspire.com/odcovers' },
+  quotes:          { name: 'Quotes',          color: '#00CEB8', colorEnd: '#40F0D8', url: 'https://www.entspire.com/odquotes' },
+  movies:          { name: 'Movies',          color: '#9AAAB8', colorEnd: '#C0D0DC', url: 'https://www.entspire.com/odmovies' },
+  slogans:         { name: 'Slogans',         color: '#FF8820', colorEnd: '#FFB050', url: 'https://www.entspire.com/odslogans' },
+  books:           { name: 'Books',           color: '#C4774A', colorEnd: '#E09870', url: 'https://www.entspire.com/odbooks' }
+};
+(function() {
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var days = Math.round((today - FREE_EPOCH) / 86400000);
+  var idx = ((days % FREE_ROTATION.length) + FREE_ROTATION.length) % FREE_ROTATION.length;
+  var gameId = FREE_ROTATION[idx];
+  var info = FREE_GAME_INFO[gameId];
+  if (!info) return;
+
+  // Mark the carousel slide as free-today
+  var slide = document.querySelector('.carousel-slide[data-game="' + gameId + '"]');
+  if (slide) slide.classList.add('free-today');
+
+  // Populate hero from the carousel slide
+  var hero = document.getElementById('freeHero');
+  if (!hero) return;
+  var img    = document.getElementById('freeHeroImg');
+  var nameEl = document.getElementById('freeHeroName');
+  var descEl = document.getElementById('freeHeroDesc');
+  var btn    = document.getElementById('freeHeroBtn');
+
+  var slideImg  = slide && slide.querySelector('.carousel-slide-img img');
+  if (img && slideImg) { img.src = slideImg.src; img.alt = info.name; }
+  var slideDesc = slide && slide.querySelector('.carousel-slide-desc');
+  if (descEl && slideDesc) descEl.textContent = slideDesc.textContent;
+  if (nameEl) { nameEl.textContent = info.name; nameEl.style.color = info.color; }
+  if (btn)    { btn.href = info.url; btn.style.background = info.color; }
+  hero.style.borderColor = info.color + '88';
+  hero.style.boxShadow = '0 0 0 1px ' + info.color + '22, 0 6px 32px ' + info.color + '22';
+  hero.classList.add('visible');
+})();
+
 // === SUBSCRIPTION CHECK ===
 // Ask parent Wix page what games this member is subscribed to.
 // Default (until we know): hide the button row to avoid flash.
@@ -672,7 +824,7 @@ function setTileButtons(tile, mode) {
 
 // Safety timeout: if no response in 3s, show both buttons + the AGP banner
 var _subTimeout = setTimeout(function() {
-  document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
+  document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
     setTileButtons(tile, 'both');
   });
   var agp = document.getElementById('agpBanner');
@@ -701,19 +853,34 @@ window.addEventListener('message', function(event) {
     else             agp.classList.add('visible');
   }
 
-  document.querySelectorAll('.game-tile[data-game]').forEach(function(tile) {
+  document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
     var game = tile.getAttribute('data-game');
     var subscribed = hasAllGames || subs.indexOf(game) !== -1;
-    if (!loggedIn)         setTileButtons(tile, 'trial-only');
-    else if (subscribed)   setTileButtons(tile, 'play-only');
-    else                   setTileButtons(tile, 'both');
+    if (subscribed)       setTileButtons(tile, 'play-only');
+    else if (!loggedIn)   setTileButtons(tile, 'trial-only');
+    else                  setTileButtons(tile, 'both');
   });
+
+  // Promote subscribed games to the front of the carousel
+  if (hasAllGames || subs.length > 0) {
+    var track = document.getElementById('carouselTrack');
+    if (track) {
+      var allSlides = Array.prototype.slice.call(track.querySelectorAll('.carousel-slide'));
+      allSlides.sort(function(a, b) {
+        var aSubbed = (hasAllGames || subs.indexOf(a.getAttribute('data-game')) !== -1) ? 0 : 1;
+        var bSubbed = (hasAllGames || subs.indexOf(b.getAttribute('data-game')) !== -1) ? 0 : 1;
+        return aSubbed - bSubbed;
+      });
+      allSlides.forEach(function(s) { track.appendChild(s); });
+      if (window.carouselGoTo) window.carouselGoTo(0);
+    }
+  }
 });
 
 // Clicking the screenshot behaves like the primary button (Play if subscribed, Free Trial otherwise)
-document.querySelectorAll('.game-tile .game-screenshot').forEach(function(ss) {
+document.querySelectorAll('.carousel-slide-img').forEach(function(ss) {
   ss.addEventListener('click', function() {
-    var tile = ss.closest('.game-tile');
+    var tile = ss.closest('.carousel-slide');
     if (!tile) return;
     var playBtn  = tile.querySelector('.tile-play');
     var trialBtn = tile.querySelector('.tile-trial');
