@@ -755,8 +755,15 @@ function showManageView(sub) {
         addList.appendChild(row);
       });
       var priceUnit = sub.plan === 'annual' ? '$9.99/yr' : '$1.99/mo';
-      document.getElementById('add-games-price-note').textContent =
-        'Each game ' + priceUnit + ' — billed on your next invoice';
+      var priceNote;
+      if (sub.status === 'trialing' && sub.trialEnd) {
+        var te = new Date(sub.trialEnd);
+        var teStr = te.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        priceNote = 'No charge today — ' + priceUnit + ' per game after your trial ends ' + teStr;
+      } else {
+        priceNote = 'Each game ' + priceUnit + ' — billed on your next invoice';
+      }
+      document.getElementById('add-games-price-note').textContent = priceNote;
       document.getElementById('add-games-section').style.display = 'block';
     }
   }
