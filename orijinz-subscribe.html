@@ -601,7 +601,7 @@
       <span>Due today</span>
       <span class="amount">$0.00</span>
     </div>
-    <div class="trial-note">14-day free trial &mdash; no charge until <span id="trial-end-date"></span></div>
+    <div class="trial-note" id="trial-note">Select games above to get started</div>
   </div>
 
   <div class="loading-spinner" id="loading-spinner">Starting checkout&hellip;</div>
@@ -667,15 +667,9 @@ function handleInit(loggedIn, subscription, isWixLegacy) {
     document.getElementById('checkout-view').style.display = 'block';
   }
 
-  setTrialEndDate();
+
 }
 
-function setTrialEndDate() {
-  var d = new Date();
-  d.setDate(d.getDate() + 14);
-  var opts = { month: 'short', day: 'numeric', year: 'numeric' };
-  document.getElementById('trial-end-date').textContent = d.toLocaleDateString('en-US', opts);
-}
 
 function showManageView(sub) {
   document.getElementById('checkout-view').style.display = 'none';
@@ -784,21 +778,26 @@ function updateSummary() {
   var subtotalEl = document.getElementById('summary-subtotal');
   var ctaBtn     = document.getElementById('cta-btn');
 
+  var trialNote = document.getElementById('trial-note');
+  var unit = plan === 'monthly' ? '/mo' : '/yr';
+
   if (allGamesMode) {
-    var price = PRICES.allgames[plan];
+    var agPrice = plan === 'monthly' ? '$5.99' : '$59.99';
     labelEl.textContent    = 'All Games Pass';
-    subtotalEl.textContent = plan === 'monthly' ? '$5.99/mo' : '$59.99/yr';
+    subtotalEl.textContent = agPrice + unit;
     ctaBtn.disabled        = false;
+    trialNote.textContent  = 'No charge today — ' + agPrice + unit + ' after your 14-day free trial';
   } else if (selectedGames.length > 0) {
     var total = selectedGames.length * PRICES.individual[plan];
-    var unit  = plan === 'monthly' ? '/mo' : '/yr';
     labelEl.textContent    = selectedGames.length + ' game' + (selectedGames.length > 1 ? 's' : '');
     subtotalEl.textContent = '$' + total.toFixed(2) + unit;
     ctaBtn.disabled        = false;
+    trialNote.textContent  = 'No charge today — $' + total.toFixed(2) + unit + ' after your 14-day free trial';
   } else {
     labelEl.textContent    = 'No games selected';
     subtotalEl.textContent = '—';
     ctaBtn.disabled        = true;
+    trialNote.textContent  = 'Select games above to get started';
   }
 }
 
