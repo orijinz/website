@@ -677,14 +677,12 @@ window.addEventListener('message', function(e) {
     }
   }
   if (d.type === 'addGamesSuccess') {
-    // Update game tags with new merged list
     if (currentSub) {
       currentSub.games = d.games || [];
       populateGameTags(currentSub);
     }
-    // Hide add-games section — all games the subscriber now has may equal all games
-    document.getElementById('add-games-section').style.display = 'none';
     selectedAddGames = [];
+    refreshAddGamesSection();
   }
   if (d.type === 'checkoutSuccess') {
     // Rare: success redirect landed back on subscribe page
@@ -739,34 +737,52 @@ function showManageView(sub) {
   document.getElementById('plan-detail').textContent =
     (sub.plan === 'annual' ? 'Annual' : 'Monthly') + ' plan';
 
-  // Populate add-games section with unsubscribed games
-  if (!sub.allGames) {
-    var subscribedSet = (sub.games || []).reduce(function(s, g) { s[g] = true; return s; }, {});
-    var available = Object.keys(gameNames).filter(function(g) { return !subscribedSet[g]; });
-    if (available.length > 0) {
-      var addList = document.getElementById('add-game-list');
-      addList.innerHTML = '';
-      available.forEach(function(g) {
-        var row = document.createElement('div');
-        row.className = 'game-row';
-        row.dataset.game = g;
-        row.setAttribute('onclick', 'toggleAddGame(this)');
-        row.innerHTML = '<div class="game-check"></div><div class="game-name">' + (gameNames[g] || g) + '</div>';
-        addList.appendChild(row);
-      });
-      var priceUnit = sub.plan === 'annual' ? '$9.99/yr' : '$1.99/mo';
-      var priceNote;
-      if (sub.status === 'trialing' && sub.trialEnd) {
-        var te = new Date(sub.trialEnd);
-        var teStr = te.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        priceNote = 'No charge today — ' + priceUnit + ' per game after your trial ends ' + teStr;
-      } else {
-        priceNote = 'Each game ' + priceUnit + ' — billed on your next invoice';
-      }
-      document.getElementById('add-games-price-note').textContent = priceNote;
-      document.getElementById('add-games-section').style.display = 'block';
-    }
+  if (!sub.allGames) refreshAddGamesSection();
+}
+
+function refreshAddGamesSection() {
+  var sub = currentSub;
+  if (!sub || sub.allGames) return;
+
+  var subscribedSet = (sub.games || []).reduce(function(s, g) { s[g] = true; return s; }, {});
+  var available = Object.keys(gameNames).filter(function(g) { return !subscribedSet[g]; });
+
+  var section = document.getElementById('add-games-section');
+  var addList = document.getElementById('add-game-list');
+  var addBtn  = document.getElementById('add-games-btn');
+  var spinner = document.getElementById('add-games-spinner');
+
+  if (available.length === 0) {
+    section.style.display = 'none';
+    return;
   }
+
+  addList.innerHTML = '';
+  available.forEach(function(g) {
+    var row = document.createElement('div');
+    row.className = 'game-row';
+    row.dataset.game = g;
+    row.setAttribute('onclick', 'toggleAddGame(this)');
+    row.innerHTML = '<div class="game-check"></div><div class="game-name">' + (gameNames[g] || g) + '</div>';
+    addList.appendChild(row);
+  });
+
+  var priceUnit = sub.plan === 'annual' ? '$9.99/yr' : '$1.99/mo';
+  var priceNote;
+  if (sub.status === 'trialing' && sub.trialEnd) {
+    var te = new Date(sub.trialEnd);
+    var teStr = te.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    priceNote = 'No charge today — ' + priceUnit + ' per game after your trial ends ' + teStr;
+  } else {
+    priceNote = 'Each game ' + priceUnit + ' — billed on your next invoice';
+  }
+  document.getElementById('add-games-price-note').textContent = priceNote;
+
+  addBtn.disabled = true;
+  addBtn.style.display = 'block';
+  spinner.style.display = 'none';
+  document.getElementById('add-games-error').style.display = 'none';
+  section.style.display = 'block';
 }
 
 function populateGameTags(sub) {
