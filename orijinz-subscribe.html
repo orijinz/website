@@ -286,11 +286,10 @@
     padding: 10px 12px;
     outline: none;
     transition: border-color 0.15s;
-    text-transform: uppercase;
     letter-spacing: 1px;
   }
   .coupon-input:focus { border-color: #d4af37; }
-  .coupon-input::placeholder { text-transform: none; letter-spacing: 0; color: #555; }
+  .coupon-input::placeholder { letter-spacing: 0; color: #555; }
   .coupon-apply {
     background: #2a2a2a;
     border: 1px solid #444;
@@ -890,7 +889,7 @@ function updateSummary() {
 
 // ─── Coupon ───────────────────────────────────────────────────────────────────
 function applyCoupon() {
-  var val = document.getElementById('coupon-input').value.trim().toUpperCase();
+  var val = document.getElementById('coupon-input').value.trim();
   var msg = document.getElementById('coupon-msg');
 
   if (!val) {
