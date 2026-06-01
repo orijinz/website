@@ -4,18 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Orijinz Daily — Subscribe</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     background: #111;
     color: #e8e8e8;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 15px;
     line-height: 1.5;
     padding: 24px 16px 32px;
     max-width: 480px;
     margin: 0 auto;
+  }
+
+  /* ── Orijinz Daily logo (exact match to orijinz-daily-qa.html) ── */
+  .orijinz-logo { display: block; margin-bottom: 4px; }
+  .logo-text {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    line-height: 1; letter-spacing: -0.01em;
+    display: inline-flex; align-items: baseline;
+  }
+  .logo-text .rijinz-daily {
+    background-image: linear-gradient(90deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #B83030, #E07020, #FFD840);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: inline-block;
+  }
+  .logo-text .logo-spacer { width: 0.25em; }
+  .icon-o { position: relative; display: inline-block; font-size: 1em; line-height: 1; vertical-align: baseline; }
+  .icon-o .o-shadow { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; color: rgba(0,0,0,0.4); position: absolute; top: 0.03em; left: 0.025em; }
+  .icon-o .o-mid { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #7A5CA8, #4A70B8, #2A9AA8, #00A898, #C03828, #C06018, #D0A030, #7A5CA8); position: absolute; top: 0.015em; left: 0.01em; }
+  .icon-o .o-top { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: inherit; line-height: 1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-image: conic-gradient(from 180deg, #9D7DD4, #6898E8, #43BAD0, #00CEB8, #F05040, #F08030, #FFD840, #9D7DD4); position: relative; }
+  .logo-tagline {
+    font-size: 14px;
+    color: #ccc;
+    font-style: italic;
+    margin-bottom: 16px;
+    display: block;
   }
 
   /* ── Header ── */
@@ -31,7 +58,7 @@
     letter-spacing: 0.3px;
   }
   .page-header p {
-    color: #aaa;
+    color: #bbb;
     font-size: 14px;
   }
 
@@ -79,7 +106,7 @@
     font-weight: 700;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    color: #888;
+    color: #aaa;
     margin-bottom: 10px;
   }
 
@@ -153,7 +180,7 @@
     align-items: center;
     gap: 10px;
     margin: 10px 0;
-    color: #555;
+    color: #888;
     font-size: 13px;
   }
   .or-divider::before,
@@ -213,7 +240,7 @@
   }
   .allgames-info .subtitle {
     font-size: 12px;
-    color: #888;
+    color: #aaa;
   }
   .allgames-price {
     text-align: right;
@@ -232,9 +259,13 @@
   /* ── Pricing note below game list ── */
   .pricing-note {
     font-size: 12px;
-    color: #777;
+    color: #999;
     text-align: center;
     padding: 8px 0 4px;
+  }
+  .pricing-note.gold-note {
+    color: #d4af37;
+    font-weight: 600;
   }
 
   /* ── Coupon ── */
@@ -335,10 +366,10 @@
   .legal {
     text-align: center;
     font-size: 12px;
-    color: #666;
+    color: #999;
     line-height: 1.6;
   }
-  .legal a { color: #888; }
+  .legal a { color: #bbb; }
 
   /* ── Manage subscription view ── */
   #manage-view { display: none; }
@@ -391,6 +422,13 @@
   }
   .manage-btn:hover { background: #333; }
 
+  /* ── Section divider ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 0 0 20px;
+  }
+
   /* ── Error / loading states ── */
   .error-banner {
     background: #3a1e1e;
@@ -424,10 +462,14 @@
 <!-- LOGIN PROMPT (shown if user is not logged in) -->
 <div id="login-prompt">
   <div class="page-header">
+    <div class="orijinz-logo">
+      <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
+      <div class="logo-tagline">The fun and fascinating origins games</div>
+    </div>
     <h1>Start Your Free Trial</h1>
     <p>Sign in to subscribe to Orijinz Daily</p>
   </div>
-  <p>You need to be signed in to start a subscription.</p>
+  <p style="color:#bbb;margin-bottom:16px;font-size:14px;">You need to be signed in to start a subscription.</p>
   <button class="cta-btn" onclick="send('loginRequired')">Sign In / Create Account</button>
 </div>
 
@@ -437,20 +479,34 @@
     <h1>Your Subscription</h1>
     <p>Manage your Orijinz Daily games</p>
   </div>
-  <div class="manage-box">
+  <!-- Stripe subscription -->
+  <div id="stripe-manage-box" class="manage-box">
     <div id="status-badge" class="status-badge"></div>
     <div id="games-tags" class="game-tags"></div>
     <div id="trial-detail" class="detail"></div>
     <div id="plan-detail" class="detail"></div>
   </div>
-  <button class="manage-btn" onclick="send('manageSubscription')">
+  <button id="stripe-manage-btn" class="manage-btn" onclick="send('manageSubscription')">
     Manage / Cancel Subscription →
   </button>
+
+  <!-- Legacy Wix subscription -->
+  <div id="legacy-manage-box" class="manage-box" style="display:none;">
+    <div class="status-badge active" style="margin-bottom:10px;">Active</div>
+    <p class="detail">Your subscription is managed through our previous billing system.</p>
+  </div>
+  <a id="legacy-manage-link" class="manage-btn" href="https://www.entspire.com/account/my-subscriptions" target="_top" style="display:none;text-align:center;text-decoration:none;">
+    Manage / Cancel Subscription →
+  </a>
 </div>
 
 <!-- CHECKOUT VIEW (shown if not subscribed) -->
 <div id="checkout-view">
   <div class="page-header">
+    <div class="orijinz-logo">
+      <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
+      <div class="logo-tagline">The fun and fascinating origins games</div>
+    </div>
     <h1>Start Your Free Trial</h1>
     <p>14 days free &mdash; no credit card required</p>
   </div>
@@ -468,13 +524,13 @@
   <!-- Individual games -->
   <div class="section-label">Select Your Games</div>
   <div class="game-list" id="game-list">
-    <div class="game-row" data-game="wordsandphrases" onclick="toggleGame(this)">
-      <div class="game-check"></div>
-      <div class="game-name">Words &amp; Phrases</div>
-    </div>
     <div class="game-row" data-game="70ssongs" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">70s Songs</div>
+    </div>
+    <div class="game-row" data-game="books" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Books</div>
     </div>
     <div class="game-row" data-game="covers" onclick="toggleGame(this)">
       <div class="game-check"></div>
@@ -484,20 +540,20 @@
       <div class="game-check"></div>
       <div class="game-name">Movies</div>
     </div>
-    <div class="game-row" data-game="slogans" onclick="toggleGame(this)">
-      <div class="game-check"></div>
-      <div class="game-name">Slogans</div>
-    </div>
     <div class="game-row" data-game="quotes" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Quotes</div>
     </div>
-    <div class="game-row" data-game="books" onclick="toggleGame(this)">
+    <div class="game-row" data-game="slogans" onclick="toggleGame(this)">
       <div class="game-check"></div>
-      <div class="game-name">Books</div>
+      <div class="game-name">Slogans</div>
+    </div>
+    <div class="game-row" data-game="wordsandphrases" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Words &amp; Phrases</div>
     </div>
   </div>
-  <div class="pricing-note" id="individual-pricing-note">Each game $1.99/mo &mdash; or $9.99/yr &mdash; after your 14-day free trial</div>
+  <div class="pricing-note gold-note" id="individual-pricing-note">Each game $1.99/mo &mdash; or $9.99/yr &mdash; after your 14-day free trial</div>
 
   <div class="or-divider">or</div>
 
@@ -508,11 +564,9 @@
       <div class="name">All Games Pass</div>
       <div class="subtitle">All 7 games &mdash; best value</div>
     </div>
-    <div class="allgames-price">
-      <span class="main" id="allgames-price-main">$5.99/mo</span>
-      <span class="annual-note" id="allgames-after-trial">after trial</span>
-    </div>
   </div>
+  <div class="pricing-note gold-note" id="allgames-pricing-note" style="margin-bottom:16px;">All Games Pass $5.99/mo &mdash; or $59.99/yr &mdash; after your 14-day free trial</div>
+  <hr class="section-divider">
 
   <!-- Coupon -->
   <div class="coupon-section">
@@ -531,6 +585,7 @@
     </div>
     <div class="coupon-msg" id="coupon-msg"></div>
   </div>
+  <hr class="section-divider">
 
   <!-- Summary -->
   <div class="summary">
@@ -585,7 +640,7 @@ window.addEventListener('message', function(e) {
   if (!d || !d.type) return;
 
   if (d.type === 'init') {
-    handleInit(d.loggedIn, d.subscription);
+    handleInit(d.loggedIn, d.subscription, d.isWixLegacy);
   }
   if (d.type === 'error') {
     showError(d.message || 'Something went wrong. Please try again.');
@@ -598,7 +653,7 @@ window.addEventListener('message', function(e) {
 });
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
-function handleInit(loggedIn, subscription) {
+function handleInit(loggedIn, subscription, isWixLegacy) {
   if (!loggedIn) {
     document.getElementById('checkout-view').style.display  = 'none';
     document.getElementById('login-prompt').style.display   = 'block';
@@ -606,6 +661,7 @@ function handleInit(loggedIn, subscription) {
   }
 
   if (subscription && subscription.hasAccess) {
+    if (isWixLegacy) subscription.isWixLegacy = true;
     showManageView(subscription);
   } else {
     document.getElementById('checkout-view').style.display = 'block';
@@ -624,6 +680,14 @@ function setTrialEndDate() {
 function showManageView(sub) {
   document.getElementById('checkout-view').style.display = 'none';
   document.getElementById('manage-view').style.display   = 'block';
+
+  if (sub.isWixLegacy) {
+    document.getElementById('stripe-manage-box').style.display  = 'none';
+    document.getElementById('stripe-manage-btn').style.display  = 'none';
+    document.getElementById('legacy-manage-box').style.display  = 'block';
+    document.getElementById('legacy-manage-link').style.display = 'block';
+    return;
+  }
 
   var badge = document.getElementById('status-badge');
   badge.className = 'status-badge ' + sub.status;
@@ -670,11 +734,13 @@ function setPlan(p) {
 
   document.getElementById('individual-pricing-note').innerHTML =
     p === 'monthly'
-      ? 'Each game $1.99/mo &mdash; or switch to Annual for $9.99/yr &mdash; after your 14-day free trial'
-      : 'Each game $9.99/yr &mdash; or switch to Monthly for $1.99/mo &mdash; after your 14-day free trial';
+      ? 'Each game $1.99/mo &mdash; or $9.99/yr annual &mdash; after your 14-day free trial'
+      : 'Each game $9.99/yr &mdash; or $1.99/mo monthly &mdash; after your 14-day free trial';
 
-  document.getElementById('allgames-price-main').textContent =
-    p === 'monthly' ? '$5.99/mo' : '$59.99/yr';
+  document.getElementById('allgames-pricing-note').innerHTML =
+    p === 'monthly'
+      ? 'All Games Pass $5.99/mo &mdash; or $59.99/yr annual &mdash; after your 14-day free trial'
+      : 'All Games Pass $59.99/yr &mdash; or $5.99/mo monthly &mdash; after your 14-day free trial';
 
   updateSummary();
 }
