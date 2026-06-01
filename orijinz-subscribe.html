@@ -490,6 +490,18 @@
     Manage / Cancel Subscription →
   </button>
 
+  <!-- Add more games (Stripe non-allgames subscribers only) -->
+  <div id="add-games-section" style="display:none;margin-top:24px;">
+    <div class="section-label">Add More Games</div>
+    <div class="game-list" id="add-game-list"></div>
+    <div class="pricing-note gold-note" id="add-games-price-note" style="margin-bottom:12px;"></div>
+    <div class="error-banner" id="add-games-error"></div>
+    <div class="loading-spinner" id="add-games-spinner">Adding games&hellip;</div>
+    <button class="cta-btn" id="add-games-btn" onclick="submitAddGames()" disabled>
+      Add Selected Games
+    </button>
+  </div>
+
   <!-- Legacy Wix subscription -->
   <div id="legacy-manage-box" class="manage-box" style="display:none;">
     <div class="status-badge active" style="margin-bottom:10px;">Active</div>
@@ -624,6 +636,14 @@ var allGamesMode = false;
 var selectedGames = [];
 var couponCode   = '';
 var couponValid  = false;
+var selectedAddGames = [];
+var currentSub   = null;
+
+var gameNames = {
+  wordsandphrases: 'Words & Phrases', '70ssongs': '70s Songs',
+  covers: 'Covers', movies: 'Movies', slogans: 'Slogans',
+  quotes: 'Quotes', books: 'Books',
+};
 
 var PRICES = {
   individual: { monthly: 1.99, annual: 9.99 },
@@ -645,6 +665,26 @@ window.addEventListener('message', function(e) {
   if (d.type === 'error') {
     showError(d.message || 'Something went wrong. Please try again.');
     setLoading(false);
+    // Also restore add-games button if error came from addGames call
+    var addBtn = document.getElementById('add-games-btn');
+    var addSpinner = document.getElementById('add-games-spinner');
+    var addError = document.getElementById('add-games-error');
+    if (addSpinner && addSpinner.style.display === 'block') {
+      addSpinner.style.display = 'none';
+      addBtn.style.display = 'block';
+      addError.textContent = d.message || 'Could not add games. Please try again.';
+      addError.style.display = 'block';
+    }
+  }
+  if (d.type === 'addGamesSuccess') {
+    // Update game tags with new merged list
+    if (currentSub) {
+      currentSub.games = d.games || [];
+      populateGameTags(currentSub);
+    }
+    // Hide add-games section — all games the subscriber now has may equal all games
+    document.getElementById('add-games-section').style.display = 'none';
+    selectedAddGames = [];
   }
   if (d.type === 'checkoutSuccess') {
     // Rare: success redirect landed back on subscribe page
@@ -672,6 +712,7 @@ function handleInit(loggedIn, subscription, isWixLegacy) {
 
 
 function showManageView(sub) {
+  currentSub = sub;
   document.getElementById('checkout-view').style.display = 'none';
   document.getElementById('manage-view').style.display   = 'block';
 
@@ -687,28 +728,7 @@ function showManageView(sub) {
   badge.className = 'status-badge ' + sub.status;
   badge.textContent = sub.status === 'trialing' ? 'Free Trial' : sub.status.replace('_', ' ');
 
-  var gameNames = {
-    wordsandphrases: 'Words & Phrases', '70ssongs': '70s Songs',
-    covers: 'Covers', movies: 'Movies', slogans: 'Slogans',
-    quotes: 'Quotes', books: 'Books',
-  };
-  var tagsEl = document.getElementById('games-tags');
-  var gameList = sub.allGames ? Object.keys(gameNames) : (sub.games || []);
-  if (sub.allGames) {
-    var tag = document.createElement('div');
-    tag.className = 'game-tag';
-    tag.textContent = 'All Games Pass';
-    tag.style.background = '#2a220a';
-    tag.style.color = '#d4af37';
-    tagsEl.appendChild(tag);
-  } else {
-    gameList.forEach(function(g) {
-      var tag = document.createElement('div');
-      tag.className = 'game-tag';
-      tag.textContent = gameNames[g] || g;
-      tagsEl.appendChild(tag);
-    });
-  }
+  populateGameTags(sub);
 
   if (sub.trialEnd) {
     var te = new Date(sub.trialEnd);
@@ -718,6 +738,48 @@ function showManageView(sub) {
 
   document.getElementById('plan-detail').textContent =
     (sub.plan === 'annual' ? 'Annual' : 'Monthly') + ' plan';
+
+  // Populate add-games section with unsubscribed games
+  if (!sub.allGames) {
+    var subscribedSet = (sub.games || []).reduce(function(s, g) { s[g] = true; return s; }, {});
+    var available = Object.keys(gameNames).filter(function(g) { return !subscribedSet[g]; });
+    if (available.length > 0) {
+      var addList = document.getElementById('add-game-list');
+      addList.innerHTML = '';
+      available.forEach(function(g) {
+        var row = document.createElement('div');
+        row.className = 'game-row';
+        row.dataset.game = g;
+        row.setAttribute('onclick', 'toggleAddGame(this)');
+        row.innerHTML = '<div class="game-check"></div><div class="game-name">' + (gameNames[g] || g) + '</div>';
+        addList.appendChild(row);
+      });
+      var priceUnit = sub.plan === 'annual' ? '$9.99/yr' : '$1.99/mo';
+      document.getElementById('add-games-price-note').textContent =
+        'Each game ' + priceUnit + ' — billed on your next invoice';
+      document.getElementById('add-games-section').style.display = 'block';
+    }
+  }
+}
+
+function populateGameTags(sub) {
+  var tagsEl = document.getElementById('games-tags');
+  tagsEl.innerHTML = '';
+  if (sub.allGames) {
+    var tag = document.createElement('div');
+    tag.className = 'game-tag';
+    tag.textContent = 'All Games Pass';
+    tag.style.background = '#2a220a';
+    tag.style.color = '#d4af37';
+    tagsEl.appendChild(tag);
+  } else {
+    (sub.games || []).forEach(function(g) {
+      var tag = document.createElement('div');
+      tag.className = 'game-tag';
+      tag.textContent = gameNames[g] || g;
+      tagsEl.appendChild(tag);
+    });
+  }
 }
 
 // ─── Plan toggle ─────────────────────────────────────────────────────────────
@@ -831,6 +893,28 @@ function showError(msg) {
 function setLoading(on) {
   document.getElementById('loading-spinner').style.display = on ? 'block' : 'none';
   document.getElementById('cta-btn').style.display         = on ? 'none' : 'block';
+}
+
+// ─── Add more games ───────────────────────────────────────────────────────────
+function toggleAddGame(row) {
+  var game = row.dataset.game;
+  var idx  = selectedAddGames.indexOf(game);
+  if (idx === -1) {
+    selectedAddGames.push(game);
+    row.classList.add('selected');
+  } else {
+    selectedAddGames.splice(idx, 1);
+    row.classList.remove('selected');
+  }
+  document.getElementById('add-games-btn').disabled = selectedAddGames.length === 0;
+}
+
+function submitAddGames() {
+  if (!selectedAddGames.length) return;
+  document.getElementById('add-games-spinner').style.display = 'block';
+  document.getElementById('add-games-btn').style.display     = 'none';
+  document.getElementById('add-games-error').style.display   = 'none';
+  send('addGames', { games: selectedAddGames.slice() });
 }
 
 // ─── Checkout ─────────────────────────────────────────────────────────────────
