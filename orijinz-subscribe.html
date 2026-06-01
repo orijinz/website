@@ -451,26 +451,28 @@
   /* ── Not logged in ── */
   #login-prompt {
     display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 20px;
+    min-height: 88vh;
+    padding: 24px 16px;
   }
-  #login-prompt p { color: #aaa; margin-bottom: 16px; font-size: 14px; }
 </style>
 </head>
 <body>
 
 <!-- LOGIN PROMPT (shown if user is not logged in) -->
 <div id="login-prompt">
-  <div class="page-header">
-    <div class="orijinz-logo">
-      <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
-      <div class="logo-tagline">The fun and fascinating origins games</div>
-    </div>
-    <h1>Start Your Free Trial</h1>
-    <p>Sign in to subscribe to Orijinz Daily</p>
+  <div class="orijinz-logo" style="margin-bottom:28px;">
+    <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
+    <div class="logo-tagline">The fun and fascinating origins games</div>
   </div>
-  <p style="color:#bbb;margin-bottom:16px;font-size:14px;">You need to be signed in to start a subscription.</p>
-  <button class="cta-btn" onclick="send('loginRequired')">Sign In / Create Account</button>
+  <h1 style="font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;">Start Your Free Trial</h1>
+  <p style="color:#bbb;font-size:14px;margin-bottom:8px;">14 days free &mdash; no credit card required</p>
+  <p style="color:#888;font-size:13px;margin-bottom:28px;">Sign in or create a free account to subscribe.</p>
+  <button class="cta-btn" style="max-width:360px;" onclick="send('loginRequired')">Sign In / Create Account</button>
+  <p style="color:#777;font-size:12px;margin-top:14px;">Cancel any time. Plans from $1.99/mo after trial.</p>
 </div>
 
 <!-- MANAGE VIEW (shown if already subscribed) -->
@@ -694,7 +696,7 @@ window.addEventListener('message', function(e) {
 function handleInit(loggedIn, subscription, isWixLegacy) {
   if (!loggedIn) {
     document.getElementById('checkout-view').style.display  = 'none';
-    document.getElementById('login-prompt').style.display   = 'block';
+    document.getElementById('login-prompt').style.display   = 'flex';
     return;
   }
 
