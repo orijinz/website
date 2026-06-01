@@ -229,6 +229,14 @@
     color: #888;
   }
 
+  /* ── Pricing note below game list ── */
+  .pricing-note {
+    font-size: 12px;
+    color: #777;
+    text-align: center;
+    padding: 8px 0 4px;
+  }
+
   /* ── Coupon ── */
   .coupon-section {
     margin-bottom: 20px;
@@ -463,39 +471,33 @@
     <div class="game-row" data-game="wordsandphrases" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Words &amp; Phrases</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
     <div class="game-row" data-game="70ssongs" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">70s Songs</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
     <div class="game-row" data-game="covers" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Covers</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
     <div class="game-row" data-game="movies" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Movies</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
     <div class="game-row" data-game="slogans" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Slogans</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
     <div class="game-row" data-game="quotes" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Quotes</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
     <div class="game-row" data-game="books" onclick="toggleGame(this)">
       <div class="game-check"></div>
       <div class="game-name">Books</div>
-      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
     </div>
   </div>
+  <div class="pricing-note" id="individual-pricing-note">Each game $1.99/mo &mdash; or $9.99/yr &mdash; after your 14-day free trial</div>
 
   <div class="or-divider">or</div>
 
@@ -508,12 +510,13 @@
     </div>
     <div class="allgames-price">
       <span class="main" id="allgames-price-main">$5.99/mo</span>
+      <span class="annual-note" id="allgames-after-trial">after trial</span>
     </div>
   </div>
 
   <!-- Coupon -->
   <div class="coupon-section">
-    <div class="section-label">Coupon Code (Optional)</div>
+    <div class="section-label">Coupon Code &mdash; applies to charges after your trial</div>
     <div class="coupon-row">
       <input
         type="text"
@@ -553,6 +556,7 @@
   </button>
   <div class="legal">
     No credit card required for the free trial.<br>
+    You'll receive an email before your trial ends to set up payment.<br>
     Cancel any time. By subscribing you agree to our
     <a href="https://www.entspire.com/terms" target="_blank">Terms of Service</a>.
   </div>
@@ -664,10 +668,11 @@ function setPlan(p) {
   document.getElementById('btn-monthly').classList.toggle('active', p === 'monthly');
   document.getElementById('btn-annual').classList.toggle('active',  p === 'annual');
 
-  // Update all price labels
-  document.querySelectorAll('.game-price').forEach(function(el) {
-    el.textContent = el.dataset[p];
-  });
+  document.getElementById('individual-pricing-note').innerHTML =
+    p === 'monthly'
+      ? 'Each game $1.99/mo &mdash; or switch to Annual for $9.99/yr &mdash; after your 14-day free trial'
+      : 'Each game $9.99/yr &mdash; or switch to Monthly for $1.99/mo &mdash; after your 14-day free trial';
+
   document.getElementById('allgames-price-main').textContent =
     p === 'monthly' ? '$5.99/mo' : '$59.99/yr';
 
