@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orijinz Daily — Subscribe</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #111;
+    color: #e8e8e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 24px 16px 32px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .page-header p {
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  /* ── Plan toggle ── */
+  .plan-toggle {
+    display: flex;
+    background: #222;
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .plan-toggle button {
+    flex: 1;
+    padding: 8px 4px;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s;
+    position: relative;
+    z-index: 1;
+  }
+  .plan-toggle button.active {
+    color: #111;
+    background: #d4af37;
+  }
+  .plan-toggle .save-badge {
+    background: #2a6b2a;
+    color: #6fda6f;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+    display: inline-block;
+  }
+
+  /* ── Section labels ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+  }
+
+  /* ── Game list ── */
+  .game-list {
+    background: #1c1c1c;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .game-row {
+    display: flex;
+    align-items: center;
+    padding: 13px 14px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-bottom: 1px solid #2a2a2a;
+    user-select: none;
+  }
+  .game-row:last-child { border-bottom: none; }
+  .game-row:hover { background: #232323; }
+  .game-row.selected { background: #1e1a0e; }
+
+  /* Custom checkbox */
+  .game-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #444;
+    border-radius: 5px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .game-row.selected .game-check {
+    border-color: #d4af37;
+    background: #d4af37;
+  }
+  .game-check::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border: 2px solid transparent;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+  .game-row.selected .game-check::after {
+    border-color: #111;
+  }
+
+  .game-name {
+    flex: 1;
+    font-weight: 500;
+    color: #e8e8e8;
+    font-size: 14px;
+  }
+  .game-price {
+    font-size: 13px;
+    color: #aaa;
+    text-align: right;
+    min-width: 60px;
+  }
+  .game-row.selected .game-price { color: #d4af37; }
+
+  /* ── Or divider ── */
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    color: #555;
+    font-size: 13px;
+  }
+  .or-divider::before,
+  .or-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #2a2a2a;
+  }
+
+  /* ── All Games Pass ── */
+  .allgames-row {
+    background: #1c1c1c;
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    transition: background 0.12s;
+    user-select: none;
+  }
+  .allgames-row:hover { background: #222; }
+  .allgames-row.selected { background: #1e1a0e; border: 1px solid #d4af37; }
+
+  .allgames-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #444;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 0.12s;
+  }
+  .allgames-row.selected .allgames-radio { border-color: #d4af37; }
+  .allgames-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    background: #d4af37;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.12s;
+  }
+  .allgames-row.selected .allgames-radio::after { transform: translate(-50%, -50%) scale(1); }
+
+  .allgames-info { flex: 1; }
+  .allgames-info .name {
+    font-weight: 700;
+    color: #e8e8e8;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  .allgames-info .subtitle {
+    font-size: 12px;
+    color: #888;
+  }
+  .allgames-price {
+    text-align: right;
+  }
+  .allgames-price .main {
+    font-size: 15px;
+    font-weight: 700;
+    color: #d4af37;
+    display: block;
+  }
+  .allgames-price .annual-note {
+    font-size: 11px;
+    color: #888;
+  }
+
+  /* ── Coupon ── */
+  .coupon-section {
+    margin-bottom: 20px;
+  }
+  .coupon-row {
+    display: flex;
+    gap: 8px;
+  }
+  .coupon-input {
+    flex: 1;
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #e8e8e8;
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .coupon-input:focus { border-color: #d4af37; }
+  .coupon-input::placeholder { text-transform: none; letter-spacing: 0; color: #555; }
+  .coupon-apply {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #aaa;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    white-space: nowrap;
+  }
+  .coupon-apply:hover { background: #333; color: #e8e8e8; }
+  .coupon-msg {
+    font-size: 12px;
+    margin-top: 6px;
+    min-height: 18px;
+  }
+  .coupon-msg.ok    { color: #6fda6f; }
+  .coupon-msg.error { color: #e05555; }
+
+  /* ── Summary ── */
+  .summary {
+    background: #1c1c1c;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 20px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 6px;
+  }
+  .summary-row:last-child { margin-bottom: 0; }
+  .summary-row.total {
+    border-top: 1px solid #2a2a2a;
+    padding-top: 10px;
+    margin-top: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8e8e8;
+  }
+  .summary-row.total .amount { color: #d4af37; }
+  .trial-note {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* ── CTA Button ── */
+  .cta-btn {
+    width: 100%;
+    padding: 15px;
+    background: #d4af37;
+    border: none;
+    border-radius: 10px;
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: background 0.15s, transform 0.1s;
+    margin-bottom: 10px;
+  }
+  .cta-btn:hover:not(:disabled) { background: #c9a227; }
+  .cta-btn:active:not(:disabled) { transform: scale(0.98); }
+  .cta-btn:disabled { opacity: 0.4; cursor: default; }
+
+  .legal {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.6;
+  }
+  .legal a { color: #888; }
+
+  /* ── Manage subscription view ── */
+  #manage-view { display: none; }
+  .manage-box {
+    background: #1c1c1c;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .manage-box .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .status-badge.trialing { background: #1e3a1e; color: #6fda6f; }
+  .status-badge.active   { background: #1e3a1e; color: #6fda6f; }
+  .status-badge.past_due { background: #3a1e1e; color: #e05555; }
+  .manage-box .detail    { font-size: 13px; color: #aaa; margin-bottom: 4px; }
+  .manage-box .game-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .game-tag {
+    background: #2a2a2a;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 12px;
+    color: #ccc;
+  }
+  .manage-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .manage-btn:hover { background: #333; }
+
+  /* ── Error / loading states ── */
+  .error-banner {
+    background: #3a1e1e;
+    border: 1px solid #5a2e2e;
+    border-radius: 8px;
+    color: #e08080;
+    font-size: 13px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .loading-spinner {
+    display: none;
+    text-align: center;
+    padding: 16px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  /* ── Not logged in ── */
+  #login-prompt {
+    display: none;
+    text-align: center;
+    padding: 20px;
+  }
+  #login-prompt p { color: #aaa; margin-bottom: 16px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN PROMPT (shown if user is not logged in) -->
+<div id="login-prompt">
+  <div class="page-header">
+    <h1>Start Your Free Trial</h1>
+    <p>Sign in to subscribe to Orijinz Daily</p>
+  </div>
+  <p>You need to be signed in to start a subscription.</p>
+  <button class="cta-btn" onclick="send('loginRequired')">Sign In / Create Account</button>
+</div>
+
+<!-- MANAGE VIEW (shown if already subscribed) -->
+<div id="manage-view">
+  <div class="page-header">
+    <h1>Your Subscription</h1>
+    <p>Manage your Orijinz Daily games</p>
+  </div>
+  <div class="manage-box">
+    <div id="status-badge" class="status-badge"></div>
+    <div id="games-tags" class="game-tags"></div>
+    <div id="trial-detail" class="detail"></div>
+    <div id="plan-detail" class="detail"></div>
+  </div>
+  <button class="manage-btn" onclick="send('manageSubscription')">
+    Manage / Cancel Subscription →
+  </button>
+</div>
+
+<!-- CHECKOUT VIEW (shown if not subscribed) -->
+<div id="checkout-view">
+  <div class="page-header">
+    <h1>Start Your Free Trial</h1>
+    <p>14 days free &mdash; no credit card required</p>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <!-- Plan toggle -->
+  <div class="plan-toggle" role="group" aria-label="Billing period">
+    <button id="btn-monthly" class="active" onclick="setPlan('monthly')">Monthly</button>
+    <button id="btn-annual"  onclick="setPlan('annual')">
+      Annual <span class="save-badge">Save 58%</span>
+    </button>
+  </div>
+
+  <!-- Individual games -->
+  <div class="section-label">Select Your Games</div>
+  <div class="game-list" id="game-list">
+    <div class="game-row" data-game="wordsandphrases" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Words &amp; Phrases</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+    <div class="game-row" data-game="70ssongs" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">70s Songs</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+    <div class="game-row" data-game="covers" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Covers</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+    <div class="game-row" data-game="movies" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Movies</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+    <div class="game-row" data-game="slogans" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Slogans</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+    <div class="game-row" data-game="quotes" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Quotes</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+    <div class="game-row" data-game="books" onclick="toggleGame(this)">
+      <div class="game-check"></div>
+      <div class="game-name">Books</div>
+      <div class="game-price" data-monthly="$1.99/mo" data-annual="$9.99/yr">$1.99/mo</div>
+    </div>
+  </div>
+
+  <div class="or-divider">or</div>
+
+  <!-- All Games Pass -->
+  <div class="allgames-row" id="allgames-row" onclick="toggleAllGames()">
+    <div class="allgames-radio"></div>
+    <div class="allgames-info">
+      <div class="name">All Games Pass</div>
+      <div class="subtitle">All 7 games &mdash; best value</div>
+    </div>
+    <div class="allgames-price">
+      <span class="main" id="allgames-price-main">$5.99/mo</span>
+    </div>
+  </div>
+
+  <!-- Coupon -->
+  <div class="coupon-section">
+    <div class="section-label">Coupon Code (Optional)</div>
+    <div class="coupon-row">
+      <input
+        type="text"
+        id="coupon-input"
+        class="coupon-input"
+        placeholder="Enter code"
+        maxlength="40"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="coupon-apply" onclick="applyCoupon()">Apply</button>
+    </div>
+    <div class="coupon-msg" id="coupon-msg"></div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="summary-row">
+      <span id="summary-label">No games selected</span>
+      <span id="summary-subtotal">—</span>
+    </div>
+    <div class="summary-row" id="discount-row" style="display:none;">
+      <span>Coupon discount</span>
+      <span id="summary-discount" style="color:#6fda6f;">—</span>
+    </div>
+    <div class="summary-row total">
+      <span>Due today</span>
+      <span class="amount">$0.00</span>
+    </div>
+    <div class="trial-note">14-day free trial &mdash; no charge until <span id="trial-end-date"></span></div>
+  </div>
+
+  <div class="loading-spinner" id="loading-spinner">Starting checkout&hellip;</div>
+
+  <button class="cta-btn" id="cta-btn" onclick="startCheckout()" disabled>
+    Start Free Trial
+  </button>
+  <div class="legal">
+    No credit card required for the free trial.<br>
+    Cancel any time. By subscribing you agree to our
+    <a href="https://www.entspire.com/terms" target="_blank">Terms of Service</a>.
+  </div>
+</div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+var plan         = 'monthly';
+var allGamesMode = false;
+var selectedGames = [];
+var couponCode   = '';
+var couponValid  = false;
+
+var PRICES = {
+  individual: { monthly: 1.99, annual: 9.99 },
+  allgames:   { monthly: 5.99, annual: 59.99 },
+};
+
+// ─── postMessage helpers ──────────────────────────────────────────────────────
+function send(type, extra) {
+  window.parent.postMessage(Object.assign({ type: type }, extra || {}), '*');
+}
+
+window.addEventListener('message', function(e) {
+  var d = e.data;
+  if (!d || !d.type) return;
+
+  if (d.type === 'init') {
+    handleInit(d.loggedIn, d.subscription);
+  }
+  if (d.type === 'error') {
+    showError(d.message || 'Something went wrong. Please try again.');
+    setLoading(false);
+  }
+  if (d.type === 'checkoutSuccess') {
+    // Rare: success redirect landed back on subscribe page
+    showError(''); // clear errors
+  }
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+function handleInit(loggedIn, subscription) {
+  if (!loggedIn) {
+    document.getElementById('checkout-view').style.display  = 'none';
+    document.getElementById('login-prompt').style.display   = 'block';
+    return;
+  }
+
+  if (subscription && subscription.hasAccess) {
+    showManageView(subscription);
+  } else {
+    document.getElementById('checkout-view').style.display = 'block';
+  }
+
+  setTrialEndDate();
+}
+
+function setTrialEndDate() {
+  var d = new Date();
+  d.setDate(d.getDate() + 14);
+  var opts = { month: 'short', day: 'numeric', year: 'numeric' };
+  document.getElementById('trial-end-date').textContent = d.toLocaleDateString('en-US', opts);
+}
+
+function showManageView(sub) {
+  document.getElementById('checkout-view').style.display = 'none';
+  document.getElementById('manage-view').style.display   = 'block';
+
+  var badge = document.getElementById('status-badge');
+  badge.className = 'status-badge ' + sub.status;
+  badge.textContent = sub.status === 'trialing' ? 'Free Trial' : sub.status.replace('_', ' ');
+
+  var gameNames = {
+    wordsandphrases: 'Words & Phrases', '70ssongs': '70s Songs',
+    covers: 'Covers', movies: 'Movies', slogans: 'Slogans',
+    quotes: 'Quotes', books: 'Books',
+  };
+  var tagsEl = document.getElementById('games-tags');
+  var gameList = sub.allGames ? Object.keys(gameNames) : (sub.games || []);
+  if (sub.allGames) {
+    var tag = document.createElement('div');
+    tag.className = 'game-tag';
+    tag.textContent = 'All Games Pass';
+    tag.style.background = '#2a220a';
+    tag.style.color = '#d4af37';
+    tagsEl.appendChild(tag);
+  } else {
+    gameList.forEach(function(g) {
+      var tag = document.createElement('div');
+      tag.className = 'game-tag';
+      tag.textContent = gameNames[g] || g;
+      tagsEl.appendChild(tag);
+    });
+  }
+
+  if (sub.trialEnd) {
+    var te = new Date(sub.trialEnd);
+    document.getElementById('trial-detail').textContent =
+      'Trial ends ' + te.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  document.getElementById('plan-detail').textContent =
+    (sub.plan === 'annual' ? 'Annual' : 'Monthly') + ' plan';
+}
+
+// ─── Plan toggle ─────────────────────────────────────────────────────────────
+function setPlan(p) {
+  plan = p;
+  document.getElementById('btn-monthly').classList.toggle('active', p === 'monthly');
+  document.getElementById('btn-annual').classList.toggle('active',  p === 'annual');
+
+  // Update all price labels
+  document.querySelectorAll('.game-price').forEach(function(el) {
+    el.textContent = el.dataset[p];
+  });
+  document.getElementById('allgames-price-main').textContent =
+    p === 'monthly' ? '$5.99/mo' : '$59.99/yr';
+
+  updateSummary();
+}
+
+// ─── Game selection ───────────────────────────────────────────────────────────
+function toggleGame(row) {
+  if (allGamesMode) {
+    // Deselect All Games Pass first
+    allGamesMode = false;
+    document.getElementById('allgames-row').classList.remove('selected');
+  }
+
+  var game = row.dataset.game;
+  var idx  = selectedGames.indexOf(game);
+  if (idx === -1) {
+    selectedGames.push(game);
+    row.classList.add('selected');
+  } else {
+    selectedGames.splice(idx, 1);
+    row.classList.remove('selected');
+  }
+  updateSummary();
+}
+
+function toggleAllGames() {
+  allGamesMode = !allGamesMode;
+
+  // Clear individual game selections visually
+  document.querySelectorAll('.game-row.selected').forEach(function(r) {
+    r.classList.remove('selected');
+  });
+  selectedGames = [];
+
+  document.getElementById('allgames-row').classList.toggle('selected', allGamesMode);
+  updateSummary();
+}
+
+// ─── Summary ──────────────────────────────────────────────────────────────────
+function updateSummary() {
+  var labelEl    = document.getElementById('summary-label');
+  var subtotalEl = document.getElementById('summary-subtotal');
+  var ctaBtn     = document.getElementById('cta-btn');
+
+  if (allGamesMode) {
+    var price = PRICES.allgames[plan];
+    labelEl.textContent    = 'All Games Pass';
+    subtotalEl.textContent = plan === 'monthly' ? '$5.99/mo' : '$59.99/yr';
+    ctaBtn.disabled        = false;
+  } else if (selectedGames.length > 0) {
+    var total = selectedGames.length * PRICES.individual[plan];
+    var unit  = plan === 'monthly' ? '/mo' : '/yr';
+    labelEl.textContent    = selectedGames.length + ' game' + (selectedGames.length > 1 ? 's' : '');
+    subtotalEl.textContent = '$' + total.toFixed(2) + unit;
+    ctaBtn.disabled        = false;
+  } else {
+    labelEl.textContent    = 'No games selected';
+    subtotalEl.textContent = '—';
+    ctaBtn.disabled        = true;
+  }
+}
+
+// ─── Coupon ───────────────────────────────────────────────────────────────────
+function applyCoupon() {
+  var val = document.getElementById('coupon-input').value.trim().toUpperCase();
+  var msg = document.getElementById('coupon-msg');
+
+  if (!val) {
+    couponCode  = '';
+    couponValid = false;
+    msg.textContent = '';
+    msg.className   = 'coupon-msg';
+    return;
+  }
+
+  // We don't validate the coupon locally — Stripe will reject it if invalid.
+  // Just store it and show a note that it'll be applied at checkout.
+  couponCode  = val;
+  couponValid = true;
+  msg.textContent = 'Code "' + val + '" will be applied at checkout.';
+  msg.className   = 'coupon-msg ok';
+}
+
+function showError(msg) {
+  var el = document.getElementById('error-banner');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+function setLoading(on) {
+  document.getElementById('loading-spinner').style.display = on ? 'block' : 'none';
+  document.getElementById('cta-btn').style.display         = on ? 'none' : 'block';
+}
+
+// ─── Checkout ─────────────────────────────────────────────────────────────────
+function startCheckout() {
+  showError('');
+
+  var games;
+  if (allGamesMode) {
+    games = ['allgames'];
+  } else if (selectedGames.length > 0) {
+    games = selectedGames.slice();
+  } else {
+    return;
+  }
+
+  setLoading(true);
+
+  send('startCheckout', {
+    games:    games,
+    isAnnual: plan === 'annual',
+    coupon:   couponCode,
+  });
+}
+</script>
+</body>
+</html>
