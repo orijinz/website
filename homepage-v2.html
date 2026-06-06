@@ -457,22 +457,22 @@
     <div style="font-family:'Nunito Sans',sans-serif; font-size:1rem; color:var(--text); font-style:italic; font-weight:600; margin-top:8px; letter-spacing:0.04em;">The fun and fascinating origins games</div>
   </div>
 
-  <!-- PITCH -->
-  <div class="pitch">
-    Seven daily puzzle games &mdash; super fun, super fascinating, and sometimes super challenging &mdash; from 70s songs to movies, books, slogans, and more. One free game rotates in every day. Subscribe to any game (or all of them) to unlock its fresh daily puzzle. Every subscription starts with a two&#8209;week free trial. Want more info? Check out the <a href="https://www.entspire.com/odqa" target="_top" style="color:var(--gold);text-decoration:none;">Orijinz Daily Q&amp;A</a>.
-  </div>
-
   <!-- FREE GAME HERO -->
   <div class="free-hero" id="freeHero">
-    <div class="free-hero-thumb">
-      <img id="freeHeroImg" src="" alt="">
-    </div>
     <div class="free-hero-info">
       <div class="free-hero-label">⭐ Today's Free Game</div>
       <div class="free-hero-name" id="freeHeroName"></div>
       <div class="free-hero-desc" id="freeHeroDesc"></div>
     </div>
+    <div class="free-hero-thumb">
+      <img id="freeHeroImg" src="" alt="">
+    </div>
     <a class="free-hero-btn" id="freeHeroBtn" target="_top" href="#">Play Free</a>
+  </div>
+
+  <!-- PITCH -->
+  <div class="pitch">
+    Seven daily puzzle games &mdash; super fun, super fascinating, and sometimes super challenging &mdash; from 70s songs to movies, books, slogans, and more. One free game rotates in every day. Subscribe to any game (or all of them) to unlock its fresh daily puzzle. Every subscription starts with a two&#8209;week free trial. Want more info? Check out the <a href="https://www.entspire.com/odqa" target="_top" style="color:var(--gold);text-decoration:none;">Orijinz Daily Q&amp;A</a>.
   </div>
 
   <!-- DAILY GAMES -->
@@ -502,7 +502,7 @@
               <div class="carousel-slide-name">Words & Phrases</div>
               <div class="carousel-slide-desc">Read the origin. Guess the word or phrase.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/odwordsandphrases">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odwordsandphrases" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -517,7 +517,7 @@
               <div class="carousel-slide-name">70s Songs</div>
               <div class="carousel-slide-desc">Read the song title. Guess the artist.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/od70s-songs">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/od70s-songs" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -532,7 +532,7 @@
               <div class="carousel-slide-name">Covers</div>
               <div class="carousel-slide-desc">Listen to a cover. Guess the original artist.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/odcovers">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odcovers" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -547,7 +547,7 @@
               <div class="carousel-slide-name">Movies</div>
               <div class="carousel-slide-desc">Read the synopsis. Guess the movie.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/odmovies">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odmovies" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -562,7 +562,7 @@
               <div class="carousel-slide-name">Slogans</div>
               <div class="carousel-slide-desc">Read the slogan. Guess the source.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/odslogans">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odslogans" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -577,7 +577,7 @@
               <div class="carousel-slide-name">Quotes</div>
               <div class="carousel-slide-desc">Read the quote. Guess the source.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/odquotes">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odquotes" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -592,7 +592,7 @@
               <div class="carousel-slide-name">Books</div>
               <div class="carousel-slide-desc">Read the summary. Name the book.</div>
               <div class="tile-buttons single">
-                <a class="tile-play" target="_top" href="https://www.entspire.com/odbooks">Play</a>
+                <a class="tile-play" target="_top" href="https://www.entspire.com/odbooks" style="display:none">Play</a>
                 <a class="tile-trial" target="_top" href="https://www.entspire.com/subscribe">Start Free Trial</a>
               </div>
             </div>
@@ -814,10 +814,10 @@ function setTileButtons(tile, mode) {
   btnRow.style.visibility = '';
 }
 
-// Safety timeout: if no response in 3s, show both buttons + the AGP banner
+// Safety timeout: if no response in 3s, show trial-only + the AGP banner
 var _subTimeout = setTimeout(function() {
   document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
-    setTileButtons(tile, 'both');
+    setTileButtons(tile, 'trial-only');
   });
   var agp = document.getElementById('agpBanner');
   if (agp) agp.classList.add('visible');
@@ -848,9 +848,8 @@ window.addEventListener('message', function(event) {
   document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
     var game = tile.getAttribute('data-game');
     var subscribed = hasAllGames || subs.indexOf(game) !== -1;
-    if (subscribed)       setTileButtons(tile, 'play-only');
-    else if (!loggedIn)   setTileButtons(tile, 'trial-only');
-    else                  setTileButtons(tile, 'both');
+    if (subscribed)  setTileButtons(tile, 'play-only');
+    else             setTileButtons(tile, 'trial-only');
   });
 
   // Promote subscribed games to the front of the carousel
