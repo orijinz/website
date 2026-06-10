@@ -421,6 +421,48 @@
   }
   .manage-btn:hover { background: #333; }
 
+  /* ── Back to games button ── */
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #9d7dd4;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 0 20px;
+    letter-spacing: 0.2px;
+  }
+  .back-btn:hover { color: #b898e0; }
+
+  /* ── Add games success state ── */
+  .add-games-success {
+    display: none;
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+  .add-games-success .success-icon { font-size: 28px; margin-bottom: 8px; }
+  .add-games-success .success-msg  { color: #6fda6f; font-weight: 600; margin-bottom: 16px; font-size: 15px; }
+  .play-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 15px;
+    background: #9d7dd4;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: background 0.15s;
+  }
+  .play-btn:hover { background: #b898e0; }
+
   /* ── Section divider ── */
   .section-divider {
     border: none;
@@ -476,6 +518,7 @@
 
 <!-- MANAGE VIEW (shown if already subscribed) -->
 <div id="manage-view">
+  <button class="back-btn" onclick="goBackToGames()">&#x2190; Back to Games</button>
   <div class="page-header">
     <h1>Your Subscription</h1>
     <p>Manage your Orijinz Daily games</p>
@@ -501,6 +544,11 @@
     <button class="cta-btn" id="add-games-btn" onclick="submitAddGames()" disabled>
       Add Selected Games
     </button>
+    <div class="add-games-success" id="add-games-success">
+      <div class="success-icon">&#x2713;</div>
+      <div class="success-msg">Games added to your subscription!</div>
+      <button class="play-btn" onclick="goBackToGames()">Start Playing &#x2192;</button>
+    </div>
   </div>
 
   <!-- Legacy Wix subscription -->
@@ -656,6 +704,12 @@ function send(type, extra) {
   window.parent.postMessage(Object.assign({ type: type }, extra || {}), '*');
 }
 
+function goBackToGames() {
+  try { window.top.location.href = 'https://www.entspire.com'; } catch(e) {
+    window.parent.postMessage({ type: 'orijinz_navigate', url: '/' }, '*');
+  }
+}
+
 window.addEventListener('message', function(e) {
   var d = e.data;
   if (!d || !d.type) return;
@@ -684,6 +738,11 @@ window.addEventListener('message', function(e) {
     }
     selectedAddGames = [];
     refreshAddGamesSection();
+    // Show success state with play button
+    var successEl = document.getElementById('add-games-success');
+    if (successEl) successEl.style.display = 'block';
+    var addBtn = document.getElementById('add-games-btn');
+    if (addBtn) addBtn.style.display = 'none';
   }
   if (d.type === 'checkoutSuccess') {
     // Rare: success redirect landed back on subscribe page
