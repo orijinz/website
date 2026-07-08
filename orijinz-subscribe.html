@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 11:59 -->
+<!-- LAST UPDATED: 2026-07-08 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -754,7 +754,10 @@ window.addEventListener('message', function(e) {
   if (!d || !d.type) return;
 
   if (d.type === 'init') {
-    handleInit(d.loggedIn, d.subscription, d.isWixLegacy);
+    handleInit(d.loggedIn, d.subscription, d.isWixLegacy, d.isNativeIOS);
+  }
+  if (d.type === 'nativeIOSReady') {
+    handleInit(false, null, false, true);
   }
   if (d.type === 'error') {
     showError(d.message || 'Something went wrong. Please try again.');
@@ -838,9 +841,9 @@ window.orijinzIAPError = function(msg) {
 };
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
-function handleInit(loggedIn, subscription, isWixLegacy) {
+function handleInit(loggedIn, subscription, isWixLegacy, isNativeIOS) {
   // Inside the iOS native app — use IAP flow instead of Stripe
-  if (window.ORIJINZ_NATIVE_IOS) {
+  if (isNativeIOS || window.ORIJINZ_NATIVE_IOS) {
     if (window.ORIJINZ_IAP_ACTIVE || (subscription && subscription.hasAccess)) {
       document.getElementById('iap-manage-view').style.display = 'block';
     } else if (!loggedIn) {
