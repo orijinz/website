@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-07 17:52 -->
+<!-- LAST UPDATED: 2026-07-08 11:59 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -563,6 +563,43 @@
   </a>
 </div>
 
+<!-- IAP CHECKOUT VIEW (iOS app only) -->
+<div id="iap-view" style="display:none;">
+  <div class="page-header">
+    <div class="orijinz-logo" style="margin-bottom:16px;">
+      <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
+    </div>
+    <h1>All Games Pass</h1>
+    <p>Unlock all 7 games with one subscription</p>
+  </div>
+  <div class="plan-toggle" role="group" aria-label="Billing period">
+    <button id="iap-btn-monthly" class="active" onclick="setIAPPlan('monthly')">Monthly</button>
+    <button id="iap-btn-annual" onclick="setIAPPlan('annual')">Annual <span class="save-badge">Save 58%</span></button>
+  </div>
+  <div id="iap-price-note" class="pricing-note gold-note" style="margin-bottom:24px;">$5.99/month after 7-day free trial</div>
+  <button class="cta-btn" id="iap-cta-btn" onclick="startIAPCheckout()">Start Free Trial</button>
+  <div id="iap-loading" class="loading-spinner" style="display:none;">Opening App Store&hellip;</div>
+  <div id="iap-error" style="color:#e05050;text-align:center;margin-top:12px;font-size:14px;display:none;"></div>
+  <button class="back-btn" style="display:block;text-align:center;margin-top:20px;" onclick="restoreIAP()">Restore Purchases</button>
+  <div class="legal" style="margin-top:20px;">
+    Payment charged to your Apple ID. Renews automatically unless cancelled 24 hours before period end.
+    Manage or cancel in Apple ID Settings.
+  </div>
+</div>
+
+<!-- IAP MANAGE VIEW (iOS app — already subscribed via IAP) -->
+<div id="iap-manage-view" style="display:none;">
+  <div class="page-header" style="margin-bottom:24px;">
+    <h1 style="color:#FFD840;">All Games Unlocked</h1>
+    <p>Your All Games Pass is active</p>
+  </div>
+  <div class="manage-box" style="text-align:center;padding:20px;">
+    <div class="status-badge active" style="display:inline-block;margin-bottom:12px;">Active</div>
+    <p class="detail">Manage or cancel your subscription in<br><strong>Settings &gt; Apple ID &gt; Subscriptions</strong></p>
+  </div>
+  <button class="cta-btn" style="margin-top:20px;" onclick="goBackToGames()">&#x2190; Play Now</button>
+</div>
+
 <!-- CHECKOUT VIEW (shown if not subscribed) -->
 <div id="checkout-view">
   <div class="page-header">
@@ -752,8 +789,68 @@ window.addEventListener('message', function(e) {
   }
 });
 
+// ─── IAP (iOS native app) ─────────────────────────────────────────────────────
+var iapPlan = 'monthly';
+var iapPrices = { monthly: '$5.99/month', annual: '$59.99/year' };
+
+function setIAPPlan(p) {
+  iapPlan = p;
+  document.getElementById('iap-btn-monthly').classList.toggle('active', p === 'monthly');
+  document.getElementById('iap-btn-annual').classList.toggle('active', p === 'annual');
+  document.getElementById('iap-price-note').textContent =
+    (p === 'annual' ? '$59.99/year' : '$5.99/month') + ' after 7-day free trial';
+}
+
+function startIAPCheckout() {
+  document.getElementById('iap-cta-btn').style.display = 'none';
+  document.getElementById('iap-loading').style.display = 'block';
+  document.getElementById('iap-error').style.display = 'none';
+  window.location.href = 'orijinz://subscribe?plan=' + iapPlan;
+}
+
+function restoreIAP() {
+  document.getElementById('iap-error').style.display = 'none';
+  window.location.href = 'orijinz://restore';
+}
+
+window.orijinzIAPSuccess = function() {
+  document.getElementById('iap-view').style.display = 'none';
+  document.getElementById('iap-manage-view').style.display = 'block';
+};
+
+window.orijinzIAPCancelled = function() {
+  document.getElementById('iap-cta-btn').style.display = 'block';
+  document.getElementById('iap-loading').style.display = 'none';
+};
+
+window.orijinzIAPPending = function() {
+  document.getElementById('iap-cta-btn').style.display = 'block';
+  document.getElementById('iap-loading').style.display = 'none';
+  document.getElementById('iap-error').style.display = 'block';
+  document.getElementById('iap-error').textContent = 'Purchase is pending approval. You\'ll be notified when it\'s complete.';
+};
+
+window.orijinzIAPError = function(msg) {
+  document.getElementById('iap-cta-btn').style.display = 'block';
+  document.getElementById('iap-loading').style.display = 'none';
+  document.getElementById('iap-error').style.display = 'block';
+  document.getElementById('iap-error').textContent = msg || 'Something went wrong. Please try again.';
+};
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 function handleInit(loggedIn, subscription, isWixLegacy) {
+  // Inside the iOS native app — use IAP flow instead of Stripe
+  if (window.ORIJINZ_NATIVE_IOS) {
+    if (window.ORIJINZ_IAP_ACTIVE || (subscription && subscription.hasAccess)) {
+      document.getElementById('iap-manage-view').style.display = 'block';
+    } else if (!loggedIn) {
+      document.getElementById('login-prompt').style.display = 'flex';
+    } else {
+      document.getElementById('iap-view').style.display = 'block';
+    }
+    return;
+  }
+
   if (!loggedIn) {
     document.getElementById('checkout-view').style.display  = 'none';
     document.getElementById('login-prompt').style.display   = 'flex';
@@ -766,8 +863,6 @@ function handleInit(loggedIn, subscription, isWixLegacy) {
   } else {
     document.getElementById('checkout-view').style.display = 'block';
   }
-
-
 }
 
 
