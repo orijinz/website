@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 -->
+<!-- LAST UPDATED: 2026-07-08 16:21 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -846,8 +846,6 @@ function handleInit(loggedIn, subscription, isWixLegacy, isNativeIOS) {
   if (isNativeIOS || window.ORIJINZ_NATIVE_IOS) {
     if (window.ORIJINZ_IAP_ACTIVE || (subscription && subscription.hasAccess)) {
       document.getElementById('iap-manage-view').style.display = 'block';
-    } else if (!loggedIn) {
-      document.getElementById('login-prompt').style.display = 'flex';
     } else {
       document.getElementById('iap-view').style.display = 'block';
     }
