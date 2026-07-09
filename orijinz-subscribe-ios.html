@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orijinz Daily — Subscribe</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #111;
+            color: #e0e0e0;
+            font-family: 'Hunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+            padding: 24px 16px 32px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+            font-weight: 700;
+            text-wrap: balance;
+        }
+        .subtitle {
+            color: #bbb;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+        .game-list {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .game-list span {
+            display: inline-block;
+            margin-right: 12px;
+            margin-bottom: 8px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0;
+            margin-bottom: 16px;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: #ccc; }
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            background: #222;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .toggle-btn.active {
+            background: #d4a438;
+            color: #000;
+            border-color: #d4a438;
+        }
+        .toggle-btn:hover:not(.active) {
+            border-color: #666;
+        }
+        .price-display {
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #d4a438;
+            font-weight: 600;
+        }
+        .trial-info {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .cta-btn {
+            width: 100%;
+            padding: 14px;
+            background: #d4a438;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 12px;
+        }
+        .cta-btn:active { background: #b8941e; }
+        .restore-btn {
+            width: 100%;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: #7b9ccc;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .restore-btn:active { color: #5b7cac; }
+        .legal {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+        .error-msg {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid #dc3545;
+            border-radius: 6px;
+            padding: 12px;
+            color: #ff6b6b;
+            margin-bottom: 16px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<button class="back-btn" onclick="goBack()">← Back</button>
+
+<h1>All Games Pass</h1>
+<p class="subtitle">Unlock all 7 games with one subscription</p>
+
+<div class="game-list">
+    <span>✓ 70s Songs</span>
+    <span>✓ Books</span>
+    <span>✓ Covers</span>
+    <span>✓ Movies</span>
+    <span>✓ Quotes</span>
+    <span>✓ Slogans</span>
+    <span>✓ Words & Phrases</span>
+</div>
+
+<div class="toggle-group">
+    <button class="toggle-btn active" onclick="selectPlan('monthly')">Monthly</button>
+    <button class="toggle-btn" onclick="selectPlan('annual')">Annual<br><span style="font-size:0.8rem; font-weight: 400;">Save 58%</span></button>
+</div>
+
+<div class="price-display" id="priceDisplay">$5.99/month after 7-day free trial</div>
+<div class="trial-info">14 days free — no credit card required</div>
+
+<div class="error-msg" id="errorMsg"></div>
+
+<button class="cta-btn" onclick="startTrial()">Start Free Trial</button>
+<button class="restore-btn" onclick="restorePurchases()">Restore Purchases</button>
+
+<div class="legal">
+Payment charged to your Apple ID. Renews automatically unless cancelled 24 hours before period end. Manage or cancel in Apple ID Settings.
+</div>
+
+<script>
+let currentPlan = 'monthly';
+
+function selectPlan(plan) {
+    currentPlan = plan;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    event.target.closest('.toggle-btn').classList.add('active');
+
+    const priceEl = document.getElementById('priceDisplay');
+    if (plan === 'monthly') {
+        priceEl.textContent = '$5.99/month after 7-day free trial';
+    } else {
+        priceEl.textContent = '$59.99/year after 7-day free trial';
+    }
+}
+
+function startTrial() {
+    window.location.href = 'orijinz://subscribe?plan=' + currentPlan;
+}
+
+function restorePurchases() {
+    window.location.href = 'orijinz://restore';
+}
+
+function goBack() {
+    window.history.back();
+}
+
+function showError(msg) {
+    const errorEl = document.getElementById('errorMsg');
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
+    setTimeout(() => { errorEl.style.display = 'none'; }, 4000);
+}
+
+// Global error handlers for IAP callbacks
+window.orijinzIAPSuccess = function() {
+    showError('✓ Subscription activated! Refreshing...');
+    setTimeout(() => { window.location.reload(); }, 1500);
+};
+
+window.orijinzIAPError = function(msg) {
+    showError('Error: ' + msg);
+};
+
+window.orijinzIAPCancelled = function() {
+    showError('Purchase cancelled');
+};
+
+window.orijinzIAPPending = function() {
+    showError('Purchase pending approval');
+};
+</script>
+
+</body>
+</html>
