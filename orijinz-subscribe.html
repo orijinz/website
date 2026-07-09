@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 16:21 -->
+<!-- LAST UPDATED: 2026-07-08 17:56 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -748,6 +748,9 @@ function goBackToGames() {
     window.parent.postMessage({ type: 'orijinz_navigate', url: '/' }, '*');
   }
 }
+
+// Tell Wix parent we're ready — resolves the race where $w.onReady sends init before this iframe has loaded
+window.parent.postMessage({ type: 'subscribeReady' }, '*');
 
 window.addEventListener('message', function(e) {
   var d = e.data;
