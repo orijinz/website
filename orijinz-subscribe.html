@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 17:56 -->
+<!-- LAST UPDATED: 2026-07-08 18:17 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -846,7 +846,7 @@ window.orijinzIAPError = function(msg) {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 function handleInit(loggedIn, subscription, isWixLegacy, isNativeIOS) {
   // Inside the iOS native app — use IAP flow instead of Stripe
-  if (isNativeIOS || window.ORIJINZ_NATIVE_IOS) {
+  if (isNativeIOS || window.ORIJINZ_NATIVE_IOS || /OrijinzApp\//.test(navigator.userAgent)) {
     if (window.ORIJINZ_IAP_ACTIVE || (subscription && subscription.hasAccess)) {
       document.getElementById('iap-manage-view').style.display = 'block';
     } else {
