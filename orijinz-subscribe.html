@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 18:17 -->
+<!-- LAST UPDATED: 2026-07-08 20:06 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -749,8 +749,13 @@ function goBackToGames() {
   }
 }
 
-// Tell Wix parent we're ready — resolves the race where $w.onReady sends init before this iframe has loaded
-window.parent.postMessage({ type: 'subscribeReady' }, '*');
+// Detect native iOS app by UA — runs at load, no postMessage needed
+if (/OrijinzApp\//.test(navigator.userAgent)) {
+  document.getElementById('iap-view').style.display = 'block';
+} else {
+  // Tell Wix parent we're ready so it can send the init payload
+  window.parent.postMessage({ type: 'subscribeReady' }, '*');
+}
 
 window.addEventListener('message', function(e) {
   var d = e.data;
