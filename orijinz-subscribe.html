@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 20:06 -->
+<!-- LAST UPDATED: 2026-07-08 20:21 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -752,6 +752,9 @@ function goBackToGames() {
 // Detect native iOS app by UA — runs at load, no postMessage needed
 if (/OrijinzApp\//.test(navigator.userAgent)) {
   document.getElementById('iap-view').style.display = 'block';
+  ['checkout-view','login-prompt','iap-manage-view'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
 } else {
   // Tell Wix parent we're ready so it can send the init payload
   window.parent.postMessage({ type: 'subscribeReady' }, '*');
@@ -852,6 +855,9 @@ window.orijinzIAPError = function(msg) {
 function handleInit(loggedIn, subscription, isWixLegacy, isNativeIOS) {
   // Inside the iOS native app — use IAP flow instead of Stripe
   if (isNativeIOS || window.ORIJINZ_NATIVE_IOS || /OrijinzApp\//.test(navigator.userAgent)) {
+    ['checkout-view','login-prompt','iap-view','iap-manage-view'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
     if (window.ORIJINZ_IAP_ACTIVE || (subscription && subscription.hasAccess)) {
       document.getElementById('iap-manage-view').style.display = 'block';
     } else {
