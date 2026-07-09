@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 20:31 -->
+<!-- LAST UPDATED: 2026-07-08 20:36 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -568,14 +568,15 @@
 
 <!-- IAP CHECKOUT VIEW (iOS app only) -->
 <div id="iap-view" style="display:none;">
-  <button onclick="goBackToGames()" style="background:none;border:none;color:#aaa;font-size:15px;padding:0 0 16px 0;cursor:pointer;display:block;">&#x2190; Back to Games</button>
-  <div class="page-header">
-    <div class="orijinz-logo" style="margin-bottom:16px;">
-      <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
-    </div>
-    <h1>All Games Pass</h1>
-    <p>Unlock all 7 games with one subscription</p>
+  <button onclick="goBackToGames()" style="background:none;border:none;color:#aaa;font-size:15px;padding:0 0 12px 0;cursor:pointer;display:block;">&#x2190; Back to Games</button>
+  <h1 style="font-size:1.6rem;margin-bottom:6px;">All Games Pass</h1>
+  <p style="color:#bbb;margin-bottom:16px;">Unlock all 7 games with one subscription</p>
+
+  <div style="background:#1a1a1a;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:14px;color:#ccc;line-height:1.9;">
+    &#x2713; 70s Songs &nbsp;&nbsp; &#x2713; Books &nbsp;&nbsp; &#x2713; Covers<br>
+    &#x2713; Movies &nbsp;&nbsp; &#x2713; Quotes &nbsp;&nbsp; &#x2713; Slogans &nbsp;&nbsp; &#x2713; Words &amp; Phrases
   </div>
+
   <div class="plan-toggle" role="group" aria-label="Billing period">
     <button id="iap-btn-monthly" class="active" onclick="setIAPPlan('monthly')">Monthly</button>
     <button id="iap-btn-annual" onclick="setIAPPlan('annual')">Annual <span class="save-badge">Save 58%</span></button>
