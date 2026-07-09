@@ -1,9 +1,12 @@
-<!-- LAST UPDATED: 2026-07-07 17:52 -->
+<!-- LAST UPDATED: 2026-07-09 08:30 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Orijinz Daily — Subscribe</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -511,7 +514,7 @@
     <div class="logo-tagline">The fun and fascinating origins games</div>
   </div>
   <h1 style="font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;">Start Your Free Trial</h1>
-  <p style="color:#bbb;font-size:14px;margin-bottom:8px;">14 days free &mdash; no credit card required</p>
+  <p style="color:#bbb;font-size:14px;margin-bottom:8px;">7 days free &mdash; no credit card required</p>
   <p style="color:#888;font-size:13px;margin-bottom:28px;">Sign in or create a free account to subscribe.</p>
   <button class="cta-btn" style="max-width:360px;" onclick="send('loginRequired')">Sign In / Create Account</button>
   <p style="color:#777;font-size:12px;margin-top:14px;">Cancel any time. Plans from $1.99/mo after trial.</p>
@@ -563,15 +566,54 @@
   </a>
 </div>
 
+<!-- IAP CHECKOUT VIEW (iOS app only) -->
+<div id="iap-view" style="display:none;">
+  <button onclick="goBackToGames()" style="background:none;border:none;color:#aaa;font-size:15px;padding:0 0 12px 0;cursor:pointer;display:block;">&#x2190; Back to Games</button>
+  <h1 style="font-size:1.6rem;margin-bottom:6px;">All Games Pass</h1>
+  <p style="color:#bbb;margin-bottom:16px;">Unlock all 7 games with one subscription</p>
+
+  <div style="background:#1a1a1a;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:14px;color:#ccc;line-height:1.9;">
+    &#x2713; 70s Songs &nbsp;&nbsp; &#x2713; Books &nbsp;&nbsp; &#x2713; Covers<br>
+    &#x2713; Movies &nbsp;&nbsp; &#x2713; Quotes &nbsp;&nbsp; &#x2713; Slogans &nbsp;&nbsp; &#x2713; Words &amp; Phrases
+  </div>
+
+  <div class="plan-toggle" role="group" aria-label="Billing period">
+    <button id="iap-btn-monthly" class="active" onclick="setIAPPlan('monthly')">Monthly</button>
+    <button id="iap-btn-annual" onclick="setIAPPlan('annual')">Annual <span class="save-badge">Save 58%</span></button>
+  </div>
+  <div id="iap-price-note" class="pricing-note gold-note" style="margin-bottom:24px;">$5.99/month after 7-day free trial</div>
+  <button class="cta-btn" id="iap-cta-btn" onclick="startIAPCheckout()">Start Free Trial</button>
+  <div id="iap-loading" class="loading-spinner" style="display:none;">Opening App Store&hellip;</div>
+  <div id="iap-error" style="color:#e05050;text-align:center;margin-top:12px;font-size:14px;display:none;"></div>
+  <button class="back-btn" style="display:block;text-align:center;margin-top:20px;" onclick="restoreIAP()">Restore Purchases</button>
+  <div class="legal" style="margin-top:20px;">
+    Payment charged to your Apple ID. Renews automatically unless cancelled 24 hours before period end.
+    Manage or cancel in Apple ID Settings.
+  </div>
+</div>
+
+<!-- IAP MANAGE VIEW (iOS app — already subscribed via IAP) -->
+<div id="iap-manage-view" style="display:none;">
+  <div class="page-header" style="margin-bottom:24px;">
+    <h1 style="color:#FFD840;">All Games Unlocked</h1>
+    <p>Your All Games Pass is active</p>
+  </div>
+  <div class="manage-box" style="text-align:center;padding:20px;">
+    <div class="status-badge active" style="display:inline-block;margin-bottom:12px;">Active</div>
+    <p class="detail">Manage or cancel your subscription in<br><strong>Settings &gt; Apple ID &gt; Subscriptions</strong></p>
+  </div>
+  <button class="cta-btn" style="margin-top:20px;" onclick="goBackToGames()">&#x2190; Play Now</button>
+</div>
+
 <!-- CHECKOUT VIEW (shown if not subscribed) -->
-<div id="checkout-view">
+<div id="checkout-view" style="display:none;">
   <div class="page-header">
     <div class="orijinz-logo">
       <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
       <div class="logo-tagline">The fun and fascinating origins games</div>
     </div>
     <h1>Start Your Free Trial</h1>
-    <p>14 days free &mdash; no credit card required</p>
+    <p>7 days free &mdash; no credit card required</p>
   </div>
 
   <div class="error-banner" id="error-banner"></div>
@@ -712,12 +754,26 @@ function goBackToGames() {
   }
 }
 
+// Detect native iOS app by UA — runs at load, no postMessage needed
+if (/OrijinzApp\//.test(navigator.userAgent)) {
+  document.getElementById('iap-view').style.display = 'block';
+  ['checkout-view','login-prompt','iap-manage-view'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+} else {
+  // Tell Wix parent we're ready so it can send the init payload
+  window.parent.postMessage({ type: 'subscribeReady' }, '*');
+}
+
 window.addEventListener('message', function(e) {
   var d = e.data;
   if (!d || !d.type) return;
 
   if (d.type === 'init') {
-    handleInit(d.loggedIn, d.subscription, d.isWixLegacy);
+    handleInit(d.loggedIn, d.subscription, d.isWixLegacy, d.isNativeIOS);
+  }
+  if (d.type === 'nativeIOSReady') {
+    handleInit(false, null, false, true);
   }
   if (d.type === 'error') {
     showError(d.message || 'Something went wrong. Please try again.');
@@ -752,8 +808,69 @@ window.addEventListener('message', function(e) {
   }
 });
 
+// ─── IAP (iOS native app) ─────────────────────────────────────────────────────
+var iapPlan = 'monthly';
+var iapPrices = { monthly: '$5.99/month', annual: '$59.99/year' };
+
+function setIAPPlan(p) {
+  iapPlan = p;
+  document.getElementById('iap-btn-monthly').classList.toggle('active', p === 'monthly');
+  document.getElementById('iap-btn-annual').classList.toggle('active', p === 'annual');
+  document.getElementById('iap-price-note').textContent =
+    (p === 'annual' ? '$59.99/year' : '$5.99/month') + ' after 7-day free trial';
+}
+
+function startIAPCheckout() {
+  document.getElementById('iap-cta-btn').style.display = 'none';
+  document.getElementById('iap-loading').style.display = 'block';
+  document.getElementById('iap-error').style.display = 'none';
+  window.location.href = 'orijinz://subscribe?plan=' + iapPlan;
+}
+
+function restoreIAP() {
+  document.getElementById('iap-error').style.display = 'none';
+  window.location.href = 'orijinz://restore';
+}
+
+window.orijinzIAPSuccess = function() {
+  document.getElementById('iap-view').style.display = 'none';
+  document.getElementById('iap-manage-view').style.display = 'block';
+};
+
+window.orijinzIAPCancelled = function() {
+  document.getElementById('iap-cta-btn').style.display = 'block';
+  document.getElementById('iap-loading').style.display = 'none';
+};
+
+window.orijinzIAPPending = function() {
+  document.getElementById('iap-cta-btn').style.display = 'block';
+  document.getElementById('iap-loading').style.display = 'none';
+  document.getElementById('iap-error').style.display = 'block';
+  document.getElementById('iap-error').textContent = 'Purchase is pending approval. You\'ll be notified when it\'s complete.';
+};
+
+window.orijinzIAPError = function(msg) {
+  document.getElementById('iap-cta-btn').style.display = 'block';
+  document.getElementById('iap-loading').style.display = 'none';
+  document.getElementById('iap-error').style.display = 'block';
+  document.getElementById('iap-error').textContent = msg || 'Something went wrong. Please try again.';
+};
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
-function handleInit(loggedIn, subscription, isWixLegacy) {
+function handleInit(loggedIn, subscription, isWixLegacy, isNativeIOS) {
+  // Inside the iOS native app — use IAP flow instead of Stripe
+  if (isNativeIOS || window.ORIJINZ_NATIVE_IOS || /OrijinzApp\//.test(navigator.userAgent)) {
+    ['checkout-view','login-prompt','iap-view','iap-manage-view'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
+    if (window.ORIJINZ_IAP_ACTIVE || (subscription && subscription.hasAccess)) {
+      document.getElementById('iap-manage-view').style.display = 'block';
+    } else {
+      document.getElementById('iap-view').style.display = 'block';
+    }
+    return;
+  }
+
   if (!loggedIn) {
     document.getElementById('checkout-view').style.display  = 'none';
     document.getElementById('login-prompt').style.display   = 'flex';
@@ -766,8 +883,6 @@ function handleInit(loggedIn, subscription, isWixLegacy) {
   } else {
     document.getElementById('checkout-view').style.display = 'block';
   }
-
-
 }
 
 
