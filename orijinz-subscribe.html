@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-08 20:36 -->
+<!-- LAST UPDATED: 2026-07-08 20:51 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -606,7 +606,7 @@
 </div>
 
 <!-- CHECKOUT VIEW (shown if not subscribed) -->
-<div id="checkout-view">
+<div id="checkout-view" style="display:none;">
   <div class="page-header">
     <div class="orijinz-logo">
       <div class="logo-text"><span class="icon-o"><span class="o-shadow">O</span><span class="o-mid">O</span><span class="o-top">O</span></span><span class="rijinz-daily">rijinz</span><span class="logo-spacer"></span><span class="rijinz-daily">Daily</span></div>
@@ -760,7 +760,6 @@ if (/OrijinzApp\//.test(navigator.userAgent)) {
   ['checkout-view','login-prompt','iap-manage-view'].forEach(function(id){
     var el = document.getElementById(id); if (el) el.style.display = 'none';
   });
-  window.scrollTo(0, 0);
 } else {
   // Tell Wix parent we're ready so it can send the init payload
   window.parent.postMessage({ type: 'subscribeReady' }, '*');
