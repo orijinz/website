@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- LAST UPDATED: 2026-07-13 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -206,8 +207,8 @@ function showError(msg) {
 
 // Global error handlers for IAP callbacks
 window.orijinzIAPSuccess = function() {
-    showError('✓ Subscription activated! Refreshing...');
-    setTimeout(() => { window.location.reload(); }, 1500);
+    showError('✓ Subscription activated!');
+    setTimeout(() => { window.location.href = '/'; }, 1500);
 };
 
 window.orijinzIAPError = function(msg) {
