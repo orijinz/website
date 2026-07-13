@@ -208,7 +208,10 @@ function showError(msg) {
 // Global error handlers for IAP callbacks
 window.orijinzIAPSuccess = function() {
     showError('✓ Subscription activated!');
-    setTimeout(() => { window.location.href = '/website/homepage-v2.html'; }, 1500);
+    setTimeout(() => {
+        const ts = Date.now();
+        window.location.href = '/website/homepage-v2.html?_t=' + ts;
+    }, 1500);
 };
 
 window.orijinzIAPError = function(msg) {
