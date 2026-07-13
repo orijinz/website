@@ -209,8 +209,8 @@ function showError(msg) {
 window.orijinzIAPSuccess = function() {
     showError('✓ Subscription activated!');
     setTimeout(() => {
-        const ts = Date.now();
-        window.location.href = '/website/homepage-v2.html?_t=' + ts;
+        window.location.href = '/website/homepage-v2.html';
+        setTimeout(() => { window.location.reload(true); }, 500);
     }, 1500);
 };
 
