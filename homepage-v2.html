@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- LAST UPDATED: 2026-07-13 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -787,10 +788,34 @@ var FREE_GAME_INFO = {
 })();
 
 // === SUBSCRIPTION CHECK ===
-// Ask parent Wix page what games this member is subscribed to.
+// If running in native iOS app, check window.ORIJINZ_IAP_ACTIVE directly.
+// Otherwise, ask parent Wix page what games this member is subscribed to.
 // Default (until we know): hide the button row to avoid flash.
 document.querySelectorAll('.tile-buttons').forEach(function(b) { b.style.visibility = 'hidden'; });
-window.parent.postMessage({ type: 'orijinz_check_subscriptions' }, '*');
+
+// Check if running in native iOS app
+if (window.ORIJINZ_NATIVE_IOS) {
+  // iOS app: use local ORIJINZ_IAP_ACTIVE flag
+  var iapActive = window.ORIJINZ_IAP_ACTIVE;
+  if (iapActive) {
+    // Subscribed: show All Games Pass mode (all play buttons)
+    document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
+      setTileButtons(tile, 'play-only');
+    });
+    var agp = document.getElementById('agpBanner');
+    if (agp) agp.classList.remove('visible');
+  } else {
+    // Not subscribed: show trial-only mode
+    document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
+      setTileButtons(tile, 'trial-only');
+    });
+    var agp = document.getElementById('agpBanner');
+    if (agp) agp.classList.add('visible');
+  }
+} else {
+  // Web/Wix: use parent postMessage flow
+  window.parent.postMessage({ type: 'orijinz_check_subscriptions' }, '*');
+}
 
 function setTileButtons(tile, mode) {
   // mode: 'play-only' | 'trial-only' | 'both'
@@ -824,6 +849,27 @@ var _subTimeout = setTimeout(function() {
 }, 3000);
 
 window.addEventListener('message', function(event) {
+  // Handle nativeIOSReady from AppDelegate (iOS app)
+  if (event.data && event.data.type === 'nativeIOSReady') {
+    clearTimeout(_subTimeout);
+    var iapActive = event.data.iapActive || false;
+    if (iapActive) {
+      document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
+        setTileButtons(tile, 'play-only');
+      });
+      var agp = document.getElementById('agpBanner');
+      if (agp) agp.classList.remove('visible');
+    } else {
+      document.querySelectorAll('.carousel-slide[data-game]').forEach(function(tile) {
+        setTileButtons(tile, 'trial-only');
+      });
+      var agp = document.getElementById('agpBanner');
+      if (agp) agp.classList.add('visible');
+    }
+    return;
+  }
+
+  // Handle orijinz_subscriptions from Wix parent page
   if (!event.data || event.data.type !== 'orijinz_subscriptions') return;
   clearTimeout(_subTimeout);
   var loggedIn = event.data.loggedIn || false;
