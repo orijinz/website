@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST UPDATED: 2026-07-15 -->
+<!-- LAST UPDATED: 2026-07-14 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -155,17 +155,16 @@ if (iapActive === true) {
 }
 
 function navigateToGame() {
-    // Pass session token to game page so it can authenticate with Wix
+    // Pass iOS subscription flag and session token to game page
     var sessionToken = sessionStorage.getItem('wixSessionToken');
-    var urlWithToken = gameUrl;
+    var urlWithParams = gameUrl + '&iapActive=true';
     if (sessionToken) {
-        var separator = gameUrl.includes('?') ? '&' : '?';
-        urlWithToken = gameUrl + separator + 'sessionToken=' + encodeURIComponent(sessionToken);
+        urlWithParams = urlWithParams + '&sessionToken=' + encodeURIComponent(sessionToken);
     }
     try {
-        window.top.location.href = urlWithToken;
+        window.top.location.href = urlWithParams;
     } catch (e) {
-        window.location.href = urlWithToken;
+        window.location.href = urlWithParams;
     }
 }
 
