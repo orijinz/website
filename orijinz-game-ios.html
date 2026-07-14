@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST UPDATED: 2026-07-14 -->
+<!-- LAST UPDATED: 2026-07-15 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -56,6 +56,19 @@
             text-decoration: none;
         }
         .btn:active { background: #d4a438; }
+        .debug {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: #0f0;
+            font-size: 0.8rem;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -66,6 +79,8 @@
     <p id="message">Starting your game...</p>
     <button class="btn" id="backBtn" onclick="goBack()" style="display:none;">Back to Home</button>
 </div>
+
+<div class="debug" id="debug"></div>
 
 <script>
 // Get game ID from query params
@@ -93,33 +108,64 @@ function goBack() {
     }
 }
 
-// Wait for subscription flag to be injected
-var checkAttempts = 0;
-var checkInterval = setInterval(function() {
-    checkAttempts++;
+// Check subscription status from URL parameter (passed by iOS app) and window variable (set by didFinish)
+var iapActiveParam = params.get('iapActive') === 'true';
+var iapActive = iapActiveParam || (typeof window.ORIJINZ_IAP_ACTIVE !== 'undefined' ? window.ORIJINZ_IAP_ACTIVE : false);
 
-    // Once flag is available or timeout, check subscription status
-    if (typeof window.ORIJINZ_IAP_ACTIVE !== 'undefined' || checkAttempts > 40) {
-        clearInterval(checkInterval);
+// Show debug info
+var debugEl = document.getElementById('debug');
+var debugMsg = 'iapActive=' + iapActive + ' (fromURL=' + iapActiveParam + ')\nURL: ' + window.location.search.substring(0, 100);
+debugEl.textContent = debugMsg;
+debugEl.style.display = 'block';
 
-        // If NOT subscribed, don't try to load game (it will redirect to subscribe)
-        if (!window.ORIJINZ_IAP_ACTIVE) {
-            document.getElementById('title').textContent = 'Not Subscribed';
-            document.getElementById('message').textContent = 'Please subscribe to play this game.';
-            document.getElementById('backBtn').style.display = 'inline-block';
+console.log('Game wrapper loaded. iapActive from URL:', iapActiveParam, 'iapActive final:', iapActive);
+console.log('URL params:', window.location.search);
+
+// Store in sessionStorage so the Wix game page can read it
+if (iapActive) {
+    try { sessionStorage.setItem('orijinzIAPActive', 'true'); } catch(e) {}
+}
+
+if (iapActive === true) {
+    console.log('Subscribed - navigating to game');
+    // Subscribed: navigate to game
+    navigateToGame();
+} else {
+    // If NOT subscribed, don't try to load game (it will redirect to subscribe)
+    // But first wait a moment in case the flag is being injected
+    var checkAttempts = 0;
+    var checkInterval = setInterval(function() {
+        checkAttempts++;
+
+        // Once flag becomes available or timeout, make final decision
+        if ((typeof window.ORIJINZ_IAP_ACTIVE !== 'undefined' && window.ORIJINZ_IAP_ACTIVE) || checkAttempts > 40) {
+            clearInterval(checkInterval);
+
+            if (window.ORIJINZ_IAP_ACTIVE === true) {
+                try { sessionStorage.setItem('orijinzIAPActive', 'true'); } catch(e) {}
+                navigateToGame();
+            } else {
+                document.getElementById('title').textContent = 'Not Subscribed';
+                document.getElementById('message').textContent = 'Please subscribe to play this game.';
+                document.getElementById('backBtn').style.display = 'inline-block';
+            }
             return;
         }
-
-        // Subscribed: navigate to game
-        navigateToGame();
-    }
-}, 50);
+    }, 50);
+}
 
 function navigateToGame() {
+    // Pass session token to game page so it can authenticate with Wix
+    var sessionToken = sessionStorage.getItem('wixSessionToken');
+    var urlWithToken = gameUrl;
+    if (sessionToken) {
+        var separator = gameUrl.includes('?') ? '&' : '?';
+        urlWithToken = gameUrl + separator + 'sessionToken=' + encodeURIComponent(sessionToken);
+    }
     try {
-        window.top.location.href = gameUrl;
+        window.top.location.href = urlWithToken;
     } catch (e) {
-        window.location.href = gameUrl;
+        window.location.href = urlWithToken;
     }
 }
 
