@@ -225,6 +225,21 @@ window.orijinzIAPCancelled = function() {
 window.orijinzIAPPending = function() {
     showError('Purchase pending approval');
 };
+
+// Apple Sign-In callbacks
+window.orijinzAppleSignInSuccess = function(userData) {
+    // Send account info to Wix to create member and link subscription
+    window.top.postMessage({
+        type: 'orijinz_create_account',
+        email: userData.email,
+        name: userData.name,
+        source: 'ios_iap'
+    }, '*');
+};
+
+window.orijinzAppleSignInError = function(msg) {
+    console.log('Apple Sign-In error (non-blocking):', msg);
+};
 </script>
 
 </body>
