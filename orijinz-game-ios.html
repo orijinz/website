@@ -60,13 +60,13 @@ var gameId = params.get('game') || 'odwordsandphrases';
 
 // Map game IDs to URLs
 var gameUrls = {
-    'odwordsandphrases': 'https://www.entspire.com/odwordsandphrases',
-    'od70s-songs': 'https://www.entspire.com/od70s-songs',
-    'odcovers': 'https://www.entspire.com/odcovers',
-    'odmovies': 'https://www.entspire.com/odmovies',
-    'odslogans': 'https://www.entspire.com/odslogans',
-    'odquotes': 'https://www.entspire.com/odquotes',
-    'odbooks': 'https://www.entspire.com/odbooks'
+    'odwordsandphrases': 'https://www.entspire.com/odwordsandphrases?fromWrapper=1',
+    'od70s-songs': 'https://www.entspire.com/od70s-songs?fromWrapper=1',
+    'odcovers': 'https://www.entspire.com/odcovers?fromWrapper=1',
+    'odmovies': 'https://www.entspire.com/odmovies?fromWrapper=1',
+    'odslogans': 'https://www.entspire.com/odslogans?fromWrapper=1',
+    'odquotes': 'https://www.entspire.com/odquotes?fromWrapper=1',
+    'odbooks': 'https://www.entspire.com/odbooks?fromWrapper=1'
 };
 
 var gameUrl = gameUrls[gameId] || gameUrls['odwordsandphrases'];
