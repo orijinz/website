@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST UPDATED: 2026-07-13 -->
+<!-- LAST UPDATED: 2026-07-14 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -209,8 +209,8 @@ function showError(msg) {
 window.orijinzIAPSuccess = function() {
     showError('✓ Subscription activated!');
     setTimeout(() => {
-        window.location.replace('/website/homepage-v2.html');
-        setTimeout(() => { window.location.reload(true); }, 500);
+        // Navigate to home with absolute URL to avoid relative path issues
+        window.location.href = 'https://orijinz.github.io/website/homepage-v2.html';
     }, 1500);
 };
 

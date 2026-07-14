@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST UPDATED: 2026-07-13 -->
+<!-- LAST UPDATED: 2026-07-14 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -932,6 +932,14 @@ document.querySelectorAll('.carousel-slide-img').forEach(function(ss) {
 if (window.ORIJINZ_NATIVE_IOS) {
   document.querySelectorAll('a[href*="play.google.com"]').forEach(function(el) {
     el.style.display = 'none';
+  });
+}
+
+// If landing on home page after iOS IAP purchase, clear back history so user can't navigate back to subscribe
+if (window.ORIJINZ_NATIVE_IOS && window.ORIJINZ_IAP_ACTIVE && document.referrer.includes('orijinz-subscribe-ios')) {
+  history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', function() {
+    history.pushState(null, '', window.location.href);
   });
 }
 
