@@ -71,15 +71,25 @@ var gameUrls = {
 
 var gameUrl = gameUrls[gameId] || gameUrls['odwordsandphrases'];
 
-// Wait a brief moment for AppDelegate to inject ORIJINZ_IAP_ACTIVE,
-// then navigate to the actual game
-setTimeout(function() {
+// Wait for AppDelegate to inject ORIJINZ_IAP_ACTIVE, then navigate
+function navigateToGame() {
     try {
         window.top.location.href = gameUrl;
     } catch (e) {
         window.location.href = gameUrl;
     }
-}, 200);
+}
+
+// Delay to ensure injection happens before navigation
+setTimeout(navigateToGame, 800);
+
+// Safety timeout: if still on this page after 10 seconds, something went wrong
+setTimeout(function() {
+    if (window.location.pathname.includes('orijinz-game-ios')) {
+        document.querySelector('.loading').innerHTML = '<p style="color:#e57373;">Game failed to load. Please try again.</p>';
+        setTimeout(navigateToGame, 2000);
+    }
+}, 10000);
 </script>
 
 </body>
