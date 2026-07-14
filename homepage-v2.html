@@ -797,17 +797,6 @@ document.querySelectorAll('.tile-buttons').forEach(function(b) { b.style.visibil
 if (window.ORIJINZ_NATIVE_IOS) {
   // iOS app: use local ORIJINZ_IAP_ACTIVE flag
   var iapActive = window.ORIJINZ_IAP_ACTIVE;
-  var userEmail = window.ORIJINZ_USER_EMAIL;
-
-  // If user just signed in via Apple, create account in Wix
-  if (userEmail && iapActive) {
-    window.parent.postMessage({
-      type: 'orijinz_create_account_ios',
-      email: userEmail,
-      name: window.ORIJINZ_USER_NAME || 'User',
-      source: 'ios_iap'
-    }, '*');
-  }
 
   if (iapActive) {
     // Subscribed: show All Games Pass mode (all play buttons)
