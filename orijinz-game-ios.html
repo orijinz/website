@@ -42,15 +42,29 @@
         p {
             color: #a0a8b8;
             font-size: 0.95rem;
+            margin-bottom: 24px;
         }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f0c860;
+            color: #111;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:active { background: #d4a438; }
     </style>
 </head>
 <body>
 
 <div class="loading">
     <div class="spinner"></div>
-    <h1>Loading Game</h1>
-    <p>Starting your game...</p>
+    <h1 id="title">Loading Game</h1>
+    <p id="message">Starting your game...</p>
+    <button class="btn" id="backBtn" onclick="goBack()" style="display:none;">Back to Home</button>
 </div>
 
 <script>
@@ -71,7 +85,36 @@ var gameUrls = {
 
 var gameUrl = gameUrls[gameId] || gameUrls['odwordsandphrases'];
 
-// Wait for AppDelegate to inject ORIJINZ_IAP_ACTIVE, then navigate
+function goBack() {
+    try {
+        window.top.location.href = 'https://orijinz.github.io/website/homepage-v2.html';
+    } catch (e) {
+        window.location.href = 'https://orijinz.github.io/website/homepage-v2.html';
+    }
+}
+
+// Wait for subscription flag to be injected
+var checkAttempts = 0;
+var checkInterval = setInterval(function() {
+    checkAttempts++;
+
+    // Once flag is available or timeout, check subscription status
+    if (typeof window.ORIJINZ_IAP_ACTIVE !== 'undefined' || checkAttempts > 40) {
+        clearInterval(checkInterval);
+
+        // If NOT subscribed, don't try to load game (it will redirect to subscribe)
+        if (!window.ORIJINZ_IAP_ACTIVE) {
+            document.getElementById('title').textContent = 'Not Subscribed';
+            document.getElementById('message').textContent = 'Please subscribe to play this game.';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            return;
+        }
+
+        // Subscribed: navigate to game
+        navigateToGame();
+    }
+}, 50);
+
 function navigateToGame() {
     try {
         window.top.location.href = gameUrl;
@@ -80,23 +123,14 @@ function navigateToGame() {
     }
 }
 
-// Poll for the subscription flag, then navigate
-var checkAttempts = 0;
-var checkInterval = setInterval(function() {
-    checkAttempts++;
-    if (typeof window.ORIJINZ_IAP_ACTIVE !== 'undefined' || checkAttempts > 40) {
-        clearInterval(checkInterval);
-        navigateToGame();
-    }
-}, 50);
-
-// Safety absolute timeout: if still on this page after 12 seconds, retry
+// Safety: if stuck after 10s, show error
 setTimeout(function() {
     if (window.location.pathname.includes('orijinz-game-ios')) {
-        document.querySelector('.loading').innerHTML = '<p style="color:#e57373;">Game failed to load. Retrying...</p>';
-        setTimeout(navigateToGame, 1000);
+        document.getElementById('title').textContent = 'Game Failed to Load';
+        document.getElementById('message').textContent = 'Please try again.';
+        document.getElementById('backBtn').style.display = 'inline-block';
     }
-}, 12000);
+}, 10000);
 </script>
 
 </body>
