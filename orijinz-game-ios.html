@@ -80,16 +80,23 @@ function navigateToGame() {
     }
 }
 
-// Delay to ensure injection happens before navigation
-setTimeout(navigateToGame, 800);
+// Poll for the subscription flag, then navigate
+var checkAttempts = 0;
+var checkInterval = setInterval(function() {
+    checkAttempts++;
+    if (typeof window.ORIJINZ_IAP_ACTIVE !== 'undefined' || checkAttempts > 40) {
+        clearInterval(checkInterval);
+        navigateToGame();
+    }
+}, 50);
 
-// Safety timeout: if still on this page after 10 seconds, something went wrong
+// Safety absolute timeout: if still on this page after 12 seconds, retry
 setTimeout(function() {
     if (window.location.pathname.includes('orijinz-game-ios')) {
-        document.querySelector('.loading').innerHTML = '<p style="color:#e57373;">Game failed to load. Please try again.</p>';
-        setTimeout(navigateToGame, 2000);
+        document.querySelector('.loading').innerHTML = '<p style="color:#e57373;">Game failed to load. Retrying...</p>';
+        setTimeout(navigateToGame, 1000);
     }
-}, 10000);
+}, 12000);
 </script>
 
 </body>
