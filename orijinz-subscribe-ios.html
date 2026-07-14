@@ -209,7 +209,7 @@ function showError(msg) {
 window.orijinzIAPSuccess = function() {
     showError('✓ Subscription activated!');
     setTimeout(() => {
-        window.location.href = '/website/homepage-v2.html';
+        window.location.replace('/website/homepage-v2.html');
         setTimeout(() => { window.location.reload(true); }, 500);
     }, 1500);
 };
