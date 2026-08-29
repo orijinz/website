@@ -1,4 +1,4 @@
-<!-- LAST UPDATED: 2026-07-09 18:30 -->
+<!-- LAST UPDATED: 2026-08-28 (trial copy corrected 14->7 days) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -619,7 +619,7 @@
       <div class="game-name">Words &amp; Phrases</div>
     </div>
   </div>
-  <div class="pricing-note gold-note" id="individual-pricing-note">Each game $1.99/mo &mdash; or $9.99/yr &mdash; after your 14-day free trial</div>
+  <div class="pricing-note gold-note" id="individual-pricing-note">Each game $1.99/mo &mdash; or $9.99/yr &mdash; after your 7-day free trial</div>
 
   <div class="or-divider">or</div>
 
@@ -631,7 +631,7 @@
       <div class="subtitle">All 7 games &mdash; best value</div>
     </div>
   </div>
-  <div class="pricing-note gold-note" id="allgames-pricing-note" style="margin-bottom:16px;">All Games Pass $5.99/mo &mdash; or $59.99/yr &mdash; after your 14-day free trial</div>
+  <div class="pricing-note gold-note" id="allgames-pricing-note" style="margin-bottom:16px;">All Games Pass $5.99/mo &mdash; or $59.99/yr &mdash; after your 7-day free trial</div>
   <hr class="section-divider">
 
   <!-- Coupon -->
@@ -878,13 +878,13 @@ function setPlan(p) {
 
   document.getElementById('individual-pricing-note').innerHTML =
     p === 'monthly'
-      ? 'Each game $1.99/mo &mdash; or $9.99/yr annual &mdash; after your 14-day free trial'
-      : 'Each game $9.99/yr &mdash; or $1.99/mo monthly &mdash; after your 14-day free trial';
+      ? 'Each game $1.99/mo &mdash; or $9.99/yr annual &mdash; after your 7-day free trial'
+      : 'Each game $9.99/yr &mdash; or $1.99/mo monthly &mdash; after your 7-day free trial';
 
   document.getElementById('allgames-pricing-note').innerHTML =
     p === 'monthly'
-      ? 'All Games Pass $5.99/mo &mdash; or $59.99/yr annual &mdash; after your 14-day free trial'
-      : 'All Games Pass $59.99/yr &mdash; or $5.99/mo monthly &mdash; after your 14-day free trial';
+      ? 'All Games Pass $5.99/mo &mdash; or $59.99/yr annual &mdash; after your 7-day free trial'
+      : 'All Games Pass $59.99/yr &mdash; or $5.99/mo monthly &mdash; after your 7-day free trial';
 
   updateSummary();
 }
@@ -936,13 +936,13 @@ function updateSummary() {
     labelEl.textContent    = 'All Games Pass';
     subtotalEl.textContent = agPrice + unit;
     ctaBtn.disabled        = false;
-    trialNote.textContent  = 'No charge today — ' + agPrice + unit + ' after your 14-day free trial';
+    trialNote.textContent  = 'No charge today — ' + agPrice + unit + ' after your 7-day free trial';
   } else if (selectedGames.length > 0) {
     var total = selectedGames.length * PRICES.individual[plan];
     labelEl.textContent    = selectedGames.length + ' game' + (selectedGames.length > 1 ? 's' : '');
     subtotalEl.textContent = '$' + total.toFixed(2) + unit;
     ctaBtn.disabled        = false;
-    trialNote.textContent  = 'No charge today — $' + total.toFixed(2) + unit + ' after your 14-day free trial';
+    trialNote.textContent  = 'No charge today — $' + total.toFixed(2) + unit + ' after your 7-day free trial';
   } else {
     labelEl.textContent    = 'No games selected';
     subtotalEl.textContent = '—';
