@@ -100,6 +100,7 @@
         <div class="ad-sub">Your clip starts automatically the instant the ad ends. Nothing counts against you yet.</div>
         <div class="ad-elapsed" id="adElapsed"></div>
       </div>
+      <div id="ytAdHint" style="display:none;position:absolute;top:0;left:0;right:0;z-index:5;background:rgba(5,8,16,.82);color:#fff;font-size:.72rem;text-align:center;padding:7px 8px;pointer-events:none;">🔇 Ad (muted) — tap <b>Skip Ad</b> bottom-right when it appears. Your clip is next; timer paused.</div>
     </div>
     <div class="vbar">
       <span id="videoTimer"></span>
@@ -114,10 +115,14 @@
   </div>
   <div style="text-align:center;margin-top:12px;font-size:.8rem;color:var(--muted);">
     <label style="cursor:pointer;user-select:none;">
-      <input type="checkbox" id="preMuteChk" style="vertical-align:middle;">
-      Pre-mute player at load <span style="color:var(--gold)">(A/B test: does muting suppress ads?)</span>
+      <input type="checkbox" id="skipChk" checked style="vertical-align:middle;">
+      Ads skippable <span style="color:var(--gold)">(show muted ad + let the Skip button work)</span>
     </label>
-    <div style="font-size:.7rem;margin-top:4px;">OFF = behaves like Orijinz (should get ads). ON = muted from load (does the ad vanish?).</div>
+    <div style="font-size:.7rem;margin:4px 0 8px;">ON = you can tap Skip after ~5s (recommended). OFF = ad is hidden but you're forced to watch it fully.</div>
+    <label style="cursor:pointer;user-select:none;">
+      <input type="checkbox" id="preMuteChk" style="vertical-align:middle;">
+      Pre-mute at load <span style="color:var(--muted)">(confirmed: does NOT stop ads — leave off)</span>
+    </label>
   </div>
   <div class="answer" id="answer"></div>
 
@@ -127,6 +132,7 @@
       <div class="stat"><div class="n" id="mPlayed">0</div><div class="l">Played</div></div>
       <div class="stat"><div class="n" id="mAds" style="color:var(--bad)">0</div><div class="l">Had an ad</div></div>
       <div class="stat"><div class="n" id="mRate">—</div><div class="l">Ad rate</div></div>
+      <div class="stat"><div class="n" id="mAvgAd" style="color:var(--gold)">—</div><div class="l">Avg ad time</div></div>
       <div class="stat"><div class="n" id="mBlocked" style="color:var(--muted)">0</div><div class="l">Embed-blocked</div></div>
     </div>
     <div class="log" id="log"></div>
@@ -146,27 +152,33 @@ window.onYouTubeIframeAPIReady = () => { ytApiReady = true; };
 (function(){ const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); })();
 
 // ---- metrics ----
-const results = []; // {title, result:'ad'|'clean'|'blocked', adSecs}
+const results = []; // {title, result:'ad'|'clean'|'blocked'|'pending', adSecs, code}
+// Upsert so an ad is logged the MOMENT it's detected (not only after the trailer starts),
+// and its duration can be updated live as the ad runs.
+function upsertResult(title, patch){
+  let r = results.find(x=>x.title===title);
+  if(!r){ r={title, result:'pending', adSecs:0, code:null}; results.push(r); }
+  Object.assign(r, patch);
+  renderMetrics();
+}
 function renderMetrics(){
-  const played = results.filter(r=>r.result!=='blocked').length;
-  const ads = results.filter(r=>r.result==='ad').length;
+  const adRows = results.filter(r=>r.result==='ad');
+  const played = results.filter(r=>r.result==='ad'||r.result==='clean').length;
+  const ads = adRows.length;
   const blocked = results.filter(r=>r.result==='blocked').length;
+  const secs = adRows.map(r=>r.adSecs).filter(s=>s>0);
+  const avgAd = secs.length ? Math.round(secs.reduce((a,b)=>a+b,0)/secs.length) : 0;
   document.getElementById('mPlayed').textContent = played;
   document.getElementById('mAds').textContent = ads;
   document.getElementById('mBlocked').textContent = blocked;
   document.getElementById('mRate').textContent = played ? Math.round(ads/played*100)+'%' : '—';
+  document.getElementById('mAvgAd').textContent = avgAd ? avgAd+'s' : '—';
   const log = document.getElementById('log');
   log.innerHTML = results.map(r=>{
-    const cls = r.result==='ad'?'tag-ad':r.result==='blocked'?'tag-blocked':'tag-clean';
-    const label = r.result==='ad'?('AD · '+r.adSecs+'s'):r.result==='blocked'?('BLOCKED'+(r.code!=null?' ('+r.code+')':'')):'clean ✓';
+    const cls = r.result==='ad'?'tag-ad':r.result==='blocked'?'tag-blocked':r.result==='clean'?'tag-clean':'';
+    const label = r.result==='ad'?('AD · '+r.adSecs+'s'):r.result==='blocked'?('BLOCKED'+(r.code!=null?' ('+r.code+')':'')):r.result==='clean'?'clean ✓':'…';
     return `<div><span>${r.title}</span><span class="${cls}">${label}</span></div>`;
   }).join('');
-}
-function record(title, result, adSecs, code){
-  // one result per title per pass (first play wins)
-  if (results.find(r=>r.title===title)) return;
-  results.push({title, result, adSecs: adSecs||0, code: code});
-  renderMetrics();
 }
 
 // ---- render current ----
@@ -190,6 +202,9 @@ function watchTrailer(){
   document.getElementById('videoCard').style.display = '';
   document.getElementById('ytMask').style.display = '';
   document.getElementById('ytAdOverlay').style.display = 'none';
+  document.getElementById('ytAdHint').style.display = 'none';
+  document.getElementById('ytBandTop').style.display = '';
+  document.getElementById('ytBandBot').style.display = '';
   const timerEl = document.getElementById('videoTimer');
   timerEl.innerHTML = 'Press ▶ in the player to start';
 
@@ -201,6 +216,7 @@ function watchTrailer(){
     adTimer = setInterval(()=>{
       const s = Math.round((Date.now()-adStart)/1000);
       document.getElementById('adElapsed').textContent = 'ad: '+s+'s';
+      upsertResult(m.title, {adSecs: s}); // keep duration live even if the user skips/leaves mid-ad
     }, 250);
   };
   const stopAdClock = ()=>{ if(adTimer){clearInterval(adTimer);adTimer=null;} };
@@ -225,19 +241,30 @@ function watchTrailer(){
             let isAd=false;
             try { const vd=ytPlayer.getVideoData(); isAd = !vd||!vd.video_id||vd.video_id!==m.yt; } catch(x){}
             const mask=document.getElementById('ytMask'), ov=document.getElementById('ytAdOverlay');
+            const bandT=document.getElementById('ytBandTop'), bandB=document.getElementById('ytBandBot'), hint=document.getElementById('ytAdHint');
             if (isAd){
-              mask.style.display='none'; ov.style.display='flex';
               try{ ytPlayer.mute(); }catch(x){}
-              if (!adLogged){ adLogged=true; startAdClock(); }
+              if (document.getElementById('skipChk').checked){
+                // SHOW the muted ad so the Skip button is reachable (bands off → skip visible bottom-right)
+                mask.style.display='none'; ov.style.display='none';
+                bandT.style.display='none'; bandB.style.display='none'; hint.style.display='block';
+              } else {
+                // HIDE the ad entirely (forced full watch — no skip)
+                mask.style.display='none'; ov.style.display='flex';
+                bandT.style.display=''; bandB.style.display=''; hint.style.display='none';
+              }
+              if (!adLogged){ adLogged=true; upsertResult(m.title,{result:'ad'}); startAdClock(); }
             } else {
-              mask.style.display='none'; ov.style.display='none';
+              // real trailer confirmed — re-cover the title (bands on), unmute, start clip
+              mask.style.display='none'; ov.style.display='none'; hint.style.display='none';
+              bandT.style.display=''; bandB.style.display='';
               stopAdClock();
               try{ ytPlayer.unMute(); ytPlayer.setVolume(100); }catch(x){}
               if (seenIdle && !videoTimer) startClip();
               if (!cleanLogged){
                 cleanLogged=true;
-                const adSecs = adStart? Math.round((Date.now()-adStart)/1000):0;
-                record(m.title, adLogged?'ad':'clean', adSecs);
+                if (adLogged){ const adSecs = adStart? Math.round((Date.now()-adStart)/1000):0; upsertResult(m.title,{result:'ad', adSecs}); }
+                else { upsertResult(m.title,{result:'clean'}); }
               }
             }
           }
@@ -247,8 +274,8 @@ function watchTrailer(){
           // YT error codes: 2 bad param · 5 HTML5 error · 100 not found/private ·
           // 101/150 embedding DISABLED by the video owner (the only real "this link is unusable" signal).
           const code = e && e.data;
-          record(m.title, 'blocked', 0, code);
           try{ if(ytPlayer) ytPlayer.destroy(); }catch(x){} ytPlayer=null;
+          upsertResult(m.title,{result:'blocked', code:code});
           const why = (code===101||code===150)?'Embedding disabled by owner':(code===100?'Video not found/private':'Playback error ('+code+')');
           c.innerHTML = '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;gap:10px;color:#aaa;font-size:.8rem;text-align:center;padding:12px;">'+why+'<a href="https://www.youtube.com/watch?v='+m.yt+'" target="_blank" rel="noopener" style="color:var(--gold);">▶ Watch on YouTube</a></div>';
           timerEl.textContent='';
