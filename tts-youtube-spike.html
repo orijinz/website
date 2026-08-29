@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Toss That Story — YouTube Spike</title>
+<style>
+  :root{
+    --bg:#0a1120; --panel:#0f1a2e; --text:#dbe4f0; --muted:#9fb0c6;
+    --head:#00ced1; --gold:#f5b301; --accent:#7c5cff; --border:rgba(120,150,190,0.18);
+    --ok:#3ad29f; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;min-height:100vh;background:#0A0F1C radial-gradient(ellipse at top,#1A2238 0%,#0A0F1C 70%) no-repeat;
+    color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:640px;margin:0 auto;padding:18px 16px 60px;}
+  header{text-align:center;margin-bottom:14px;}
+  .kicker{font-family:'Space Mono',ui-monospace,monospace;letter-spacing:.22em;font-size:.62rem;color:var(--muted);text-transform:uppercase;}
+  h1{font-size:1.25rem;margin:4px 0 2px;}
+  .sub{color:var(--muted);font-size:.82rem;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-top:14px;}
+  .syn-label{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--head);text-transform:uppercase;margin-bottom:6px;}
+  .syn{font-size:.98rem;}
+  .meta{margin-top:8px;font-size:.72rem;color:var(--muted);}
+  .badge{display:inline-block;background:rgba(124,92,255,.16);border:1px solid rgba(124,92,255,.4);color:#c9bcff;
+    border-radius:999px;padding:1px 10px;font-size:.66rem;font-family:'Space Mono',monospace;}
+
+  /* video */
+  #videoCard{margin-top:14px;border-radius:12px;overflow:hidden;border:1px solid var(--border);border-top:2px solid var(--head);}
+  .vwrap{position:relative;width:100%;padding-top:56.25%;background:#000;}
+  #ytIframeContainer{position:absolute;inset:0;}
+  #ytIframeContainer iframe{width:100%;height:100%;}
+  .band{position:absolute;left:0;right:0;background:#000;z-index:2;pointer-events:none;}
+  #ytBandTop{top:0;height:16%;}
+  #ytBandBot{bottom:0;height:14%;}
+  #ytMask{position:absolute;inset:0;z-index:3;pointer-events:none;}
+  /* Ad-wait overlay — this is the "what does the player see while an ad runs" experience */
+  #ytAdOverlay{display:none;position:absolute;inset:0;z-index:4;background:rgba(5,8,16,.94);
+    flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;pointer-events:none;}
+  .eq{display:flex;gap:5px;align-items:flex-end;height:34px;}
+  .eq span{width:6px;background:linear-gradient(180deg,var(--head),var(--accent));border-radius:3px;animation:eq 1s ease-in-out infinite;}
+  .eq span:nth-child(2){animation-delay:.15s}.eq span:nth-child(3){animation-delay:.3s}
+  .eq span:nth-child(4){animation-delay:.45s}.eq span:nth-child(5){animation-delay:.6s}
+  @keyframes eq{0%,100%{height:8px}50%{height:34px}}
+  .ad-title{color:#fff;font-weight:700;font-size:.95rem;letter-spacing:.02em;}
+  .ad-sub{color:var(--muted);font-size:.78rem;max-width:300px;}
+  .ad-elapsed{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--gold);}
+  .vbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0b1220;}
+  #videoTimer{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--gold);}
+
+  .btnrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  button.act{background:linear-gradient(180deg,#14233d,#0f1a2e);color:var(--text);border:1px solid var(--border);
+    border-radius:12px;padding:12px 18px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  button.act:active{transform:translateY(1px);}
+  button.primary{border-color:rgba(0,206,209,.5);color:#bff4f5;}
+  button.stop{padding:6px 14px;font-size:.7rem;}
+  .answer{margin-top:14px;text-align:center;font-size:1.15rem;font-weight:700;color:var(--gold);min-height:1.4em;}
+
+  /* metrics */
+  .metrics{margin-top:22px;border:1px dashed var(--border);border-radius:12px;padding:14px 16px;background:rgba(10,16,28,.6);}
+  .metrics h2{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--head);margin:0 0 10px;font-family:'Space Mono',monospace;}
+  .stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;}
+  .stat{flex:1;min-width:90px;text-align:center;background:#0b1220;border:1px solid var(--border);border-radius:10px;padding:8px 6px;}
+  .stat .n{font-size:1.5rem;font-weight:800;}
+  .stat .l{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+  .log{font-family:'Space Mono',monospace;font-size:.72rem;max-height:220px;overflow-y:auto;}
+  .log div{padding:3px 0;border-bottom:1px solid rgba(120,150,190,.08);display:flex;justify-content:space-between;gap:10px;}
+  .tag-ad{color:var(--bad);} .tag-clean{color:var(--ok);} .tag-blocked{color:var(--muted);}
+  .note{font-size:.72rem;color:var(--muted);margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">🎬 Toss That Story · Spike</div>
+    <h1>Read the synopsis. Guess the movie.</h1>
+    <div class="sub">Testing: ad-hide · ad-mute · title-boxing · <b>real ad rate</b></div>
+  </header>
+
+  <div class="card">
+    <div class="syn-label">Synopsis</div>
+    <div class="syn" id="syn">—</div>
+    <div class="meta"><span class="badge" id="genre">—</span> &nbsp; <span id="counter" style="color:var(--muted)"></span></div>
+  </div>
+
+  <div id="videoCard" style="display:none;">
+    <div class="vwrap">
+      <div id="ytIframeContainer"></div>
+      <div class="band" id="ytBandTop"></div>
+      <div class="band" id="ytBandBot"></div>
+      <svg id="ytMask" width="100%" height="100%" style="display:block;">
+        <defs><mask id="playHole"><rect width="100%" height="100%" fill="white"/><ellipse cx="50%" cy="50%" rx="42" ry="30" fill="black"/></mask></defs>
+        <rect width="100%" height="100%" fill="#000" mask="url(#playHole)"/>
+      </svg>
+      <div id="ytAdOverlay">
+        <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="ad-title">Ad playing — muted 🔇</div>
+        <div class="ad-sub">Your clip starts automatically the instant the ad ends. Nothing counts against you yet.</div>
+        <div class="ad-elapsed" id="adElapsed"></div>
+      </div>
+    </div>
+    <div class="vbar">
+      <span id="videoTimer"></span>
+      <button class="act stop" onclick="stopClip()">■ Stop</button>
+    </div>
+  </div>
+
+  <div class="btnrow">
+    <button class="act primary" id="trailerBtn" onclick="watchTrailer()">▶ Watch Trailer (30s)</button>
+    <button class="act" onclick="revealAnswer()">Reveal answer</button>
+    <button class="act" onclick="nextMovie()">Next ▶</button>
+  </div>
+  <div style="text-align:center;margin-top:12px;font-size:.8rem;color:var(--muted);">
+    <label style="cursor:pointer;user-select:none;">
+      <input type="checkbox" id="preMuteChk" style="vertical-align:middle;">
+      Pre-mute player at load <span style="color:var(--gold)">(A/B test: does muting suppress ads?)</span>
+    </label>
+    <div style="font-size:.7rem;margin-top:4px;">OFF = behaves like Orijinz (should get ads). ON = muted from load (does the ad vanish?).</div>
+  </div>
+  <div class="answer" id="answer"></div>
+
+  <div class="metrics">
+    <h2>📊 Ad-rate results (this is the number that matters)</h2>
+    <div class="stat-row">
+      <div class="stat"><div class="n" id="mPlayed">0</div><div class="l">Played</div></div>
+      <div class="stat"><div class="n" id="mAds" style="color:var(--bad)">0</div><div class="l">Had an ad</div></div>
+      <div class="stat"><div class="n" id="mRate">—</div><div class="l">Ad rate</div></div>
+      <div class="stat"><div class="n" id="mBlocked" style="color:var(--muted)">0</div><div class="l">Embed-blocked</div></div>
+    </div>
+    <div class="log" id="log"></div>
+    <div class="note">Play all 22 (tap Watch Trailer → Next) to get a representative ad rate <b>on this device/account</b>. Ad behaviour differs by device, region and whether you're signed into YouTube — so the real read is doing this on your iPhone, ideally in a Capacitor WebView build (see notes).</div>
+  </div>
+</div>
+
+<script>
+// ---- data ----
+const MOVIES = [{"title": "The Dark Knight", "yt": "EXeTwQWrcwY", "syn": "A brooding billionaire plays dress-up to clean up his city, but when a chaotic clown decides to burn everything down just for the fun of it, even the good guys start looking shady.", "genre": "Drama"}, {"title": "Inception", "yt": "66TuSJo4dZM", "syn": "A thief who steals secrets from inside people's dreams takes on one last impossible job: planting an idea rather than stealing one, requiring a dream within a dream within a dream — and a spinning top to remind him which side of reality he's on.", "genre": "Crime & Mystery"}, {"title": "Jurassic Park", "yt": "bx46tthKXmc", "syn": "A theme park filled with real dinosaurs goes catastrophically wrong when the dinosaurs remember they're dinosaurs, leaving a handful of scientists and children to outrun the consequences.", "genre": "Family"}, {"title": "Titanic", "yt": "CHekzSiZjrY", "syn": "A ship that supposedly couldn't sink does exactly that, and the world's most tragic love story plays out across the bow, the ballroom, and eventually the freezing North Atlantic.", "genre": "Romance"}, {"title": "The Matrix", "yt": "m8e-FF8MsqU", "syn": "A hacker discovers that reality is a simulation, swallows a red pill, and wakes up bald, covered in slime, and at war with the machines that have been running the world the whole time.", "genre": "Drama"}, {"title": "Forrest Gump", "yt": "iVWNmTT1FPg", "syn": "A slow-witted but warm-hearted man from Alabama accidentally witnesses most of the major events of late 20th-century American history, apparently without ever trying to.", "genre": "Historical"}, {"title": "Gladiator", "yt": "P5ieIbInFpg", "syn": "A Roman general is betrayed, sold into slavery, and transformed into history's greatest gladiator — working his way back toward the emperor who destroyed his family, one arena at a time.", "genre": "Family"}, {"title": "The Lion King", "yt": "TcibFQiUiJQ", "syn": "A  cub is tricked into believing he killed his father, flees in shame, and must return years later to reclaim his kingdom from the uncle who murdered the king.", "genre": "Fantasy"}, {"title": "Pulp Fiction", "yt": "tGpTpVyI_OQ", "syn": "A pair of chatty hitmen drift through L.A. crime scenes arguing about burgers, foot massages, and divine intervention while a crooked boxer, a crime boss’s thrill‑seeking wife, and two amateur stick‑up artists stumble through their own bad decisions — all of them orbiting a world where violence is casual, morality is flexible, and the smallest, dumbest choices spiral into cosmic punchlines.", "genre": "Crime & Mystery"}, {"title": "Top Gun: Maverick", "yt": "VIgYcrHiTgw", "syn": "A grounded legendary pilot is called back to train a new generation for a near-impossible mission that looks exactly like the one that defined him thirty years ago — except now he has to lead it himself.", "genre": "Action & Adventure"}, {"title": "Jaws", "yt": "BU_j7fyBF-A", "syn": "A  shark terrorises a beach town while a police chief who is afraid of water, a marine biologist, and a grizzled shark hunter argue about the best way to deal with it — mostly from a boat that is too small.", "genre": "Crime & Mystery"}, {"title": "Back to the Future", "yt": "ez6WQ7IX72U", "syn": "A teenager accidentally sends his father back in time and must make his parents fall in love — all while being chased by a Libyan terrorist gang and trying to get back to 1985.", "genre": "Science Fiction"}, {"title": "The Silence of the Lambs", "yt": "6iB21hsprAQ", "syn": "A sharp rookie agent is sent to interview a brilliant, incarcerated cannibal in hopes of catching a different serial killer — and leaves every session quietly unsure whether she is hunting a monster or being studied by one.", "genre": "Crime & Mystery"}, {"title": "Get Out", "yt": "sRfnevzM9kQ", "syn": "A young Black man's weekend trip to meet his white girlfriend's liberal family turns into something far more sinister than awkward dinner conversation.", "genre": "Horror"}, {"title": "La La Land", "yt": "0pdqf4P9MB8", "syn": "A jazz-loving pianist and an aspiring actress fall in love while chasing their dreams in Los Angeles, only to discover that dreams and love don't always share a timeline.", "genre": "Romance"}, {"title": "Toy Story", "yt": "CxwTLktovTU", "syn": "A cowboy toy faces an existential crisis when his owner gets a shiny new space ranger toy that doesn't know he's a toy, setting off a rivalry that ends in an unlikely friendship and a rocket launch.", "genre": "Science Fiction"}, {"title": "The Shawshank Redemption", "yt": "mW5WCmsrg-0", "syn": "Landing in prison for a crime he insists he didn't commit, a quiet banker quickly becomes the most useful man inside — brilliant with money, patient with people, and secretly plotting the most audacious escape imaginable.", "genre": "Crime & Mystery"}, {"title": "Interstellar", "yt": "ePbKGoIGAXY", "syn": "A former pilot and widowed farmer joins a desperate mission through a wormhole to find a new home for a dying Earth, forcing him to navigate hostile worlds, fractured time, and the pull of a daughter he may never see again as love becomes the one force that refuses to obey physics.", "genre": "Action & Adventure"}, {"title": "The Avengers", "yt": "eOrNdBpGMv8", "syn": "A collection of mismatched heroes — including a rage monster, a demigod, and a man in a metal suit — must stop bickering long enough to prevent an alien army from flattening Manhattan.", "genre": "Science Fiction"}, {"title": "Frozen", "yt": "S1x76DoACB8", "syn": "A princess with uncontrollable ice powers flees her kingdom in shame, and her fearless sister treks through a frozen wasteland with a goofy snowman and a rugged iceman to bring her home.", "genre": "Fantasy"}, {"title": "No Country for Old Men", "yt": "38A__WT3-o0", "syn": "A botched robbery in the Texas desert leaves a hunter in possession of a bag of drug money, a psychopathic hitman on his trail, and a weary sheriff philosophising about a world that has stopped making sense.", "genre": "Drama"}, {"title": "A Quiet Place", "yt": "YPY7J-flzE8", "syn": "A family learns to survive in a world overrun by creatures that hunt entirely by sound, and finds that the most terrifying thing about raising children in silence is that children don't stay silent.", "genre": "Family"}];
+let idx = 0;
+const CLIP_SECS = 30;
+
+// ---- YT api ----
+let ytApiReady = false, ytPlayer = null, videoTimer = null, adTimer = null;
+window.onYouTubeIframeAPIReady = () => { ytApiReady = true; };
+(function(){ const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); })();
+
+// ---- metrics ----
+const results = []; // {title, result:'ad'|'clean'|'blocked', adSecs}
+function renderMetrics(){
+  const played = results.filter(r=>r.result!=='blocked').length;
+  const ads = results.filter(r=>r.result==='ad').length;
+  const blocked = results.filter(r=>r.result==='blocked').length;
+  document.getElementById('mPlayed').textContent = played;
+  document.getElementById('mAds').textContent = ads;
+  document.getElementById('mBlocked').textContent = blocked;
+  document.getElementById('mRate').textContent = played ? Math.round(ads/played*100)+'%' : '—';
+  const log = document.getElementById('log');
+  log.innerHTML = results.map(r=>{
+    const cls = r.result==='ad'?'tag-ad':r.result==='blocked'?'tag-blocked':'tag-clean';
+    const label = r.result==='ad'?('AD · '+r.adSecs+'s'):r.result==='blocked'?('BLOCKED'+(r.code!=null?' ('+r.code+')':'')):'clean ✓';
+    return `<div><span>${r.title}</span><span class="${cls}">${label}</span></div>`;
+  }).join('');
+}
+function record(title, result, adSecs, code){
+  // one result per title per pass (first play wins)
+  if (results.find(r=>r.title===title)) return;
+  results.push({title, result, adSecs: adSecs||0, code: code});
+  renderMetrics();
+}
+
+// ---- render current ----
+function render(){
+  const m = MOVIES[idx];
+  document.getElementById('syn').textContent = m.syn;
+  document.getElementById('genre').textContent = m.genre || 'Movie';
+  document.getElementById('counter').textContent = `(${idx+1} / ${MOVIES.length})`;
+  document.getElementById('answer').textContent = '';
+  stopClip();
+}
+function nextMovie(){ idx = (idx+1) % MOVIES.length; render(); }
+function revealAnswer(){ document.getElementById('answer').textContent = MOVIES[idx].title; }
+
+// ---- trailer ----
+function watchTrailer(){
+  const m = MOVIES[idx];
+  stopClip();
+  const c = document.getElementById('ytIframeContainer');
+  c.innerHTML = '<div id="ytPlayerDiv"></div>';
+  document.getElementById('videoCard').style.display = '';
+  document.getElementById('ytMask').style.display = '';
+  document.getElementById('ytAdOverlay').style.display = 'none';
+  const timerEl = document.getElementById('videoTimer');
+  timerEl.innerHTML = 'Press ▶ in the player to start';
+
+  let seenIdle = false, adStart = 0, adLogged = false, cleanLogged = false;
+
+  const startAdClock = ()=>{
+    adStart = Date.now();
+    if (adTimer) clearInterval(adTimer);
+    adTimer = setInterval(()=>{
+      const s = Math.round((Date.now()-adStart)/1000);
+      document.getElementById('adElapsed').textContent = 'ad: '+s+'s';
+    }, 250);
+  };
+  const stopAdClock = ()=>{ if(adTimer){clearInterval(adTimer);adTimer=null;} };
+
+  const startClip = ()=>{
+    let remaining = CLIP_SECS;
+    timerEl.textContent = remaining+'s remaining';
+    if (videoTimer) clearInterval(videoTimer);
+    videoTimer = setInterval(()=>{ remaining--; if(remaining<=0){stopClip();return;} timerEl.textContent = remaining+'s remaining'; }, 1000);
+  };
+
+  const createPlayer = ()=>{
+    ytPlayer = new YT.Player('ytPlayerDiv', {
+      videoId: m.yt,
+      playerVars: { controls:1, modestbranding:1, rel:0, playsinline:1, origin: location.origin, enablejsapi:1 },
+      width:'100%', height:'100%',
+      events:{
+        onReady: (e)=>{ if(document.getElementById('preMuteChk').checked){ try{ e.target.mute(); }catch(x){} } }, // optional pre-mute (A/B)
+        onStateChange: (e)=>{
+          if (e.data===YT.PlayerState.UNSTARTED||e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.CUED) seenIdle=true;
+          if (e.data===YT.PlayerState.PLAYING){
+            let isAd=false;
+            try { const vd=ytPlayer.getVideoData(); isAd = !vd||!vd.video_id||vd.video_id!==m.yt; } catch(x){}
+            const mask=document.getElementById('ytMask'), ov=document.getElementById('ytAdOverlay');
+            if (isAd){
+              mask.style.display='none'; ov.style.display='flex';
+              try{ ytPlayer.mute(); }catch(x){}
+              if (!adLogged){ adLogged=true; startAdClock(); }
+            } else {
+              mask.style.display='none'; ov.style.display='none';
+              stopAdClock();
+              try{ ytPlayer.unMute(); ytPlayer.setVolume(100); }catch(x){}
+              if (seenIdle && !videoTimer) startClip();
+              if (!cleanLogged){
+                cleanLogged=true;
+                const adSecs = adStart? Math.round((Date.now()-adStart)/1000):0;
+                record(m.title, adLogged?'ad':'clean', adSecs);
+              }
+            }
+          }
+        },
+        onError: (e)=>{
+          stopAdClock();
+          // YT error codes: 2 bad param · 5 HTML5 error · 100 not found/private ·
+          // 101/150 embedding DISABLED by the video owner (the only real "this link is unusable" signal).
+          const code = e && e.data;
+          record(m.title, 'blocked', 0, code);
+          try{ if(ytPlayer) ytPlayer.destroy(); }catch(x){} ytPlayer=null;
+          const why = (code===101||code===150)?'Embedding disabled by owner':(code===100?'Video not found/private':'Playback error ('+code+')');
+          c.innerHTML = '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;gap:10px;color:#aaa;font-size:.8rem;text-align:center;padding:12px;">'+why+'<a href="https://www.youtube.com/watch?v='+m.yt+'" target="_blank" rel="noopener" style="color:var(--gold);">▶ Watch on YouTube</a></div>';
+          timerEl.textContent='';
+        }
+      }
+    });
+  };
+  if (ytApiReady) createPlayer();
+  else { const w=setInterval(()=>{ if(ytApiReady){clearInterval(w);createPlayer();} },100); }
+}
+
+function stopClip(){
+  if (videoTimer){clearInterval(videoTimer);videoTimer=null;}
+  if (adTimer){clearInterval(adTimer);adTimer=null;}
+  if (ytPlayer){ try{ytPlayer.destroy();}catch(e){} ytPlayer=null; }
+  document.getElementById('ytIframeContainer').innerHTML='';
+  document.getElementById('videoCard').style.display='none';
+  document.getElementById('videoTimer').textContent='';
+  document.getElementById('ytAdOverlay').style.display='none';
+}
+
+render();
+</script>
+</body>
+</html>
