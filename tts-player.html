@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>TTS Player</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;}
+  #box{position:absolute;inset:0;} #box iframe{width:100%;height:100%;border:0;}
+  .band{position:absolute;left:0;right:0;background:#000;z-index:2;pointer-events:none;}
+  .bt{top:0;height:16%;} .bb{bottom:0;height:14%;}
+  #mask{position:absolute;inset:0;z-index:3;pointer-events:none;display:block;}
+  #ad{display:none;position:absolute;inset:0;z-index:4;background:rgba(5,8,16,.94);color:#fff;
+      font:700 14px -apple-system,sans-serif;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:14px;}
+  #ad small{font-weight:400;font-size:12px;color:#9fb0c6;}
+  #blk{position:absolute;inset:0;z-index:5;background:transparent;}
+</style>
+</head>
+<body>
+  <div id="box"><div id="yt"></div></div>
+  <div class="band bt"></div><div class="band bb"></div>
+  <svg id="mask" width="100%" height="100%"><defs><mask id="ph"><rect width="100%" height="100%" fill="#fff"/><ellipse cx="50%" cy="50%" rx="40" ry="28" fill="#000"/></mask></defs><rect width="100%" height="100%" fill="#000" mask="url(#ph)"/></svg>
+  <div id="ad">Ad &mdash; muted<small>your clip starts the moment it ends</small></div>
+  <div id="blk"></div>
+<script>
+  // Hosted YouTube player proxy for iOS WKWebView: served from a real https origin so WKWebView sends
+  // a valid Referer (fixes error 153). Boxes the title, hides+mutes ads, and postMessages state to the
+  // parent app (capacitor://localhost) so the app drives the clip timer / ad meter / auto-advance.
+  var q = new URLSearchParams(location.search);
+  var vid = q.get("v"), start = parseInt(q.get("start") || "0", 10) || 0;
+  var player = null, adFlag = false;
+  function post(m){ try { (window.parent || window).postMessage(m, "*"); } catch(e){} }
+  var s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
+  window.onYouTubeIframeAPIReady = function(){
+    player = new YT.Player("yt", { videoId: vid, width: "100%", height: "100%",
+      playerVars: { controls: 0, modestbranding: 1, rel: 0, playsinline: 1, fs: 0, iv_load_policy: 3, disablekb: 1, start: start, origin: location.origin },
+      events: {
+        onReady: function(e){ try { e.target.mute(); } catch(x){} try { e.target.playVideo(); } catch(x){} },
+        onStateChange: function(e){
+          if (e.data === YT.PlayerState.PLAYING) {
+            var isAd = false; try { var vd = player.getVideoData(); isAd = !vd || !vd.video_id || vd.video_id !== vid; } catch(x){}
+            if (isAd) {
+              document.getElementById("mask").style.display = "none";
+              document.getElementById("ad").style.display = "flex";
+              try { player.mute(); } catch(x){}
+              if (!adFlag) { adFlag = true; post({ tts: "ad" }); }
+            } else {
+              document.getElementById("mask").style.display = "none";
+              document.getElementById("ad").style.display = "none";
+              try { player.unMute(); player.setVolume(100); } catch(x){}
+              post({ tts: "play" });
+            }
+          }
+        },
+        onError: function(e){ post({ tts: "err", code: (e && e.data) }); }
+      } });
+  };
+</script>
+</body>
+</html>
