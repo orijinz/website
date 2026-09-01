@@ -15,9 +15,20 @@
       font:700 14px -apple-system,sans-serif;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:14px;}
   #ad small{font-weight:400;font-size:12px;color:#9fb0c6;}
   #blk{position:absolute;inset:0;z-index:5;background:transparent;}
-  /* Startup shield: hides YouTube's ~2s title/channel/controls info card that flashes when a clip begins. */
-  #cover{position:absolute;inset:0;z-index:6;background:#000;display:flex;align-items:center;justify-content:center;
-      color:#9fb0c6;font:600 13px -apple-system,sans-serif;transition:opacity .35s;}
+  /* Cinematic 3-2-1 startup shield — also hides YouTube's ~2s title/channel/controls info card. */
+  #cover{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at center,#0a1a3a 0%,#04070f 72%);transition:opacity .3s;overflow:hidden;}
+  #cover::before{content:"";position:absolute;inset:0;background:
+      repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);opacity:.5;}
+  #cd{position:relative;width:170px;height:170px;display:flex;align-items:center;justify-content:center;}
+  .cd-ring{position:absolute;inset:0;border-radius:50%;
+      background:conic-gradient(from -90deg, rgba(0,206,209,0) 0deg, rgba(0,206,209,.9) 300deg, rgba(0,206,209,0) 340deg);
+      -webkit-mask:radial-gradient(circle, transparent 63%, #000 65%);mask:radial-gradient(circle, transparent 63%, #000 65%);
+      animation:cdsweep .9s linear infinite;}
+  .cd-ring2{position:absolute;inset:14px;border-radius:50%;border:2px solid rgba(255,255,255,.14);}
+  #cdnum{font:900 96px/1 -apple-system,"Segoe UI",sans-serif;color:#fff;text-shadow:0 0 26px rgba(0,206,209,.85),0 0 6px rgba(255,255,255,.6);}
+  @keyframes cdsweep{to{transform:rotate(360deg);}}
+  @keyframes cdpop{0%{transform:scale(1.6);opacity:0}22%{opacity:1}100%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
@@ -26,15 +37,21 @@
   <svg id="mask" width="100%" height="100%"><defs><mask id="ph"><rect width="100%" height="100%" fill="#fff"/><ellipse cx="50%" cy="50%" rx="40" ry="28" fill="#000"/></mask></defs><rect width="100%" height="100%" fill="#000" mask="url(#ph)"/></svg>
   <div id="ad">Ad &mdash; muted<small>your clip starts the moment it ends</small></div>
   <div id="blk"></div>
-  <div id="cover">loading clip&hellip;</div>
+  <div id="cover"><div id="cd"><div class="cd-ring"></div><div class="cd-ring2"></div><div id="cdnum"></div></div></div>
 <script>
-  // Hosted YouTube player proxy for iOS WKWebView: real https origin so WKWebView sends a valid Referer
-  // (fixes error 153). Boxes the title, hides+mutes ads, shields the ~2s startup info card, and
-  // postMessages state to the parent app so it drives the clip timer / ad meter / auto-advance.
+  // Hosted YouTube proxy for iOS WKWebView: real https origin → valid Referer (fixes error 153).
+  // Boxes the title, hides+mutes ads, disables captions, and runs a cinematic 3-2-1 shield over
+  // YouTube's startup info card before revealing clean video. postMessages state to the parent app.
   var q = new URLSearchParams(location.search);
   var vid = q.get("v"), start = parseInt(q.get("start") || "0", 10) || 0;
   var player = null, adFlag = false, started = false;
   function post(m){ try { (window.parent || window).postMessage(m, "*"); } catch(e){} }
+  function pop(el){ el.style.animation = "none"; void el.offsetWidth; el.style.animation = "cdpop .9s ease-out"; }
+  function runCountdown(done){
+    var num = document.getElementById("cdnum"); var n = 3;
+    num.textContent = n; pop(num);
+    var iv = setInterval(function(){ n--; if (n <= 0) { clearInterval(iv); done(); return; } num.textContent = n; pop(num); }, 900);
+  }
   var s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
   window.onYouTubeIframeAPIReady = function(){
     player = new YT.Player("yt", { videoId: vid, width: "100%", height: "100%",
@@ -46,7 +63,7 @@
             var isAd = false; try { var vd = player.getVideoData(); isAd = !vd || !vd.video_id || vd.video_id !== vid; } catch(x){}
             if (isAd) {
               document.getElementById("mask").style.display = "none";
-              document.getElementById("cover").style.display = "none";     // ad is showing under our own ad panel; no startup shield needed
+              document.getElementById("cover").style.display = "none";
               document.getElementById("ad").style.display = "flex";
               try { player.mute(); } catch(x){}
               if (!adFlag) { adFlag = true; post({ tts: "ad" }); }
@@ -55,14 +72,12 @@
               document.getElementById("ad").style.display = "none";
               try { player.unMute(); player.setVolume(100); } catch(x){}
               if (!started) {
-                // Keep the opaque shield up while YouTube's startup info card (title/channel/logo) plays
-                // and fades, THEN reveal clean video and tell the app to start the 30s clock.
                 started = true;
-                setTimeout(function(){
+                runCountdown(function(){          // 3-2-1 over ~2.7s, then reveal clean video + start the app clock
                   var c = document.getElementById("cover"); c.style.opacity = "0";
-                  setTimeout(function(){ c.style.display = "none"; }, 350);
+                  setTimeout(function(){ c.style.display = "none"; }, 300);
                   post({ tts: "play" });
-                }, 2500);
+                });
               }
             }
           }
